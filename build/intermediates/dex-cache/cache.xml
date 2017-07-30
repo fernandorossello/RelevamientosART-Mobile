@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        is-multidex="false"
+        jar="/home/fernando/Android/Sdk/extras/android/m2repository/com/android/support/support-annotations/26.0.0-alpha1/support-annotations-26.0.0-alpha1.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.1"
+        sha1="023ee503b631f69511e335a061ea008f8da60f40">
+        <dex dex="/home/fernando/Documentos/Mobile/RelevamientosART/app/build/intermediates/pre-dexed/debug/support-annotations-26.0.0-alpha1_1d22d5454ed274c04767e69d952b58dfd2b8e0a3.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/fernando/.android/build-cache/aafe27e542b2de69252fd8079c39b8e47d23cf38/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.1"
+        sha1="fcd01fd11233459f546c437ec927e9b61bf7caf1">
+        <dex dex="/home/fernando/Documentos/Mobile/RelevamientosART/app/build/intermediates/pre-dexed/debug/classes_b8f0dc85dd688fd236ff2ca006769f7c3eba922a.jar" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/fernando/Documentos/Mobile/RelevamientosART/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.1"
+        sha1="d6e83ff968c90f0761763797184895c45ff84fc8">
+        <dex dex="/home/fernando/Documentos/Mobile/RelevamientosART/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run-bootstrap_e5f10da2b607584df137707cc6ae851a098cedbb/classes.dex" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/fernando/.android/build-cache/78fee9f86c88f109c1229671cce9f78ed364aa73/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.1"
+        sha1="8df0e365e40beb151bc42dee20817721a6cab7b0">
+        <dex dex="/home/fernando/Documentos/Mobile/RelevamientosART/app/build/intermediates/pre-dexed/debug/classes_b380c1438d39e4df7a5a42846c4418d87dcefd9a.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/fernando/.android/build-cache/fbf99c8ffd9104af5f54ce25e6fdfee994415cbf/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.1"
+        sha1="952944218ecedea1554a513dec0c14d570642843">
+        <dex dex="/home/fernando/Documentos/Mobile/RelevamientosART/app/build/intermediates/pre-dexed/debug/classes_595e9258a506c4a8fb7b7a9e010dba04eeaaeff0.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/fernando/.android/build-cache/8aa8b6ad87f90fd548223f6025f05ddfba405d2a/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.1"
+        sha1="88246166d5afb106f532f6e6deae683c66b42c89">
+        <dex dex="/home/fernando/Documentos/Mobile/RelevamientosART/app/build/intermediates/pre-dexed/debug/classes_5e1cf01aeda5657a5a29109600da3ab6331c1c2f.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/fernando/.android/build-cache/9b09749b7abfbf3474873693c20c7a78823d405a/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.1"
+        sha1="d7c42c80f6509b9ea4db28ca7859ffae08ec5741">
+        <dex dex="/home/fernando/Documentos/Mobile/RelevamientosART/app/build/intermediates/pre-dexed/debug/classes_0de26db085bcd57e722956befee91320104c962d.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/fernando/.android/build-cache/9edd3e0300a4f4d2d5dc8b0b84c6ee56c61a9425/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.1"
+        sha1="9935891f23923f39d002087085d9696568a9f657">
+        <dex dex="/home/fernando/Documentos/Mobile/RelevamientosART/app/build/intermediates/pre-dexed/debug/classes_a83feef46937d67349e656f3d8a65710fac61a55.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/fernando/.android/build-cache/d5ad754a9efe45fa9c8aca7bbad49860b9ebbc53/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.1"
+        sha1="2e92aa0163544a804a0b34f169ca61801770839a">
+        <dex dex="/home/fernando/Documentos/Mobile/RelevamientosART/app/build/intermediates/pre-dexed/debug/classes_b56386970076b1357ada79e6f6e39202a86cc932.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/fernando/.android/build-cache/6b8fe30a851f8c08ca4e882d090bea3ec408ebdb/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.1"
+        sha1="c4f45092eee6cdf1a5dbd597b2b6819be652ce2e">
+        <dex dex="/home/fernando/Documentos/Mobile/RelevamientosART/app/build/intermediates/pre-dexed/debug/classes_400ab21f0532b192bbdb29d90abb9a898c1f7502.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/fernando/.android/build-cache/bcc63b5e05f273df13e0f74981b323a3b7d07e19/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.1"
+        sha1="6a022bf00ccd0948a8180c505e8e458bbddd43a6">
+        <dex dex="/home/fernando/Documentos/Mobile/RelevamientosART/app/build/intermediates/pre-dexed/debug/classes_abf45eef15f1781665dad762fb5fba488ae6f26e.jar" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/fernando/Documentos/Mobile/RelevamientosART/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.1"
+        sha1="3be78ebc2706b2e1fe2f12d5726887a92d6c183b">
+        <dex dex="/home/fernando/Documentos/Mobile/RelevamientosART/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run_0491ba0e01b99bb2ff4e6a13cdcbb5df840ba224/classes.dex" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/fernando/.android/build-cache/e0a5433caba640fbc4fd1cfd69bc4459a4c57fbb/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.1"
+        sha1="cddcd0fb93bc70e27325f2f715b2710332004ebb">
+        <dex dex="/home/fernando/Documentos/Mobile/RelevamientosART/app/build/intermediates/pre-dexed/debug/classes_21f090262684f75a4d09c5b06acdb0286076d7db.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/fernando/.android/build-cache/c476367a6af1789ffe96cd238a40868448bd8bf3/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.1"
+        sha1="18d31838aa4fcc768a8a0516e22cc13b94655d89">
+        <dex dex="/home/fernando/Documentos/Mobile/RelevamientosART/app/build/intermediates/pre-dexed/debug/classes_6e39d3ae9c6ade2f1a72b97356a50f1943f26c63.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/fernando/.android/build-cache/c613a7834b949eb0765c9263e32f7a7c5ae2e73d/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.1"
+        sha1="47471eb19df288158b00b8d9cfa41bce7373f5cc">
+        <dex dex="/home/fernando/Documentos/Mobile/RelevamientosART/app/build/intermediates/pre-dexed/debug/classes_ac92fd610111e8df07e79fbe74b22432a4558882.jar" />
+    </item>
+
+</items>
