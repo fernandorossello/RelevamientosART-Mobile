@@ -10,7 +10,7 @@
     <string name="error_invalid_password">La contraseña es muy corta</string>
     <string name="error_incorrect_password">La contraseña es incorrecta</string>
     <string name="error_field_required">Campo requerido</string>
-    <string name="permission_rationale">Permisos no otorgados</string>
+    <string name="permission_rationale">Es necesario otorgar permisos</string>
 
 
     <!--Strings related to Main Activity -->
@@ -20,4 +20,5 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Ajustes</string>
+    <string name="salir">Salir</string>
 </resources>
