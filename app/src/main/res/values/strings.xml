@@ -21,4 +21,6 @@
 
     <string name="action_settings">Ajustes</string>
     <string name="salir">Salir</string>
+    <string name="sincronizar">Sincronizar</string>
+    <string name="msj_sincronizandoVisitas">Las visitas se están sincronizando</string>
 </resources>
