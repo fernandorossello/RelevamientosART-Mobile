@@ -3,9 +3,12 @@ package Modelo;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
-@DatabaseTable
-public class Task {
+import java.util.Date;
 
+@DatabaseTable
+public class Result {
+
+    //TODO: En caso de ser necesario, migrar completo el modelo de resultados.
     @DatabaseField(id = true)
     public int id;
 
@@ -13,8 +16,6 @@ public class Task {
     public int type;
 
     @DatabaseField
-    public int status;
+    public Date completed_at;
 
-    @DatabaseField(foreign = true)
-    public Result result;
 }

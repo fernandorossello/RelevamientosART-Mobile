@@ -1,13 +1,9 @@
 package com.example.fernando.relevamientosart;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -18,8 +14,19 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.j256.ormlite.android.apptools.OpenHelperManager;
+
+import java.sql.SQLException;
+import java.util.List;
+
+import Helpers.DBHelper;
+import Modelo.Managers.VisitManager;
+import Modelo.Visit;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private DBHelper mDBHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,13 +86,25 @@ public class MainActivity extends AppCompatActivity
             return true;
         } else if (id == R.id.nav_sincronizar)
         {
-            //TODO:Agregar lógica de sincronización
+            //TODO: No lo pongo en un asynTask porque manejaremos asincronismo cuando agreguemos conexión con el endpoint
+            sincronizarVisitas();
             Toast.makeText(this, getString(R.string.msj_sincronizandoVisitas), Toast.LENGTH_SHORT).show();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void sincronizarVisitas() {
+        VisitManager managerVisitas = new VisitManager(this.getHelper());
+        List<Visit> visitas = managerVisitas.simuladorParaTraerVisitasDelEndpoint();
+        try {
+            managerVisitas.persist(visitas);
+        }
+        catch (SQLException e){
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void borrarDatos(){
@@ -104,5 +123,23 @@ public class MainActivity extends AppCompatActivity
     private void Logout(){
         borrarDatos();
         redireccionarALogin();
+    }
+
+
+    //************************************************DB HELPER************************************************
+    public DBHelper getHelper() {
+        if (mDBHelper == null) {
+            mDBHelper = OpenHelperManager.getHelper(this, DBHelper.class);
+        }
+        return mDBHelper;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mDBHelper != null) {
+            OpenHelperManager.releaseHelper();
+            mDBHelper = null;
+        }
     }
 }
