@@ -8,7 +8,7 @@
     <string name="action_sign_in_short">Ingresar</string>
     <string name="error_invalid_email">Correo electrónico inválido</string>
     <string name="error_invalid_password">La contraseña es muy corta</string>
-    <string name="error_incorrect_password">La contraseña es incorrecta</string>
+    <string name="error_incorrect_password">La contraseña o el usuario son incorrectos</string>
     <string name="error_field_required">Campo requerido</string>
     <string name="permission_rationale">Es necesario otorgar permisos</string>
 
