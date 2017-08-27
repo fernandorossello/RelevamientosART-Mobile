@@ -10,4 +10,4 @@
     android:layout_marginRight="16dp"
     app:layoutManager="LinearLayoutManager"
     tools:context="com.example.fernando.relevamientosart.VisitFragment"
-    tools:listitem="@layout/fragment_visit" />
+    tools:listitem="@layout/fragment_visit"/>

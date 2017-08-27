@@ -32,12 +32,25 @@ public class VisitManager extends Manager<Visit> {
         Visit visita2 = new Visit(){ {this.id = 2; this.institution = institucion; this.status = 2; this.priority = 1; }};
         Visit visita3 = new Visit(){ {this.id = 3; this.institution = institucion; this.status = 3; this.priority = 3; }};
         Visit visita4 = new Visit(){ {this.id = 4; this.institution = institucion2; this.status = 3; this.priority = 3; }};
+        Visit visita5 = new Visit(){ {this.id = 5; this.institution = institucion2; this.status = 3; this.priority = 3; }};
+        Visit visita6 = new Visit(){ {this.id = 6; this.institution = institucion2; this.status = 3; this.priority = 4; }};
+        Visit visita7 = new Visit(){ {this.id = 7; this.institution = institucion2; this.status = 3; this.priority = 3; }};
+        Visit visita8 = new Visit(){ {this.id = 8; this.institution = institucion2; this.status = 3; this.priority = 5; }};
+        Visit visita9 = new Visit(){ {this.id = 9; this.institution = institucion2; this.status = 3; this.priority = 3; }};
+        Visit visita10 = new Visit(){ {this.id = 10; this.institution = institucion2; this.status = 3; this.priority = 3; }};
 
 
         lista.add(visita1);
         lista.add(visita2);
         lista.add(visita3);
         lista.add(visita4);
+        lista.add(visita5);
+        lista.add(visita6);
+        lista.add(visita7);
+        lista.add(visita8);
+        lista.add(visita9);
+        lista.add(visita10);
+
 
         return  lista;
     }
