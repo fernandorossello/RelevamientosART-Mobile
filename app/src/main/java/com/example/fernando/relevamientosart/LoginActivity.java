@@ -20,7 +20,6 @@ import android.content.CursorLoader;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.AsyncTask;
 
 import android.os.Build;
 import android.os.Bundle;
@@ -37,16 +36,33 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+import com.google.gson.GsonBuilder;
 
-import Modelo.Managers.UserManager;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import Modelo.User;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
 public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
 
+
+    public static final String urlEndpointUsers = "https://relevamientos-art.herokuapp.com/users";
     /**
      * Id to identity READ_CONTACTS permission request.
      */
@@ -56,7 +72,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
-    private UserLoginTask mAuthTask = null;
 
     // UI references.
     private AutoCompleteTextView mEmailView;
@@ -148,15 +163,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * errors are presented and no actual login attempt is made.
      */
     private void attemptLogin() {
-        if (mAuthTask != null) {
-            return;
-        }
-
-        if(!TieneAccesoAInternet()) {
+       if(!TieneAccesoAInternet()) {
             Toast.makeText(this, R.string.internet_requerido, Toast.LENGTH_SHORT).show();
             return ;
         }
-
 
         // Reset errors.
         mEmailView.setError(null);
@@ -195,8 +205,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mAuthTask = new UserLoginTask(email, password);
-            mAuthTask.execute((Void) null);
+            this.ValidarAcceso(email, password);
         }
     }
 
@@ -287,7 +296,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mEmailView.setAdapter(adapter);
     }
 
-
     private interface ProfileQuery {
         String[] PROJECTION = {
                 ContactsContract.CommonDataKinds.Email.ADDRESS,
@@ -296,59 +304,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         int ADDRESS = 0;
         int IS_PRIMARY = 1;
-    }
-
-    /**
-     * Represents an asynchronous login/registration task used to authenticate
-     * the user.
-     */
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
-
-        private final String mEmail;
-        private final String mPassword;
-
-        UserLoginTask(String email, String password) {
-            mEmail = email;
-            mPassword = password;
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-
-            try {
-                UserManager manager = new UserManager();
-                User usuario = manager.ValidarAcceso(mEmail,mPassword);
-
-                if(usuario != null){
-                    salvarDatos(usuario.id,usuario.name);
-                    return true;
-                } else {
-                    return false;
-                }
-
-            } catch (Exception e) {
-                return false;
-            }
-        }
-
-        @Override
-        protected void onPostExecute(final Boolean success) {
-            mAuthTask = null;
-            showProgress(false);
-
-            if (success) {
-                AbrirMainActivity();
-            } else {
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
-                mPasswordView.requestFocus();
-            }
-        }
-
-        @Override
-        protected void onCancelled() {
-            mAuthTask = null;
-            showProgress(false);
-        }
     }
 
     private void salvarDatos(Integer idUsuario, String nombre){
@@ -360,7 +315,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     private void ValidarSesionDeUsuario(){
         Integer idUsuario = PreferenceManager.getDefaultSharedPreferences(this).getInt("idUsuario",-1);
-        if(idUsuario > 1){
+        if(idUsuario > 0){
             AbrirMainActivity();;
         }
     }
@@ -375,6 +330,70 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
         return (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
                 connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED);
+    }
+
+    public void ValidarAcceso(String email,String clave){
+
+        try {
+            RequestQueue requestQueue = Volley.newRequestQueue(this);
+            JSONObject jsonBody = new JSONObject();
+            jsonBody.put("email", email);
+            jsonBody.put("password", clave);
+            final String requestBody = jsonBody.toString();
+
+            String URL = urlEndpointUsers + "/login";
+
+            JsonObjectRequest jsonRequest = new JsonObjectRequest
+                    (Request.Method.POST, URL, null, new Response.Listener<JSONObject>() {
+
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            User usuario = new GsonBuilder().create().fromJson(response.toString(), User.class);
+                            salvarDatos(usuario.id,usuario.email);
+                            AbrirMainActivity();
+                       }
+                    }, new Response.ErrorListener() {
+
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            if(error.networkResponse.statusCode == 401){
+                                showProgress(false);
+                                mPasswordView.setError(getString(R.string.error_incorrect_password));
+                                mPasswordView.requestFocus();
+                            }
+                            VolleyError err = error;
+                        }
+                    }){
+                @Override
+                public String getBodyContentType() {
+                    return "application/json; charset=utf-8";
+                }
+
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    Map<String,String> headers =  new HashMap<>();
+                    headers.put("Content-Type","application/json");
+                    headers.put("Accept","application/json");
+
+                    return headers;
+                }
+
+                @Override
+                public byte[] getBody(){
+                    try {
+                        return requestBody == null ? null : requestBody.getBytes("utf-8");
+                    } catch (UnsupportedEncodingException uee) {
+                        VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", requestBody, "utf-8");
+                        return null;
+                    }
+                }
+            };
+
+            requestQueue.add(jsonRequest);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
 }
