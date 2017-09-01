@@ -9,9 +9,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import java.sql.SQLException;
 import java.util.List;
 
+import Helpers.DBHelper;
 import Modelo.Managers.VisitManager;
 import Modelo.Visit;
 
@@ -24,9 +27,7 @@ import Modelo.Visit;
  */
 public class VisitFragment extends Fragment {
 
-    // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
-    // TODO: Customize parameters
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
 
@@ -37,7 +38,6 @@ public class VisitFragment extends Fragment {
     public VisitFragment() {
     }
 
-    // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
     public static VisitFragment newInstance(int columnCount) {
         VisitFragment fragment = new VisitFragment();
@@ -70,12 +70,14 @@ public class VisitFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-
-            VisitManager managerVisitas = new VisitManager();
-
-            List<Visit> visitas = managerVisitas.obtenerVisitasSincronizadas();
-
-            recyclerView.setAdapter(new MyVisitRecyclerViewAdapter(visitas, mListener));
+            
+            try {
+                DBHelper helper = ((MainActivity) getActivity()).getHelper();
+                List<Visit> visitas = new VisitManager(helper).obtenerVisitasSincronizadas();
+                 recyclerView.setAdapter(new MyVisitRecyclerViewAdapter(visitas, mListener));
+            }catch(SQLException e){
+                Toast.makeText(context, R.string.error_carga_visitas, Toast.LENGTH_SHORT).show();
+            }
         }
         return view;
     }

@@ -4,17 +4,12 @@ import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
 @DatabaseTable
-public class Task {
+public class Zone {
 
     @DatabaseField(id = true)
     public int id;
 
     @DatabaseField
-    public int type;
+    public String name;
 
-    @DatabaseField
-    public int status;
-
-    @DatabaseField(foreign = true)
-    public Result result;
 }
