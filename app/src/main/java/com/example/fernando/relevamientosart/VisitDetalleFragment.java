@@ -5,6 +5,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -46,8 +49,26 @@ public class VisitDetalleFragment extends Fragment {
         TextView txt =  view.findViewById(R.id.texto_detalle_visita);
         txt.setText(texto);
 
+        setHasOptionsMenu(true);
+
         return view;
     }
+
+    @Override
+     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+                super.onCreateOptionsMenu(menu, inflater);
+                MenuItem menuItem = menu.findItem(R.id.action_rar);
+                menuItem.setVisible(true);
+
+        menuItem = menu.findItem(R.id.action_rgrl);
+        menuItem.setVisible(true);
+
+        menuItem = menu.findItem(R.id.action_capacitacion);
+        menuItem.setVisible(true);
+
+        menuItem = menu.findItem(R.id.action_exportar);
+        menuItem.setVisible(true);
+        }
 
 
     @Override

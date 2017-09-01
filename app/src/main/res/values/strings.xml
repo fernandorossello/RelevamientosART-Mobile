@@ -24,6 +24,11 @@
     <string name="internet_requerido">No dispone de acceso a internet</string>
     <string name="error_carga_visitas">Se ha producido un error al cargar las visitas</string>
     <string name="title_activity_settings">Settings</string>
+    <string name="rar">Relevamiento de agentes de riesgo</string>
+    <string name="rgrl">R.G.R.L.</string>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="exportar">Exportar formulario</string>
+    <string name="capacitacion">Capacitación</string>
 
 
 </resources>

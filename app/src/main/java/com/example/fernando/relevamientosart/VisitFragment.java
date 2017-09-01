@@ -73,6 +73,8 @@ public class VisitFragment extends Fragment {
                 Toast.makeText(context, R.string.error_carga_visitas, Toast.LENGTH_SHORT).show();
             }
         }
+
+        setHasOptionsMenu(false);
         return view;
     }
 
