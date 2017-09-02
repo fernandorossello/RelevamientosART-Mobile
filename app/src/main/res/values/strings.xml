@@ -29,6 +29,6 @@
     <string name="title_activity_main2">Main2Activity</string>
     <string name="exportar">Exportar formulario</string>
     <string name="capacitacion">Capacitación</string>
-
+    <string name="fecha_regul">Fecha regul.</string>
 
 </resources>
