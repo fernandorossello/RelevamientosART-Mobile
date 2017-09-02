@@ -14,15 +14,21 @@
 
 
     <!--Strings related to Main Activity -->
-    <string name="title_activity_main">MainActivity</string>
-
+    <string name="title_activity_main">Visitas</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-
     <string name="action_settings">Ajustes</string>
     <string name="salir">Salir</string>
     <string name="sincronizar">Sincronizar</string>
     <string name="msj_sincronizandoVisitas">Las visitas se están sincronizando</string>
     <string name="internet_requerido">No dispone de acceso a internet</string>
     <string name="error_carga_visitas">Se ha producido un error al cargar las visitas</string>
+    <string name="title_activity_settings">Settings</string>
+    <string name="rar">Relevamiento de agentes de riesgo</string>
+    <string name="rgrl">R.G.R.L.</string>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="exportar">Exportar formulario</string>
+    <string name="capacitacion">Capacitación</string>
+    <string name="fecha_regul">Fecha regul.</string>
+
 </resources>

@@ -3,4 +3,11 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="colorTextSecondary">#FFFFFF</color>
+
+    <color name="colorAsignada">#303F9F</color>
+    <color name="colorFinalizada">#848484</color>
+    <color name="colorEnCurso">#597935</color>
+    <color name="colorPostergada">#ba3236</color>
+    <color name="background_card">#dadada</color>
 </resources>
