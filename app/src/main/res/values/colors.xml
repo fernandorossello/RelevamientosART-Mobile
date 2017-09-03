@@ -10,4 +10,8 @@
     <color name="colorEnCurso">#597935</color>
     <color name="colorPostergada">#ba3236</color>
     <color name="background_card">#dadada</color>
+    <color name="color_TextView_visita">#dadada</color>
+    <color name="color_TextView_valor_visita">#dadada</color>
+
+
 </resources>

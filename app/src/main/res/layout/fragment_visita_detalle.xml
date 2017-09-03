@@ -4,11 +4,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.fernando.relevamientosart.VisitDetalleFragment">
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -17,30 +21,262 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Empresa:"
+                android:text="@string/razon_social"
                 android:textSize="@dimen/detalle_label"
                 android:textColor="@color/colorPrimary"
+                android:background="@color/color_TextView_visita"
                 />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Cualquier pelotudez SA"/>
+                android:text="Empresa S.A."
+                android:textSize="@dimen/detalle_valor_label"
+                android:background="@color/color_TextView_valor_visita"/>
 
         
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Dirección:"
+            android:text="@string/domicilio"
             android:textSize="@dimen/detalle_label"
             android:textColor="@color/colorPrimary"
+            android:background="@color/color_TextView_visita"
             />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Medrano 950"/>
+            android:text="Medrano 950"
+            android:textSize="@dimen/detalle_valor_label"
+            android:background="@color/color_TextView_valor_visita"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/cuit"
+            android:textSize="@dimen/detalle_label"
+            android:textColor="@color/colorPrimary"
+            android:background="@color/color_TextView_visita"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="30-12345678-9"
+            android:textSize="@dimen/detalle_valor_label"
+            android:background="@color/color_TextView_valor_visita"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/contrato_num"
+            android:textSize="@dimen/detalle_label"
+            android:textColor="@color/colorPrimary"
+            android:background="@color/color_TextView_visita"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="123456789"
+            android:textSize="@dimen/detalle_valor_label"
+            android:background="@color/color_TextView_valor_visita"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/fecha_visita"
+            android:textSize="@dimen/detalle_label"
+            android:textColor="@color/colorPrimary"
+            android:background="@color/color_TextView_visita"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="02/SEP/2017"
+            android:textSize="@dimen/detalle_valor_label"
+            android:background="@color/color_TextView_valor_visita"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/actividad"
+            android:textSize="@dimen/detalle_label"
+            android:textColor="@color/colorPrimary"
+            android:background="@color/color_TextView_visita"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Venta de equipamiento infotmático"
+            android:textSize="@dimen/detalle_valor_label"
+            android:background="@color/color_TextView_valor_visita"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/ciuu"
+            android:textSize="@dimen/detalle_label"
+            android:textColor="@color/colorPrimary"
+            android:background="@color/color_TextView_visita"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="123432123"
+            android:textSize="@dimen/detalle_valor_label"
+            android:background="@color/color_TextView_valor_visita"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/establec_nombre_numero"
+            android:textSize="@dimen/detalle_label"
+            android:textColor="@color/colorPrimary"
+            android:background="@color/color_TextView_visita"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="establecimiento 1"
+            android:textSize="@dimen/detalle_valor_label"
+            android:background="@color/color_TextView_valor_visita"/>
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/trabajadores_num"
+            android:textSize="@dimen/detalle_label"
+            android:textColor="@color/colorPrimary"
+            android:background="@color/color_TextView_visita"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="9"
+            android:textSize="@dimen/detalle_valor_label"
+            android:background="@color/color_TextView_valor_visita"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/codigo_postal"
+            android:textSize="@dimen/detalle_label"
+            android:textColor="@color/colorPrimary"
+            android:background="@color/color_TextView_visita"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="C436SSR"
+            android:textSize="@dimen/detalle_valor_label"
+            android:background="@color/color_TextView_valor_visita"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/localidad"
+            android:textSize="@dimen/detalle_label"
+            android:textColor="@color/colorPrimary"
+            android:background="@color/color_TextView_visita"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Ciudad autonóma de Buenos Aires"
+            android:textSize="@dimen/detalle_valor_label"
+            android:background="@color/color_TextView_valor_visita"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/provincia"
+            android:textSize="@dimen/detalle_label"
+            android:textColor="@color/colorPrimary"
+            android:background="@color/color_TextView_visita"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="CABA"
+            android:textSize="@dimen/detalle_valor_label"
+            android:background="@color/color_TextView_valor_visita"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/telefono"
+            android:textSize="@dimen/detalle_label"
+            android:textColor="@color/colorPrimary"
+            android:background="@color/color_TextView_visita"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="4961-1234"
+            android:textSize="@dimen/detalle_valor_label"
+            android:background="@color/color_TextView_valor_visita"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/codigo_estab_afip"
+            android:textSize="@dimen/detalle_label"
+            android:textColor="@color/colorPrimary"
+            android:background="@color/color_TextView_visita"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="establecimientoAFIP 1"
+            android:textSize="@dimen/detalle_valor_label"
+            android:background="@color/color_TextView_valor_visita"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/persona_contactada"
+            android:textSize="@dimen/detalle_label"
+            android:textColor="@color/colorPrimary"
+            android:background="@color/color_TextView_visita"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Cosme Fulanito"
+            android:textSize="@dimen/detalle_valor_label"
+            android:background="@color/color_TextView_valor_visita"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/e_mail"
+            android:textSize="@dimen/detalle_label"
+            android:textColor="@color/colorPrimary"
+            android:background="@color/color_TextView_visita"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="establecimiento1@utn.com"
+            android:textSize="@dimen/detalle_valor_label"
+            android:background="@color/color_TextView_valor_visita"/>
 
     </LinearLayout>
 
+</ScrollView>
 </android.support.design.widget.CoordinatorLayout>
