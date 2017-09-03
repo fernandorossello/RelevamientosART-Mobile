@@ -42,5 +42,9 @@
     <string name="label_datosTrabajador">Datos del trabajador</string>
     <string name="label_riesgos">Riesgos</string>
     <string name="title_rgrl">R.G.R.L.</string>
+    <string name="constancia">Constancia de visita</string>
+    <string name="hint_observaciones">Observaciones</string>
+    <string name="lbl_lista_tareas">Tareas realizadas</string>
+    <string name="guardar">Guardar</string>
 
 </resources>

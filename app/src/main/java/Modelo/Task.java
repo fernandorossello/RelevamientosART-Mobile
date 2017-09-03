@@ -17,4 +17,8 @@ public class Task {
 
     @DatabaseField(foreign = true)
     public Result result;
+
+    public String getTypeName(){
+        return EnumTareas.getById(this.type).name;
+    };
 }

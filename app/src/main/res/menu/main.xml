@@ -5,7 +5,7 @@
     <item
         android:id="@+id/action_rar"
         android:title="@string/rar"
-        android:orderInCategory="10"
+        android:orderInCategory="1"
         android:icon="@drawable/ic_rar"
         app:showAsAction="ifRoom"
         android:visible="false"/>
@@ -13,25 +13,25 @@
     <item
         android:id="@+id/action_rgrl"
         android:title="@string/rgrl"
-        android:orderInCategory="10"
+        android:orderInCategory="2"
         android:icon="@drawable/ic_rgrl"
-        app:showAsAction="ifRoom"
-        android:visible="false"/>
-
-    <item
-        android:id="@+id/action_exportar"
-        android:title="@string/exportar"
-        android:orderInCategory="10"
-        android:icon="@drawable/ic_exportar"
         app:showAsAction="ifRoom"
         android:visible="false"/>
 
     <item
         android:id="@+id/action_capacitacion"
         android:title="@string/capacitacion"
-        android:orderInCategory="10"
+        android:orderInCategory="4"
         android:icon="@drawable/ic_capacitacion"
         app:showAsAction="ifRoom"
+        android:visible="false"/>
+
+    <item
+        android:id="@+id/action_constancia"
+        android:title="@string/constancia"
+        android:orderInCategory="5"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_constancia_visita"
         android:visible="false"/>
 
 </menu>
