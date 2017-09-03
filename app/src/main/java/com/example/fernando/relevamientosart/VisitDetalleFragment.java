@@ -44,11 +44,6 @@ public class VisitDetalleFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_visita_detalle, container, false);
-        String texto =  "Se ha elegido la visita nro" + this.getArguments().getInt(ARG_ID);
-
-        TextView txt =  view.findViewById(R.id.texto_detalle_visita);
-        txt.setText(texto);
-
         setHasOptionsMenu(true);
 
         return view;

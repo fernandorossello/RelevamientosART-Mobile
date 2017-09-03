@@ -6,6 +6,7 @@
     <string name="prompt_password">Contraseña</string>
     <string name="action_sign_in">Ingresar</string>
     <string name="action_sign_in_short">Ingresar</string>
+    <string name="action_restore_password">Recuperar contraseña</string>
     <string name="error_invalid_email">Correo electrónico inválido</string>
     <string name="error_invalid_password">La contraseña es muy corta</string>
     <string name="error_incorrect_password">La contraseña o el usuario son incorrectos</string>
@@ -31,43 +32,22 @@
     <string name="capacitacion">Capacitación</string>
     <string name="fecha_regul">Fecha regul.</string>
 
-
     <!--Strings related to visita_detalle -->
-<!--    <string name="razon_social">Razón social:</string>
+    <string name="razon_social">Razón social</string>
     <string name="domicilio">Domicilio</string>
     <string name="cuit">CUIT</string>
-    <string name="contrato_num">Contrato N°:</string>
-    <string name="fecha_visita">Fecha visita:</string>
-    <string name="actividad">Actividad:</string>
-    <string name="ciuu">CIIU:</string>
+    <string name="contrato_num">Contrato N°</string>
+    <string name="fecha_visita">Fecha visita</string>
+    <string name="actividad">Actividad</string>
+    <string name="ciuu">CIIU</string>
     <string name="establec_nombre_numero">N° y Nombre del estab.</string>
-    <string name="trabajadores_num">N° trabajadores:</string>
-    <string name="codigo_postal">Código postal:</string>
-    <string name="localidad">Localidad:</string>
-    <string name="provincia">Provincia:</string>
-    <string name="telefono">Teléfono:</string>
-    <string name="codigo_estab_afip">Código del estab. AFIP:</string>
-    <string name="persona_contactada">Persona contactada:</string>
-    <string name="e_mail">E-mail:</string>-->
-
-    <string name="razon_social"><u>Razón social:</u></string>
-    <string name="domicilio"><u>Domicilio:</u></string>
-    <string name="cuit"><u>CUIT:</u></string>
-    <string name="contrato_num"><u>Contrato N°:</u></string>
-    <string name="fecha_visita"><u>Fecha visita:</u></string>
-    <string name="actividad"><u>Actividad:</u></string>
-    <string name="ciuu"><u>CIIU:</u></string>
-    <string name="establec_nombre_numero"><u>N° y Nombre del estab.</u></string>
-    <string name="trabajadores_num"><u>N° trabajadores:</u></string>
-    <string name="codigo_postal"><u>Código postal:</u></string>
-    <string name="localidad"><u>Localidad:</u></string>
-    <string name="provincia"><u>Provincia:</u></string>
-    <string name="telefono"><u>Teléfono:</u></string>
-    <string name="codigo_estab_afip"><u>Código del estab. AFIP:</u></string>
-    <string name="persona_contactada"><u>Persona contactada:</u></string>
-    <string name="e_mail"><u>E-mail:</u></string>
-
-
-
+    <string name="trabajadores_num">N° trabajadores</string>
+    <string name="codigo_postal">Código postal</string>
+    <string name="localidad">Localidad</string>
+    <string name="provincia">Provincia</string>
+    <string name="telefono">Teléfono</string>
+    <string name="codigo_estab_afip">Código del estab. AFIP</string>
+    <string name="persona_contactada">Persona contactada</string>
+    <string name="e_mail">E-mail</string>
 
 </resources>
