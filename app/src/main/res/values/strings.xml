@@ -6,6 +6,7 @@
     <string name="prompt_password">Contraseña</string>
     <string name="action_sign_in">Ingresar</string>
     <string name="action_sign_in_short">Ingresar</string>
+    <string name="action_restore_password">Recuperar contraseña</string>
     <string name="error_invalid_email">Correo electrónico inválido</string>
     <string name="error_invalid_password">La contraseña es muy corta</string>
     <string name="error_incorrect_password">La contraseña o el usuario son incorrectos</string>
@@ -30,5 +31,4 @@
     <string name="exportar">Exportar formulario</string>
     <string name="capacitacion">Capacitación</string>
     <string name="fecha_regul">Fecha regul.</string>
-
 </resources>
