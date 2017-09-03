@@ -72,6 +72,8 @@ public class LoginFragment extends Fragment{
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_login, container, false);
 
+        mEmailView = (AutoCompleteTextView) view.findViewById(R.id.email);
+
         mPasswordView = (EditText) view.findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -252,6 +254,8 @@ public class LoginFragment extends Fragment{
         }
     }
 
+    //TODO: Este es un metodo comun que comparte con restorePasswordFragment
+    //Posiblemente se pueda poner en un lugar común para que ambos lo utilicen
     private boolean isEmailValid(String email) {
         return email.contains("@");
     }

@@ -83,7 +83,8 @@
                 android:id="@+id/tv_restore_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="20sp"
+                android:textSize="16sp"
+                android:textColor="@color/colorLink"
                 android:gravity="center_horizontal"
                 android:text="Recuperar contraseña"
                 android:layout_marginBottom="20dp"/>
