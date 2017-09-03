@@ -23,9 +23,11 @@ import java.util.List;
 import Helpers.DBHelper;
 import Modelo.Managers.VisitManager;
 import Modelo.Visit;
+import Modelo.WorkingMan;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener,VisitFragment.OnVisitSelectedListener{
+        implements NavigationView.OnNavigationItemSelectedListener,VisitFragment.OnVisitSelectedListener,
+        RARFragment.OnTrabajadoresFragmentInteractionListener {
 
     private DBHelper mDBHelper;
 
@@ -69,8 +71,17 @@ public class MainActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_rgrl:
-                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.fragment_container, new PreguntaFragment())
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragment_container, new PreguntaFragment())
+                        .addToBackStack(null)
+                        .commit();
+                return true;
+
+            case R.id.action_rar:
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragment_container, new RARFragment().newInstance())
                         .addToBackStack(null)
                         .commit();
                 return true;
@@ -137,11 +148,10 @@ public class MainActivity extends AppCompatActivity
             args.putInt(VisitDetalleFragment.ARG_ID, visit.id);
             newFragment.setArguments(args);
 
-            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-
-            transaction.replace(R.id.fragment_container, newFragment);
-            transaction.addToBackStack(null);
-            transaction.commit();
+            getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, newFragment)
+                .addToBackStack(null)
+                .commit();
         }
 
     //************************************************DB HELPER************************************************
@@ -159,6 +169,22 @@ public class MainActivity extends AppCompatActivity
             OpenHelperManager.releaseHelper();
             mDBHelper = null;
         }
+    }
+
+    @Override
+    public void onTrabajadorNuevo() {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, new RiskFragment().newInstance(null))
+                .addToBackStack(null)
+                .commit();
+    }
+
+    @Override
+    public void onTrabajadorSeleccionado(WorkingMan workingMan) {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, new RiskFragment().newInstance(workingMan))
+                .addToBackStack(null)
+                .commit();
     }
 
 }

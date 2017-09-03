@@ -1,0 +1,38 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".RiesgosTrabajadorFragment">
+
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/tv_worker_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/hint_nombre_trabajador"
+            android:imeActionLabel="@string/action_sign_in_short"
+            android:inputType="text"
+            android:maxLines="1"
+            android:singleLine="true" />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <include layout="@layout/fragment_risk_list"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/btn_agregarRiesgo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/item_margin"
+        app:fabSize="normal"
+        android:longClickable="true"
+        android:src="@drawable/ic_agregar"
+        />
+
+</FrameLayout>
