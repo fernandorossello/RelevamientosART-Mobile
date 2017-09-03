@@ -43,7 +43,7 @@ public class RARFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_rar, container, false);
 
         RecyclerView recyclerView  = view.findViewById(R.id.workerList);
-
+        
         Context context = view.getContext();
             recyclerView.setLayoutManager(new LinearLayoutManager(context));
         List<WorkingMan> lista = new WorkingManManager().trabajadoresEjemplo();

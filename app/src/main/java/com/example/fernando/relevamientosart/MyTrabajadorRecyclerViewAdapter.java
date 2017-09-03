@@ -61,8 +61,8 @@ public class MyTrabajadorRecyclerViewAdapter extends RecyclerView.Adapter<MyTrab
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mNombreView = (TextView) view.findViewById(R.id.tv_wm_nombre);
-            mCuilView = (TextView) view.findViewById(R.id.tv_wm_cuil);
+            mNombreView = view.findViewById(R.id.tv_wm_nombre);
+            mCuilView = view.findViewById(R.id.tv_wm_cuil);
         }
 
         @Override

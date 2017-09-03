@@ -2,6 +2,7 @@ package Modelo.Managers;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import Modelo.WorkingMan;
@@ -22,6 +23,7 @@ public class WorkingManManager extends Manager<WorkingMan> {
             name = "Fernando";
             lastName = "Rosselló";
             cuil = "34585130";
+            checked_in_on = new Date(2017,10,10);
         }});
 
         lista.add(new WorkingMan()

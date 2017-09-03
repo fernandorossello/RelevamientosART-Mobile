@@ -8,4 +8,8 @@ public class Risk {
 
     public String description;
 
+    @Override
+    public String toString() {
+        return code + " - " +description;
+    }
 }
