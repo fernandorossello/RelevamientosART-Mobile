@@ -2,4 +2,36 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <item
+        android:id="@+id/action_rar"
+        android:title="@string/rar"
+        android:orderInCategory="10"
+        android:icon="@drawable/ic_rar"
+        app:showAsAction="ifRoom"
+        android:visible="false"/>
+
+    <item
+        android:id="@+id/action_rgrl"
+        android:title="@string/rgrl"
+        android:orderInCategory="10"
+        android:icon="@drawable/ic_rgrl"
+        app:showAsAction="ifRoom"
+        android:visible="false"/>
+
+    <item
+        android:id="@+id/action_exportar"
+        android:title="@string/exportar"
+        android:orderInCategory="10"
+        android:icon="@drawable/ic_exportar"
+        app:showAsAction="ifRoom"
+        android:visible="false"/>
+
+    <item
+        android:id="@+id/action_capacitacion"
+        android:title="@string/capacitacion"
+        android:orderInCategory="10"
+        android:icon="@drawable/ic_capacitacion"
+        app:showAsAction="ifRoom"
+        android:visible="false"/>
+
 </menu>
