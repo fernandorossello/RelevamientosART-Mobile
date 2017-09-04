@@ -1,0 +1,154 @@
+<android.support.design.widget.CoordinatorLayout android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/label_datosTrabajador"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="@dimen/label_size"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+                <EditText
+                    android:id="@+id/tv_worker_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/hint_nombre_trabajador"
+                    android:imeActionLabel="@string/hint_nombre_trabajador"
+                    android:inputType="text"
+                    android:maxLines="1" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+                <EditText
+                    android:id="@+id/tv_worker_lastName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/hint_apellido_trabajador"
+                    android:imeActionLabel="@string/hint_apellido_trabajador"
+                    android:inputType="text"
+                    android:maxLines="1"/>
+            </android.support.design.widget.TextInputLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+            <EditText
+                android:id="@+id/tv_worker_cuil"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/hint_cuil_trabajador"
+                android:imeActionLabel="@string/hint_cuil_trabajador"
+                android:inputType="number"
+                android:maxLines="1" />
+        </android.support.design.widget.TextInputLayout>
+
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+            <EditText
+                android:id="@+id/tv_worker_fechaIngreso"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/hint_fechaIngreso_trabajador"
+                android:imeActionLabel="@string/hint_fechaIngreso_trabajador"
+                android:inputType="date"
+                android:clickable="true"
+                android:focusable="false"
+                android:maxLines="1" />
+        </android.support.design.widget.TextInputLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+                <EditText
+                    android:id="@+id/tv_worker_fechaInicio"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/hint_fechaInicio_trabajador"
+                    android:imeActionLabel="@string/hint_fechaInicio_trabajador"
+                    android:inputType="date"
+                    android:clickable="true"
+                    android:focusable="false"
+                    android:maxLines="1" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+                <EditText
+                    android:id="@+id/tv_worker_fechaFin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/hint_fechaFin_trabajador"
+                    android:imeActionLabel="@string/hint_fechaFin_trabajador"
+                    android:inputType="date"
+                    android:clickable="true"
+                    android:focusable="false"
+                    android:maxLines="1"/>
+            </android.support.design.widget.TextInputLayout>
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/label_riesgos"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="@dimen/label_size"
+            />
+
+    <include layout="@layout/fragment_risk_list"/>
+
+    </LinearLayout>
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/btn_agregarRiesgo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/item_margin"
+        app:fabSize="normal"
+        android:longClickable="true"
+        android:src="@drawable/ic_agregar"
+        />
+
+</android.support.design.widget.CoordinatorLayout>

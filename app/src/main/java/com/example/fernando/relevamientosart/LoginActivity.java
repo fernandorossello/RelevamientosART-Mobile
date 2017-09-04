@@ -19,11 +19,10 @@ public class LoginActivity extends AppCompatActivity implements LoginFragment.On
 
     @Override
     public void onRecuperarContrasenia() {
-        //Toast.makeText(this, "Implementar Abrir Recuperar Contrasenia", Toast.LENGTH_SHORT).show();
         getSupportFragmentManager()
                 .beginTransaction()
-                //.add(R.id.fragment_container,new restorePasswordFragment())
                 .replace(R.id.fragment_container,new restorePasswordFragment())
+                .addToBackStack(null)
                 .commit();
     }
 

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    
+    <include layout="@layout/fragment_trabajador_list" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/btn_agregarTrabajador"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/item_margin"
+        app:fabSize="normal"
+        android:longClickable="true"
+        android:src="@drawable/ic_agregar"
+        />
+
+    </android.support.design.widget.CoordinatorLayout>
