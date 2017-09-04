@@ -77,6 +77,14 @@ public class MainActivity extends AppCompatActivity
                         .commit();
                 return true;
 
+            case R.id.action_constancia:
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragment_container, new ConstanciaVisitaFragment())
+                        .addToBackStack(null)
+                        .commit();
+                return true;
+
             case R.id.action_rar:
                 getSupportFragmentManager()
                         .beginTransaction()
