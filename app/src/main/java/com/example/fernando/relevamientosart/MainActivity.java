@@ -84,6 +84,7 @@ public class MainActivity extends AppCompatActivity
                         .addToBackStack(null)
                         .commit();
                 return true;
+
             case R.id.action_rar:
                 getSupportFragmentManager()
                         .beginTransaction()

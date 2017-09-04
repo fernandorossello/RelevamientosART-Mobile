@@ -30,6 +30,18 @@
     <string name="exportar">Exportar formulario</string>
     <string name="capacitacion">Capacitación</string>
     <string name="fecha_regul">Fecha regul.</string>
+    
+    <!-- Strings related to Fragment de riesgos -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hint_nombre_trabajador">Nombre</string>
+    <string name="hint_cuil_trabajador">CUIL</string>
+    <string name="hint_apellido_trabajador">Apellido</string>
+    <string name="hint_fechaIngreso_trabajador">Ingreso</string>
+    <string name="hint_fechaFin_trabajador">Fin exposición</string>
+    <string name="hint_fechaInicio_trabajador">Inicio exposición</string>
+    <string name="label_datosTrabajador">Datos del trabajador</string>
+    <string name="label_riesgos">Riesgos</string>
+    <string name="title_rgrl">R.G.R.L.</string>
 
     <!-- Strings related to Fragment de riesgos -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -64,5 +76,6 @@
     <string name="codigo_estab_afip">Código del estab. AFIP</string>
     <string name="persona_contactada">Persona contactada</string>
     <string name="e_mail">E-mail</string>
+
 
 </resources>
