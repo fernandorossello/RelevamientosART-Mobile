@@ -50,11 +50,21 @@
 
     </LinearLayout>
 
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1">
     <EditText
+        android:id="@+id/fechaRegul"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="date"
-        android:hint="@string/fecha_regul"/>
+        android:clickable="true"
+        android:focusable="false"
+        android:hint="@string/fecha_regul"
+        android:imeActionLabel="@string/fecha_regul"/>
+    </android.support.design.widget.TextInputLayout>
+
 
     <LinearLayout
         android:layout_width="match_parent"
