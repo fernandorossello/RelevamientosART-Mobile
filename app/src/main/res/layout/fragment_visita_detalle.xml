@@ -20,11 +20,7 @@
                 android:textSize="@dimen/detalle_label"
                 android:textColor="@color/colorPrimary"/>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Empresa S.A."
-                android:textSize="@dimen/detalle_valor_label" />
+
 
         
         <TextView

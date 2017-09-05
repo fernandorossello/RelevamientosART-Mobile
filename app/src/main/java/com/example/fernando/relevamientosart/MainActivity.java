@@ -85,6 +85,14 @@ public class MainActivity extends AppCompatActivity
                         .commit();
                 return true;
 
+            case R.id.action_capacitacion:
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragment_container, new ConstanciaCapacitacionFragment())
+                        .addToBackStack(null)
+                        .commit();
+                return true;
+
             case R.id.action_rar:
                 getSupportFragmentManager()
                         .beginTransaction()
