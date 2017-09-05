@@ -1,4 +1,4 @@
-package com.example.fernando.relevamientosart;
+package com.example.fernando.relevamientosart.ConstanciaCapacitacion;
 
 import android.content.Context;
 import android.net.Uri;
@@ -12,11 +12,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.example.fernando.relevamientosart.R;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import Modelo.Attendee;
-import Modelo.Task;
 
 public class ConstanciaCapacitacionFragment extends Fragment {
     private static final String ARG_PARAM1 = "capacitacion";

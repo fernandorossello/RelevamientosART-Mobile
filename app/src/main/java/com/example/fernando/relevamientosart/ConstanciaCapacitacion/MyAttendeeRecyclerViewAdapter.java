@@ -1,4 +1,4 @@
-package com.example.fernando.relevamientosart;
+package com.example.fernando.relevamientosart.ConstanciaCapacitacion;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -6,32 +6,32 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.fernando.relevamientosart.R;
 
 import java.util.List;
 
-import Modelo.Risk;
+import Modelo.Attendee;
 
+public class MyAttendeeRecyclerViewAdapter extends RecyclerView.Adapter<MyAttendeeRecyclerViewAdapter.ViewHolder> {
 
-public class MyRiskRecyclerViewAdapter extends RecyclerView.Adapter<MyRiskRecyclerViewAdapter.ViewHolder> {
+    private List<Attendee> mValues;
 
-    private final List<Risk> mValues;
-
-    public MyRiskRecyclerViewAdapter(List<Risk> items) {
+    public MyAttendeeRecyclerViewAdapter(List<Attendee> items) {
         mValues = items;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_risk, parent, false);
+                .inflate(R.layout.fragment_attendee, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).code);
-        holder.mContentView.setText(mValues.get(position).description);
+        holder.mAttendeeView.setText(mValues.get(position).name + " " + mValues.get(position).lastName);
+        holder.mCuilView.setText(mValues.get(position).cuil);
     }
 
     @Override
@@ -41,20 +41,20 @@ public class MyRiskRecyclerViewAdapter extends RecyclerView.Adapter<MyRiskRecycl
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
-        public final TextView mIdView;
-        public final TextView mContentView;
-        public Risk mItem;
+        public final TextView mAttendeeView;
+        public final TextView mCuilView;
+        public Attendee mItem;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mIdView = (TextView) view.findViewById(R.id.id);
-            mContentView = (TextView) view.findViewById(R.id.content);
+            mAttendeeView = (TextView) view.findViewById(R.id.attendee);
+            mCuilView = (TextView) view.findViewById(R.id.cuil);
         }
 
         @Override
         public String toString() {
-            return super.toString() + " '" + mContentView.getText() + "'";
+            return super.toString() + " '" ;
         }
     }
 }

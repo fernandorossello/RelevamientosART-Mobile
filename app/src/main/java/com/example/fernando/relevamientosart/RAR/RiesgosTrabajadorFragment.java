@@ -1,4 +1,4 @@
-package com.example.fernando.relevamientosart;
+package com.example.fernando.relevamientosart.RAR;
 
 import android.content.Context;
 import android.net.Uri;
@@ -7,6 +7,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.example.fernando.relevamientosart.R;
 
 public class RiesgosTrabajadorFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";

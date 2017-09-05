@@ -1,4 +1,4 @@
-package com.example.fernando.relevamientosart;
+package com.example.fernando.relevamientosart.RAR;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -6,7 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.fernando.relevamientosart.RARFragment.OnTrabajadoresFragmentInteractionListener;
+import com.example.fernando.relevamientosart.R;
+import com.example.fernando.relevamientosart.RAR.RARFragment.OnTrabajadoresFragmentInteractionListener;
 
 import java.util.List;
 
