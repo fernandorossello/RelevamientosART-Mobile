@@ -25,19 +25,23 @@ public class VisitManager extends Manager<Visit> {
 
         List<Visit> lista = new ArrayList<>();
 
-        final Institution institucion = new Institution(){{this.id = 1; this.name="Thomas Bundle Institution of Programming";}};
-        final Institution institucion2 = new Institution(){{this.id = 2; this.name="Institución de prueba";}};
+        final Institution institucion = new Institution(){{this.id = 1; this.name="Y.P.F.";}};
+        final Institution institucion2 = new Institution(){{this.id = 2; this.name="Rancho relaxo";}};
+        final Institution institucion3 = new Institution(){{this.id = 3; this.name="Santillana";}};
+        final Institution institucion4 = new Institution(){{this.id = 4; this.name="MercadoLibre";}};
+        final Institution institucion5 = new Institution(){{this.id = 5; this.name="A.F.I.P.";}};
+        final Institution institucion6 = new Institution(){{this.id = 6; this.name="Coca-Cola";}};
+        final Institution institucion7 = new Institution(){{this.id = 7; this.name="Metrovías";}};
+        final Institution institucion8 = new Institution(){{this.id = 8; this.name="Laboratorios Bagó";}};
 
         Visit visita1 = new Visit(){ {this.id = 1; this.institution = institucion; this.status = 1; this.priority = 2; }};
-        Visit visita2 = new Visit(){ {this.id = 2; this.institution = institucion; this.status = 2; this.priority = 1; }};
-        Visit visita3 = new Visit(){ {this.id = 3; this.institution = institucion; this.status = 3; this.priority = 3; }};
-        Visit visita4 = new Visit(){ {this.id = 4; this.institution = institucion2; this.status = 3; this.priority = 3; }};
-        Visit visita5 = new Visit(){ {this.id = 5; this.institution = institucion2; this.status = 3; this.priority = 3; }};
-        Visit visita6 = new Visit(){ {this.id = 6; this.institution = institucion2; this.status = 3; this.priority = 4; }};
-        Visit visita7 = new Visit(){ {this.id = 7; this.institution = institucion2; this.status = 3; this.priority = 3; }};
-        Visit visita8 = new Visit(){ {this.id = 8; this.institution = institucion2; this.status = 3; this.priority = 5; }};
-        Visit visita9 = new Visit(){ {this.id = 9; this.institution = institucion2; this.status = 3; this.priority = 3; }};
-        Visit visita10 = new Visit(){ {this.id = 10; this.institution = institucion2; this.status = 3; this.priority = 3; }};
+        Visit visita2 = new Visit(){ {this.id = 2; this.institution = institucion2; this.status = 2; this.priority = 1; }};
+        Visit visita3 = new Visit(){ {this.id = 3; this.institution = institucion3; this.status = 3; this.priority = 3; }};
+        Visit visita4 = new Visit(){ {this.id = 4; this.institution = institucion4; this.status = 3; this.priority = 3; }};
+        Visit visita5 = new Visit(){ {this.id = 5; this.institution = institucion5; this.status = 2; this.priority = 3; }};
+        Visit visita6 = new Visit(){ {this.id = 6; this.institution = institucion6; this.status = 2; this.priority = 4; }};
+        Visit visita7 = new Visit(){ {this.id = 7; this.institution = institucion7; this.status = 1; this.priority = 3; }};
+        Visit visita8 = new Visit(){ {this.id = 8; this.institution = institucion8; this.status = 3; this.priority = 5; }};
 
 
         lista.add(visita1);
@@ -48,9 +52,6 @@ public class VisitManager extends Manager<Visit> {
         lista.add(visita6);
         lista.add(visita7);
         lista.add(visita8);
-        lista.add(visita9);
-        lista.add(visita10);
-
 
         return  lista;
     }

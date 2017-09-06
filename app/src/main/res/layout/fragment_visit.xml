@@ -1,63 +1,43 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="wrap_content"
-    android:layout_width="match_parent">
-
-    <android.support.v7.widget.CardView
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/card_view"
-    android:layout_gravity="center"
     android:layout_width="match_parent"
-    android:layout_height="100dp"
-    app:cardElevation="5dp"
-    app:cardUseCompatPadding="true">
+    android:orientation="horizontal"
+    android:paddingTop="@dimen/item_margin">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
+    <ImageView
+        android:id="@+id/iconoVisita"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_visita"
+        />
 
-        <TextView
-            android:layout_width="10dp"
-            android:id="@+id/colorBadge"
-            android:layout_height="match_parent"/>
-
-        <LinearLayout
+    <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/nombreInstitucionVisita"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:textSize="18dp"
-                android:textAppearance="?attr/textAppearanceListItem" />
+        <TextView
+            android:id="@+id/nombreInstitucionVisita"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/text_margin"
+            android:layout_marginRight="@dimen/text_margin"
+            android:textSize="@dimen/label_size"
+            android:textColor="@color/colorPrimary"
+            android:textAppearance="?attr/textAppearanceListItem" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+        <TextView
+            android:id="@+id/fechaVisita"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            android:layout_marginLeft="@dimen/text_margin"
+            android:layout_marginRight="@dimen/text_margin"
+            android:textAppearance="?attr/textAppearanceListItem"/>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-                <TextView
-                    android:id="@+id/fechaVisita"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="15sp"
-                    android:layout_marginRight="@dimen/item_margin"
-                    android:textColor="@color/colorAccent"/>
-            </LinearLayout>
-
-        </LinearLayout>
-
-        </LinearLayout>
-
-    </android.support.v7.widget.CardView>
 
     </LinearLayout>
+
+</LinearLayout>
 

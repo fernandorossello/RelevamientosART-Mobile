@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.fernando.relevamientosart.VisitFragment.OnVisitSelectedListener;
@@ -45,7 +46,7 @@ public class MyVisitRecyclerViewAdapter extends RecyclerView.Adapter<MyVisitRecy
         if(holder.mItem.status != 0) {
             EnumStatus status = EnumStatus.getById(holder.mItem.status);
             Context context = holder.mInstitutionNameView.getContext();
-            int color;
+            /*int color;
             switch (status) {
                 case ASIGNADA:
                     color = ContextCompat.getColor(context, R.color.colorAsignada);
@@ -61,7 +62,7 @@ public class MyVisitRecyclerViewAdapter extends RecyclerView.Adapter<MyVisitRecy
                     break;
             }
             //holder.mStatusView.setText(status.name);
-            holder.mBadge.setBackgroundColor(color);
+            holder.mBadge.setBackgroundColor(color);*/
         }
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
@@ -82,18 +83,16 @@ public class MyVisitRecyclerViewAdapter extends RecyclerView.Adapter<MyVisitRecy
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
         public final TextView mInstitutionNameView;
-        //public final TextView mStatusView;
-        public final TextView mBadge;
+        public final ImageView mBadge;
         public final TextView mFechaVisita;
         public Visit mItem;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mInstitutionNameView = (TextView) view.findViewById(R.id.nombreInstitucionVisita);
-           // mStatusView = (TextView) view.findViewById(R.id.statusVisita);
-            mBadge = (TextView) view.findViewById(R.id.colorBadge);
-            mFechaVisita = (TextView) view.findViewById(R.id.fechaVisita);
+            mInstitutionNameView = view.findViewById(R.id.nombreInstitucionVisita);
+            mBadge = view.findViewById(R.id.iconoVisita);
+            mFechaVisita = view.findViewById(R.id.fechaVisita);
         }
 
         @Override

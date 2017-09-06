@@ -13,14 +13,18 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/razon_social"
-                android:textSize="@dimen/detalle_label"
-                android:textColor="@color/colorPrimary"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/razon_social"
+            android:textSize="@dimen/detalle_label"
+            android:textColor="@color/colorPrimary"/>
 
-
+        <TextView
+            android:id="@+id/tv_detalle_nombre_institucion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/detalle_valor_label"/>
 
         
         <TextView
