@@ -135,7 +135,10 @@ public class MainActivity extends AppCompatActivity
         List<Visit> visitas = managerVisitas.simuladorParaTraerVisitasDelEndpoint();
         try {
             managerVisitas.persist(visitas);
-            getSupportFragmentManager().beginTransaction().add(R.id.fragment_container,new VisitFragment()).commit();
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container,new VisitFragment())
+                    .commit();
         }
         catch (SQLException e){
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -143,10 +146,11 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void borrarDatos(){
-        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(this).edit();
-        editor.remove("nombreUsuario");
-        editor.remove("idUsuario");
-        editor.commit();
+        PreferenceManager.getDefaultSharedPreferences(this)
+                .edit()
+                .remove("nombreUsuario")
+                .remove("idUsuario")
+                .commit();
     }
 
     private void redireccionarALogin(){
