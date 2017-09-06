@@ -162,13 +162,9 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void OnVisitSelected(Visit visit) {
-            VisitDetalleFragment newFragment = new VisitDetalleFragment();
-            Bundle args = new Bundle();
-            args.putInt(VisitDetalleFragment.ARG_ID, visit.id);
-            newFragment.setArguments(args);
-
-            getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, newFragment)
+            getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container, new VisitDetalleFragment().newInstance(visit))
                 .addToBackStack(null)
                 .commit();
         }

@@ -3,11 +3,12 @@ package Modelo;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
 @DatabaseTable
-public class Visit {
+public class Visit implements Serializable {
 
     @DatabaseField(id = true)
     public int id;

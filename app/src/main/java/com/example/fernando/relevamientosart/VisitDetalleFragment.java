@@ -12,11 +12,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import Modelo.Visit;
+
 public class VisitDetalleFragment extends Fragment {
 
-    public static final String ARG_ID = "idVisita";
+    public static final String ARG_VISITA = "visita";
 
-    private String mParam1;
+    private Visit mVisit;
 
     private OnFragmentInteractionListener mListener;
 
@@ -24,10 +26,10 @@ public class VisitDetalleFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static VisitDetalleFragment newInstance(int idVisita) {
+    public static VisitDetalleFragment newInstance(Visit visita) {
         VisitDetalleFragment fragment = new VisitDetalleFragment();
         Bundle args = new Bundle();
-        args.putInt(ARG_ID, idVisita);
+        args.putSerializable(ARG_VISITA, visita);
         fragment.setArguments(args);
         return fragment;
     }
@@ -36,7 +38,7 @@ public class VisitDetalleFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_ID);
+            mVisit = (Visit) getArguments().getSerializable(ARG_VISITA);
         }
     }
 
@@ -44,6 +46,10 @@ public class VisitDetalleFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_visita_detalle, container, false);
+
+        TextView tvNombreInstitucion = view.findViewById(R.id.tv_detalle_nombre_institucion);
+        tvNombreInstitucion.setText(mVisit.nombreInstitucion());
+
         setHasOptionsMenu(true);
 
         return view;
