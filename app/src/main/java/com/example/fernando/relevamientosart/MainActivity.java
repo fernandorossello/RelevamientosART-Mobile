@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity
             case R.id.action_constancia:
                 getSupportFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.fragment_container, new ConstanciaVisitaFragment())
+                        .replace(R.id.fragment_container, ConstanciaVisitaFragment.newInstance(mVisitaEnCurso))
                         .addToBackStack(null)
                         .commit();
                 return true;
@@ -163,7 +163,7 @@ public class MainActivity extends AppCompatActivity
                 .edit()
                 .remove("nombreUsuario")
                 .remove("idUsuario")
-                .commit();
+                .apply();
     }
 
     private void redireccionarALogin(){

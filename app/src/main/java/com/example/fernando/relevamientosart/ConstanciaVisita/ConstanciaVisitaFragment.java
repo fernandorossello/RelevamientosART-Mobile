@@ -32,12 +32,13 @@ import java.util.Date;
 import java.util.List;
 
 import Modelo.Task;
+import Modelo.Visit;
 
 
 public class ConstanciaVisitaFragment extends Fragment {
-    private static final String ARG_PARAM1 = "visita";
+    private static final String ARG_visita = "visita";
 
-    private String mVisit;
+    private Visit mVisit;
 
     public ConstanciaVisitaFragment() {
         // Required empty public constructor
@@ -47,10 +48,10 @@ public class ConstanciaVisitaFragment extends Fragment {
     private static final int REQUEST_READ = 2000;
 
 
-    public static ConstanciaVisitaFragment newInstance(String param1) {
+    public static ConstanciaVisitaFragment newInstance(Visit visit) {
         ConstanciaVisitaFragment fragment = new ConstanciaVisitaFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
+        args.putSerializable(ARG_visita, visit);
         fragment.setArguments(args);
         return fragment;
     }
@@ -59,7 +60,7 @@ public class ConstanciaVisitaFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mVisit = getArguments().getString(ARG_PARAM1);
+            mVisit = (Visit)getArguments().getSerializable(ARG_visita);
         }
     }
 
@@ -71,11 +72,7 @@ public class ConstanciaVisitaFragment extends Fragment {
         RecyclerView recyclerView  = view.findViewById(R.id.taskList);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
 
-        List<Task> tareas = new ArrayList<>();
-        tareas.add(new Task(){{type=1;}});
-        tareas.add(new Task(){{type=2;}});
-        tareas.add(new Task(){{type=3;}});
-        recyclerView.setAdapter(new MyTaskRecyclerViewAdapter(tareas));
+        recyclerView.setAdapter(new MyTaskRecyclerViewAdapter(mVisit.tasks));
 
         AppCompatImageButton btnFoto = view.findViewById(R.id.btn_camera);
         btnFoto.setOnClickListener(new View.OnClickListener() {
