@@ -18,20 +18,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 import Modelo.Attendee;
+import Modelo.CAPResult;
+import Modelo.Task;
 
 public class ConstanciaCapacitacionFragment extends Fragment {
-    private static final String ARG_PARAM1 = "capacitacion";
 
-    private String mCapacitacion;
+
+    private static final String ARG_TASK = "tarea";
+    private Task mTarea;
 
     public ConstanciaCapacitacionFragment() {
         // Required empty public constructor
     }
 
-    public static ConstanciaCapacitacionFragment newInstance(String param1) {
+    public static ConstanciaCapacitacionFragment newInstance(Task task) {
         ConstanciaCapacitacionFragment fragment = new ConstanciaCapacitacionFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
+        args.putSerializable(ARG_TASK,task);
         fragment.setArguments(args);
         return fragment;
     }
@@ -40,7 +43,10 @@ public class ConstanciaCapacitacionFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mCapacitacion = getArguments().getString(ARG_PARAM1);
+            mTarea = (Task) getArguments().getSerializable(ARG_TASK);
+            if(mTarea.result == null){
+                mTarea.result = new CAPResult();
+            }
         }
     }
 

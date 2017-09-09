@@ -25,7 +25,9 @@ import java.sql.SQLException;
 import java.util.List;
 
 import Helpers.DBHelper;
+import Modelo.Enums.EnumTareas;
 import Modelo.Managers.VisitManager;
+import Modelo.Task;
 import Modelo.Visit;
 import Modelo.WorkingMan;
 
@@ -34,6 +36,8 @@ public class MainActivity extends AppCompatActivity
         RARFragment.OnTrabajadoresFragmentInteractionListener {
 
     private DBHelper mDBHelper;
+
+    private Visit mVisitaEnCurso;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,15 +76,19 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        Task task;
         switch (item.getItemId()) {
-            case R.id.action_rgrl:
+            case R.id.action_rgrl: {
+
+                task = mVisitaEnCurso.obtenerTarea(EnumTareas.RGRL);
+
                 getSupportFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.fragment_container, new PreguntaFragment())
+                        .replace(R.id.fragment_container, PreguntaFragment.newInstance(task))
                         .addToBackStack(null)
                         .commit();
                 return true;
-
+            }
             case R.id.action_constancia:
                 getSupportFragmentManager()
                         .beginTransaction()
@@ -90,17 +98,22 @@ public class MainActivity extends AppCompatActivity
                 return true;
 
             case R.id.action_capacitacion:
+
+                task = mVisitaEnCurso.obtenerTarea(EnumTareas.CAPACITACION);
+
                 getSupportFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.fragment_container, new ConstanciaCapacitacionFragment())
+                        .replace(R.id.fragment_container, ConstanciaCapacitacionFragment.newInstance(task))
                         .addToBackStack(null)
                         .commit();
                 return true;
 
             case R.id.action_rar:
+                task = mVisitaEnCurso.obtenerTarea(EnumTareas.RAR);
+                
                 getSupportFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.fragment_container, new RARFragment().newInstance())
+                        .replace(R.id.fragment_container, RARFragment.newInstance(task))
                         .addToBackStack(null)
                         .commit();
                 return true;
@@ -166,7 +179,10 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void OnVisitSelected(Visit visit) {
-            getSupportFragmentManager()
+
+        mVisitaEnCurso = visit;
+
+        getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fragment_container, new VisitDetalleFragment().newInstance(visit))
                 .addToBackStack(null)

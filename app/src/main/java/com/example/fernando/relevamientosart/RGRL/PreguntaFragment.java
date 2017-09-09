@@ -11,26 +11,46 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 
 import com.example.fernando.relevamientosart.R;
+import com.example.fernando.relevamientosart.VisitDetalleFragment;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import Modelo.RGRLResult;
+import Modelo.Task;
+import Modelo.Visit;
+
 public class PreguntaFragment extends Fragment {
 
+    private static final String ARG_TASK = "tarea";
+    private Task mTarea;
+
     private final Calendar myCalendar = Calendar.getInstance();
+
+
 
     public PreguntaFragment() {
         // Required empty public constructor
     }
 
-    public static PreguntaFragment newInstance() {
-        return new PreguntaFragment();
+    public static PreguntaFragment newInstance(Task task) {
+        PreguntaFragment fragment = new PreguntaFragment();
+        Bundle args = new Bundle();
+        args.putSerializable(ARG_TASK,task);
+        fragment.setArguments(args);
+        return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            mTarea = (Task) getArguments().getSerializable(ARG_TASK);
+            if(mTarea.result == null){
+                mTarea.result = new RGRLResult();
+            }
+        }
     }
 
     @Override

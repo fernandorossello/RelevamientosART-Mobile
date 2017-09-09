@@ -14,9 +14,14 @@ import com.example.fernando.relevamientosart.R;
 import java.util.List;
 
 import Modelo.Managers.WorkingManManager;
+import Modelo.RARResult;
+import Modelo.Task;
 import Modelo.WorkingMan;
 
 public class RARFragment extends Fragment {
+
+    private static final String ARG_TASK = "tarea";
+    private Task mTarea;
 
     private OnTrabajadoresFragmentInteractionListener mListener;
 
@@ -28,13 +33,24 @@ public class RARFragment extends Fragment {
     }
 
     @SuppressWarnings("unused")
-    public static RARFragment newInstance() {
-        return new RARFragment();
+    public static RARFragment newInstance(Task task) {
+        RARFragment fragment = new RARFragment();
+
+        Bundle args = new Bundle();
+        args.putSerializable(ARG_TASK,task);
+        fragment.setArguments(args);
+        return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            mTarea = (Task) getArguments().getSerializable(ARG_TASK);
+            if(mTarea.result == null){
+                mTarea.result = new RARResult();
+            }
+        }
     }
 
     @Override

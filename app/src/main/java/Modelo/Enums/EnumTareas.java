@@ -1,10 +1,10 @@
-package Modelo;
+package Modelo.Enums;
 
 public enum EnumTareas {
 
-    PENDIENTE(1,"Confección planilla de Relevamiento de agentes de riesgo"),
-    ASIGNADA(2, "Confección planilla RGRL"),
-    ENPROCESO(3, "Brindar capacitación");
+    RAR(1,"Confección planilla de Relevamiento de agentes de riesgo"),
+    RGRL(2, "Confección planilla RGRL"),
+    CAPACITACION(3, "Brindar capacitación");
 
 
     public String name;

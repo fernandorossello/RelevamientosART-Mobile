@@ -7,5 +7,4 @@ public class RARResult extends Result {
     public String topic;
 
     public List<WorkingMan> workingMen;
-
 }
