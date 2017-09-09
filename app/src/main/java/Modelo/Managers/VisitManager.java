@@ -92,6 +92,12 @@ public class VisitManager extends Manager<Visit> {
 
         if (!daoVisitas.idExists(item.id)) {
             daoVisitas.create(item);
+        } else {
+            daoVisitas.update(item);
+        }
+
+        if(item.visitRecord != null){
+            new VisitRecordManager(dbHelper).persist(item.visitRecord);
         }
     }
 

@@ -27,6 +27,7 @@ public class DBHelper extends OrmLiteSqliteOpenHelper {
     private Dao<Visit, Integer> visitDao;
     private Dao<Institution,Integer> institutionDao;
     private Dao<Task,Integer> taskDao;
+    private Dao<VisitRecord,Integer> visitRecordDao;
 
     public DBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -47,7 +48,6 @@ public class DBHelper extends OrmLiteSqliteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase database, ConnectionSource connectionSource, int oldVersion, int newVersion) {
-
     }
 
     public Dao<Visit, Integer> getVisitDao() throws SQLException {
@@ -69,6 +69,13 @@ public class DBHelper extends OrmLiteSqliteOpenHelper {
             taskDao = getDao(Task.class);
         }
         return taskDao;
+    }
+
+    public Dao<VisitRecord,Integer> getVisitRecordDao() throws SQLException {
+        if (visitRecordDao == null) {
+            visitRecordDao= getDao(VisitRecord.class);
+        }
+        return visitRecordDao;
     }
 
     @Override

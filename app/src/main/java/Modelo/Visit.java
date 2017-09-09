@@ -37,6 +37,7 @@ public class Visit implements Serializable {
     @ForeignCollectionField(eager = true)
     public Collection<Task> tasks;
 
+    @DatabaseField(foreign = true,foreignAutoRefresh = true)
     public VisitRecord visitRecord;
 
     @DatabaseField
