@@ -1,4 +1,4 @@
-package Modelo;
+package Modelo.Enums;
 
 public enum EnumStatus {
 

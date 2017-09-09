@@ -1,8 +1,6 @@
 package com.example.fernando.relevamientosart;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,11 +11,9 @@ import android.widget.TextView;
 import com.example.fernando.relevamientosart.VisitFragment.OnVisitSelectedListener;
 
 
-import org.w3c.dom.Text;
-
 import java.util.List;
 
-import Modelo.EnumStatus;
+import Modelo.Enums.EnumStatus;
 import Modelo.Visit;
 
 public class MyVisitRecyclerViewAdapter extends RecyclerView.Adapter<MyVisitRecyclerViewAdapter.ViewHolder> {

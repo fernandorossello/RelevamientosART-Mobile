@@ -26,6 +26,7 @@ public class DBHelper extends OrmLiteSqliteOpenHelper {
 
     private Dao<Visit, Integer> visitDao;
     private Dao<Institution,Integer> institutionDao;
+    private Dao<Task,Integer> taskDao;
 
     public DBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -63,6 +64,12 @@ public class DBHelper extends OrmLiteSqliteOpenHelper {
         return institutionDao;
     }
 
+    public Dao<Task, Integer> getTaskDao() throws SQLException {
+        if (taskDao == null) {
+            taskDao = getDao(Task.class);
+        }
+        return taskDao;
+    }
 
     @Override
     public void close() {
