@@ -98,17 +98,22 @@ public class MainActivity extends AppCompatActivity
                 return true;
 
             case R.id.action_capacitacion:
+
+                task = mVisitaEnCurso.obtenerTarea(EnumTareas.CAPACITACION);
+
                 getSupportFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.fragment_container, new ConstanciaCapacitacionFragment())
+                        .replace(R.id.fragment_container, ConstanciaCapacitacionFragment.newInstance(task))
                         .addToBackStack(null)
                         .commit();
                 return true;
 
             case R.id.action_rar:
+                task = mVisitaEnCurso.obtenerTarea(EnumTareas.RAR);
+                
                 getSupportFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.fragment_container, new RARFragment().newInstance())
+                        .replace(R.id.fragment_container, RARFragment.newInstance(task))
                         .addToBackStack(null)
                         .commit();
                 return true;

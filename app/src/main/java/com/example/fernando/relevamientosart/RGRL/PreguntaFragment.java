@@ -24,9 +24,11 @@ import Modelo.Visit;
 public class PreguntaFragment extends Fragment {
 
     private static final String ARG_TASK = "tarea";
+    private Task mTarea;
+
     private final Calendar myCalendar = Calendar.getInstance();
 
-    private Task mTarea;
+
 
     public PreguntaFragment() {
         // Required empty public constructor
