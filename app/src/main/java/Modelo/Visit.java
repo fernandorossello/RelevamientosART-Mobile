@@ -38,7 +38,7 @@ public class Visit implements Serializable {
     @ForeignCollectionField(eager = true)
     public Collection<Task> tasks;
 
-    @ForeignCollectionField(eager = true)
+    @ForeignCollectionField
     public Collection<Image> images;
 
     @DatabaseField(foreign = true,foreignAutoRefresh = true)

@@ -17,4 +17,14 @@ public class Image implements Serializable{
     @DatabaseField(foreign = true)
     public Visit visit;
 
+    @Override
+    public boolean equals(Object other) {
+        if (other == null) return false;
+        if (other == this) return true;
+        if (!(other instanceof Image))return false;
+        Image otherImage = (Image)other;
+
+        return id == otherImage .id;
+    }
+
 }

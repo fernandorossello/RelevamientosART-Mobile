@@ -39,6 +39,8 @@ public class MyImageRecyclerViewAdapter extends RecyclerView.Adapter<MyImageRecy
         holder.mItem = mValues.get(position);
 
         Uri uri = Uri.parse(mValues.get(position).URLImage);
+
+
         holder.mImageView.setImageURI(uri);
 
         holder.mView.setOnClickListener(new View.OnClickListener() {

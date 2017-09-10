@@ -87,7 +87,7 @@ public class ConstanciaVisitaFragment extends Fragment {
         btnFoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mListener.OnTomarFoto(mVisit);
+                mListener.OnTomarFoto();
             }
         });
 
@@ -147,7 +147,7 @@ public class ConstanciaVisitaFragment extends Fragment {
 
 
     public interface OnEventoConstanciaListener {
-        void OnTomarFoto(Visit visit);
+        void OnTomarFoto();
         void OnVerFotosClick(Visit visit);
         void OnGuardarConstanciaDeVisita();
     }

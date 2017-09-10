@@ -47,6 +47,7 @@ import java.util.List;
 import Helpers.DBHelper;
 import Modelo.Enums.EnumTareas;
 import Modelo.Image;
+import Modelo.Managers.ImageManager;
 import Modelo.Managers.VisitManager;
 import Modelo.Task;
 import Modelo.Visit;
@@ -254,14 +255,14 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void OnTomarFoto(Visit visit) {
-        tomarFoto(visit);
+    public void OnTomarFoto() {
+        tomarFoto();
     }
 
     @Override
     public void OnVerFotosClick(Visit visit) {
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, new ImageFragment().newInstance(visit),TAG_FRAGMENT_IMAGENES)
+                .replace(R.id.fragment_container, ImageFragment.newInstance(visit),TAG_FRAGMENT_IMAGENES)
                 .addToBackStack(null)
                 .commit();
     }
@@ -271,7 +272,7 @@ public class MainActivity extends AppCompatActivity
         getSupportFragmentManager().popBackStack();
     }
 
-    private void tomarFoto(Visit visit) {
+    private void tomarFoto() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA)) {
                 Toast.makeText(this, R.string.permission_rationale, Toast.LENGTH_LONG).show();
@@ -287,7 +288,7 @@ public class MainActivity extends AppCompatActivity
             File photoFile = null;
             try {
                 String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-                String name = visit.nombreInstitucion() +"_"  + timeStamp + "_";
+                String name = mVisitaEnCurso.nombreInstitucion() +"_"  + timeStamp + "_";
                 photoFile = crearArchivoDeImagen(name);
             } catch (IOException ex) {
                 Toast.makeText(this, "Error al guardar la imagen", Toast.LENGTH_SHORT).show();
@@ -324,7 +325,14 @@ public class MainActivity extends AppCompatActivity
                     visit = mVisitaEnCurso;
                     URLImage = uriSavedImage.toString();
                 }};
-                mVisitaEnCurso.images.add(imagen);
+
+            /*    try {
+                    new ImageManager(getHelper()).persist(imagen);
+                }catch (SQLException ex){
+                    Toast.makeText(this, ex.getMessage(), Toast.LENGTH_SHORT).show();
+                }*/
+
+            mVisitaEnCurso.images.add(imagen);
             }
 
             Fragment frg = getSupportFragmentManager().findFragmentByTag(TAG_CONSTANCIA_VISITA);
@@ -359,6 +367,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void borrarImagen(Image imagen) {
+
         mVisitaEnCurso.images.remove(imagen);
 
         //TODO: Esto en realidad no lo está borrando, si nos queda tiempo revisarlo
