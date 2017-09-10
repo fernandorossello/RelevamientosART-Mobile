@@ -1,6 +1,8 @@
 package Modelo;
 
-public class Risk {
+import java.io.Serializable;
+
+public class Risk implements Serializable{
 
     public int id;
 

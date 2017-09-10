@@ -1,8 +1,9 @@
 package Modelo;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class CAPResult extends Result {
+public class CAPResult extends Result implements Serializable{
 
     public String topic;
 

@@ -1,4 +1,6 @@
 package Modelo;
 
-public class Attendee extends Employee {
+import java.io.Serializable;
+
+public class Attendee extends Employee implements Serializable{
 }
