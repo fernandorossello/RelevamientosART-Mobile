@@ -12,6 +12,7 @@ import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -54,6 +55,8 @@ public class MainActivity extends AppCompatActivity
 
     private static final int REQUEST_TAKE_PHOTO = 1500;
     private static final int REQUEST_READ = 2000;
+
+    private static final String TAG_CONSTANCIA_VISITA = "ConstanciaVisitaTag";
 
     private DBHelper mDBHelper;
 
@@ -114,7 +117,7 @@ public class MainActivity extends AppCompatActivity
             case R.id.action_constancia:
                 getSupportFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.fragment_container, ConstanciaVisitaFragment.newInstance(mVisitaEnCurso))
+                        .replace(R.id.fragment_container, ConstanciaVisitaFragment.newInstance(mVisitaEnCurso),TAG_CONSTANCIA_VISITA)
                         .addToBackStack(null)
                         .commit();
                 return true;
@@ -312,6 +315,13 @@ public class MainActivity extends AppCompatActivity
                 }};
                 mVisitaEnCurso.images.add(imagen);
             }
+
+            Fragment frg = getSupportFragmentManager().findFragmentByTag(TAG_CONSTANCIA_VISITA);
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .detach(frg)
+                    .attach(frg)
+                    .commit();
         }
     }
 
