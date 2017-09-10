@@ -1,9 +1,12 @@
 package com.example.fernando.relevamientosart.RAR;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.fernando.relevamientosart.R;
 
@@ -105,14 +109,19 @@ public class RiskFragment extends Fragment {
             .setOnClickListener(new View.OnClickListener() {
                  @Override
                  public void onClick(View view) {
-                     riesgos.add(new Risk(){{
+                     /*riesgos.add(new Risk(){{
                          code="00001";
                          description="Agente de riesgo";
-                     }});
+                     }});*/
+                     Toast.makeText(view.getContext(), "Aca debería llamar al RiskSelectorFragment", Toast.LENGTH_SHORT).show();
                     madapter.notifyDataSetChanged();
                  }
              }
         );
+
+
+
+
 
         return view;
     }
