@@ -69,6 +69,11 @@
     <string name="contenidos">Contenidos</string>
     <string name="curso">Curso</string>
     <string name="verFotos">Ver fotos</string>
+    <string name="borrarImagen">¿Desea borrar la imagen?</string>
+    <string name="borrarImagen_Title">Borrar imagen</string>
+    <string name="aceptar">Aceptar</string>
+    <string name="cancelar">Cancelar</string>
+    <string name="guardado">Guardado</string>
 
 
 </resources>

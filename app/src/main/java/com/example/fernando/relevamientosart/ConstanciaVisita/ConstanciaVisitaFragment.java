@@ -95,8 +95,9 @@ public class ConstanciaVisitaFragment extends Fragment {
         btnGuardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(view.getContext(), "Guardar", Toast.LENGTH_SHORT).show();
+                Toast.makeText(view.getContext(), R.string.guardado, Toast.LENGTH_SHORT).show();
                 guardarConstanciaDeVisita(view);
+                mListener.OnGuardarConstanciaDeVisita();
             }
         });
 
@@ -148,6 +149,7 @@ public class ConstanciaVisitaFragment extends Fragment {
     public interface OnEventoConstanciaListener {
         void OnTomarFoto(Visit visit);
         void OnVerFotosClick(Visit visit);
+        void OnGuardarConstanciaDeVisita();
     }
 
 }

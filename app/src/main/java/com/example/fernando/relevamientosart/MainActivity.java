@@ -2,9 +2,11 @@ package com.example.fernando.relevamientosart;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -13,10 +15,12 @@ import android.provider.MediaStore;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -31,6 +35,7 @@ import com.example.fernando.relevamientosart.RAR.RiskFragment;
 import com.example.fernando.relevamientosart.ConstanciaVisita.ConstanciaVisitaFragment;
 import com.example.fernando.relevamientosart.RGRL.PreguntaFragment;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
+import com.j256.ormlite.misc.TransactionManager;
 
 import java.io.File;
 import java.io.IOException;
@@ -57,6 +62,7 @@ public class MainActivity extends AppCompatActivity
     private static final int REQUEST_READ = 2000;
 
     private static final String TAG_CONSTANCIA_VISITA = "ConstanciaVisitaTag";
+    private static final String TAG_FRAGMENT_IMAGENES = "ListaImagensTag";
 
     private DBHelper mDBHelper;
 
@@ -255,9 +261,14 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void OnVerFotosClick(Visit visit) {
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, new ImageFragment().newInstance(visit))
+                .replace(R.id.fragment_container, new ImageFragment().newInstance(visit),TAG_FRAGMENT_IMAGENES)
                 .addToBackStack(null)
                 .commit();
+    }
+
+    @Override
+    public void OnGuardarConstanciaDeVisita() {
+        getSupportFragmentManager().popBackStack();
     }
 
     private void tomarFoto(Visit visit) {
@@ -326,7 +337,43 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onImagenPressed(Image imagen) {
-        Toast.makeText(this, imagen.URLImage, Toast.LENGTH_SHORT).show();
+    public void onImagenPressed(final Image imagen) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setMessage(R.string.borrarImagen)
+                .setTitle(R.string.borrarImagen_Title)
+                .setPositiveButton(R.string.aceptar, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        borrarImagen(imagen);
+                    }
+                });
+                builder.setNegativeButton(R.string.cancelar, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
+        AlertDialog dialog = builder.create();
+
+        dialog.show();
+    }
+
+    private void borrarImagen(Image imagen) {
+        mVisitaEnCurso.images.remove(imagen);
+
+        //TODO: Esto en realidad no lo está borrando, si nos queda tiempo revisarlo
+        new File(imagen.URLImage).delete();
+
+        if(mVisitaEnCurso.images.isEmpty()){
+            getSupportFragmentManager().popBackStack();
+        } else {
+            Fragment frg = getSupportFragmentManager().findFragmentByTag(TAG_FRAGMENT_IMAGENES);
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .detach(frg)
+                    .attach(frg)
+                    .commit();
+        }
+
     }
 }
