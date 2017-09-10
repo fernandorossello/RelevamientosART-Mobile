@@ -1,10 +1,18 @@
 package com.example.fernando.relevamientosart;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.provider.MediaStore;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -15,17 +23,24 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.example.fernando.relevamientosart.ConstanciaCapacitacion.ConstanciaCapacitacionFragment;
+import com.example.fernando.relevamientosart.ConstanciaVisita.ImageFragment;
+import com.example.fernando.relevamientosart.Login.LoginActivity;
 import com.example.fernando.relevamientosart.RAR.RARFragment;
 import com.example.fernando.relevamientosart.RAR.RiskFragment;
 import com.example.fernando.relevamientosart.ConstanciaVisita.ConstanciaVisitaFragment;
 import com.example.fernando.relevamientosart.RGRL.PreguntaFragment;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 
+import java.io.File;
+import java.io.IOException;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import Helpers.DBHelper;
 import Modelo.Enums.EnumTareas;
+import Modelo.Image;
 import Modelo.Managers.VisitManager;
 import Modelo.Task;
 import Modelo.Visit;
@@ -33,11 +48,18 @@ import Modelo.WorkingMan;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,VisitFragment.OnVisitSelectedListener,
-        RARFragment.OnTrabajadoresFragmentInteractionListener {
+        RARFragment.OnTrabajadoresFragmentInteractionListener,
+        ConstanciaVisitaFragment.OnEventoConstanciaListener,
+        ImageFragment.OnImageListFragmentInteractionListener {
+
+    private static final int REQUEST_TAKE_PHOTO = 1500;
+    private static final int REQUEST_READ = 2000;
 
     private DBHelper mDBHelper;
 
     private Visit mVisitaEnCurso;
+
+    private Uri uriSavedImage = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -222,4 +244,79 @@ public class MainActivity extends AppCompatActivity
                 .commit();
     }
 
+    @Override
+    public void OnTomarFoto(Visit visit) {
+        tomarFoto(visit);
+    }
+
+    @Override
+    public void OnVerFotosClick(Visit visit) {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, new ImageFragment().newInstance(visit))
+                .addToBackStack(null)
+                .commit();
+    }
+
+    private void tomarFoto(Visit visit) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA)) {
+                Toast.makeText(this, R.string.permission_rationale, Toast.LENGTH_LONG).show();
+            } else {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, REQUEST_READ);
+            }
+            return;
+        }
+
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+        if (takePictureIntent.resolveActivity(this.getPackageManager()) != null) {
+            File photoFile = null;
+            try {
+                String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+                String name = visit.nombreInstitucion() +"_"  + timeStamp + "_";
+                photoFile = crearArchivoDeImagen(name);
+            } catch (IOException ex) {
+                Toast.makeText(this, "Error al guardar la imagen", Toast.LENGTH_SHORT).show();
+            }
+            if (photoFile != null) {
+                uriSavedImage = Uri.fromFile(photoFile);
+                grantPermissionsToUri(this, takePictureIntent, uriSavedImage);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, uriSavedImage);
+                startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+            }
+        }
+    }
+
+    private static void grantPermissionsToUri(Context context, Intent intent, Uri uri) {
+        List<ResolveInfo> resInfoList = context.getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+        for (ResolveInfo resolveInfo : resInfoList) {
+            String packageName = resolveInfo.activityInfo.packageName;
+            context.grantUriPermission(packageName, uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        }
+    }
+
+    private File crearArchivoDeImagen(String fileName) throws IOException {
+        File imagesFolder = new File(Environment.getExternalStorageDirectory(), "ARTImages");
+        File image = new File(imagesFolder, fileName + ".jpg");
+        return image;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == REQUEST_TAKE_PHOTO){
+            if (resultCode == RESULT_OK){
+                Image imagen = new Image(){{
+                    visit = mVisitaEnCurso;
+                    URLImage = uriSavedImage.toString();
+                }};
+                mVisitaEnCurso.images.add(imagen);
+            }
+        }
+    }
+
+    @Override
+    public void onImagenPressed(Image imagen) {
+        Toast.makeText(this, imagen.URLImage, Toast.LENGTH_SHORT).show();
+    }
 }

@@ -12,6 +12,7 @@ import com.j256.ormlite.table.TableUtils;
 
 import java.sql.SQLException;
 
+import Modelo.Image;
 import Modelo.Institution;
 import Modelo.Task;
 import Modelo.User;
@@ -28,6 +29,7 @@ public class DBHelper extends OrmLiteSqliteOpenHelper {
     private Dao<Institution,Integer> institutionDao;
     private Dao<Task,Integer> taskDao;
     private Dao<VisitRecord,Integer> visitRecordDao;
+    private Dao<Image,Integer> imageDao;
 
     public DBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -41,6 +43,7 @@ public class DBHelper extends OrmLiteSqliteOpenHelper {
             TableUtils.createTable(connectionSource, Task.class);
             TableUtils.createTable(connectionSource, VisitRecord.class);
             TableUtils.createTable(connectionSource, Zone.class);
+            TableUtils.createTable(connectionSource, Image.class);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -76,6 +79,13 @@ public class DBHelper extends OrmLiteSqliteOpenHelper {
             visitRecordDao= getDao(VisitRecord.class);
         }
         return visitRecordDao;
+    }
+
+    public Dao<Image,Integer> getImageDao() throws SQLException {
+        if(imageDao == null){
+            imageDao = getDao(Image.class);
+        }
+        return imageDao;
     }
 
     @Override

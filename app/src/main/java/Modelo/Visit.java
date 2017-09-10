@@ -20,6 +20,7 @@ public class Visit implements Serializable {
 
     public Visit(){
         tasks = new ArrayList<>();
+        images=  new ArrayList<>();
     }
 
     @DatabaseField(id = true)
@@ -36,6 +37,9 @@ public class Visit implements Serializable {
 
     @ForeignCollectionField(eager = true)
     public Collection<Task> tasks;
+
+    @ForeignCollectionField(eager = true)
+    public Collection<Image> images;
 
     @DatabaseField(foreign = true,foreignAutoRefresh = true)
     public VisitRecord visitRecord;
