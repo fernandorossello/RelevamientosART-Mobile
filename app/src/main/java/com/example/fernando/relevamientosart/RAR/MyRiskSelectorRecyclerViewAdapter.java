@@ -47,8 +47,7 @@ public class MyRiskSelectorRecyclerViewAdapter extends RecyclerView.Adapter<MyRi
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).code);
-        holder.mContentView.setText(mValues.get(position).description);
+        holder.mContentView.setText(mValues.get(position).toString());
 
         if (mRiesgosDelTrabajador.contains(holder.mItem)){
             holder.mImageView.setVisibility(View.VISIBLE);
@@ -67,7 +66,6 @@ public class MyRiskSelectorRecyclerViewAdapter extends RecyclerView.Adapter<MyRi
                     mRiesgosDelTrabajador.add(holder.mItem);
                     holder.mImageView.setVisibility(View.VISIBLE);
                 }
-                    //mListener.onRiskSelectorFragmentInteraction();
                 mWorkingMan.riskList = mRiesgosDelTrabajador;
             }
         });
@@ -80,7 +78,6 @@ public class MyRiskSelectorRecyclerViewAdapter extends RecyclerView.Adapter<MyRi
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
-        public final TextView mIdView;
         public final TextView mContentView;
         public Risk mItem;
         public final ImageView mImageView;
@@ -88,7 +85,6 @@ public class MyRiskSelectorRecyclerViewAdapter extends RecyclerView.Adapter<MyRi
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mIdView = view.findViewById(R.id.id);
             mContentView = view.findViewById(R.id.content);
             mImageView = view.findViewById(R.id.iv_selected);
         }
