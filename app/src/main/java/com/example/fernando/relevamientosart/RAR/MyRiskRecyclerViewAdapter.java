@@ -9,6 +9,8 @@ import android.widget.TextView;
 
 import com.example.fernando.relevamientosart.R;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import Modelo.Risk;
@@ -18,8 +20,8 @@ public class MyRiskRecyclerViewAdapter extends RecyclerView.Adapter<MyRiskRecycl
 
     private final List<Risk> mValues;
 
-    public MyRiskRecyclerViewAdapter(List<Risk> items) {
-        mValues = items;
+    public MyRiskRecyclerViewAdapter(Collection<Risk> items) {
+        mValues = new ArrayList<>(items);
     }
 
     @Override
