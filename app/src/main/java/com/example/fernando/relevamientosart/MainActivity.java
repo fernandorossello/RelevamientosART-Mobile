@@ -18,6 +18,7 @@ import com.example.fernando.relevamientosart.ConstanciaCapacitacion.ConstanciaCa
 import com.example.fernando.relevamientosart.RAR.RARFragment;
 import com.example.fernando.relevamientosart.RAR.RiskFragment;
 import com.example.fernando.relevamientosart.ConstanciaVisita.ConstanciaVisitaFragment;
+import com.example.fernando.relevamientosart.RAR.RiskSelectorFragment;
 import com.example.fernando.relevamientosart.RGRL.PreguntaFragment;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 
@@ -33,7 +34,7 @@ import Modelo.WorkingMan;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,VisitFragment.OnVisitSelectedListener,
-        RARFragment.OnTrabajadoresFragmentInteractionListener {
+        RARFragment.OnTrabajadoresFragmentInteractionListener, RiskFragment.OnRiskFragmentInteractionListener {
 
     private DBHelper mDBHelper;
 
@@ -222,4 +223,11 @@ public class MainActivity extends AppCompatActivity
                 .commit();
     }
 
+    @Override
+    public void onNewRiskFragmentInteraction(WorkingMan workingMan) {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, RiskSelectorFragment.newInstance(workingMan))
+                .addToBackStack(null)
+                .commit();
+    }
 }

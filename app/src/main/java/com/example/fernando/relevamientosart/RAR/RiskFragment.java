@@ -37,6 +37,7 @@ public class RiskFragment extends Fragment {
     private final List<Risk> riesgos = new ArrayList<>();
     private final MyRiskRecyclerViewAdapter madapter = new MyRiskRecyclerViewAdapter(riesgos);
 
+    private OnRiskFragmentInteractionListener mListener;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -109,11 +110,8 @@ public class RiskFragment extends Fragment {
             .setOnClickListener(new View.OnClickListener() {
                  @Override
                  public void onClick(View view) {
-                     /*riesgos.add(new Risk(){{
-                         code="00001";
-                         description="Agente de riesgo";
-                     }});*/
-                     Toast.makeText(view.getContext(), "Aca debería llamar al RiskSelectorFragment", Toast.LENGTH_SHORT).show();
+                     mListener.onNewRiskFragmentInteraction(mWorkingMan);
+                     //Toast.makeText(view.getContext(), "Aca debería llamar al RiskSelectorFragment", Toast.LENGTH_SHORT).show();
                     madapter.notifyDataSetChanged();
                  }
              }
@@ -129,11 +127,18 @@ public class RiskFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        if (context instanceof OnRiskFragmentInteractionListener) {
+            mListener = (OnRiskFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnRiskFragmentInteractionListener");
+        }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
+        mListener = null;
     }
 
     private void cargarListenerFechaIngreso(View view) {
@@ -216,6 +221,10 @@ public class RiskFragment extends Fragment {
         String myFormat = "dd/MM/yy";
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat);
         return sdf.format(date);
+    }
+
+    public interface OnRiskFragmentInteractionListener {
+        void onNewRiskFragmentInteraction(WorkingMan workingMan);
     }
 
 }

@@ -28,7 +28,6 @@ public class RiskSelectorFragment extends Fragment {
     // TODO: Customize parameters
     private int mColumnCount = 1;
     private OnRiskSelectorFragmentInteractionListener mListener;
-    private final MyRiskSelectorRecyclerViewAdapter madapter = new MyRiskSelectorRecyclerViewAdapter(mWorkingMan.riskList, mListener);
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -42,11 +41,7 @@ public class RiskSelectorFragment extends Fragment {
     public static RiskSelectorFragment newInstance(WorkingMan workingMan) {
         RiskSelectorFragment fragment = new RiskSelectorFragment();
         Bundle args = new Bundle();
-        if (workingMan != null) {
-            args.putSerializable(RiskSelectorFragment.ARG_WORKING_MAN, workingMan);
-        } else {
-            args.putSerializable(RiskSelectorFragment.ARG_WORKING_MAN, new WorkingMan());
-        }
+        args.putSerializable(RiskSelectorFragment.ARG_WORKING_MAN, workingMan);
 
         fragment.setArguments(args);
         return fragment;
@@ -70,8 +65,7 @@ public class RiskSelectorFragment extends Fragment {
 
         Context context = view.getContext();
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
-        recyclerView.setAdapter(madapter);
-        //recyclerView.setAdapter(new MyRiskSelectorRecyclerViewAdapter(mWorkingMan.riskList, mListener));
+        recyclerView.setAdapter(new MyRiskSelectorRecyclerViewAdapter(mWorkingMan, mListener));
 
         return view;
     }
@@ -82,10 +76,11 @@ public class RiskSelectorFragment extends Fragment {
         super.onAttach(context);
         if (context instanceof OnRiskSelectorFragmentInteractionListener) {
             mListener = (OnRiskSelectorFragmentInteractionListener) context;
-        } else {
+        }
+        /*else {
             throw new RuntimeException(context.toString()
                     + " must implement OnRiskSelectorFragmentInteractionListener");
-        }
+        }*/
     }
 
     @Override
