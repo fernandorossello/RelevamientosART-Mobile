@@ -8,11 +8,18 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.example.fernando.relevamientosart.MainActivity;
 import com.example.fernando.relevamientosart.R;
 
+import java.sql.SQLException;
+import java.util.Collection;
 import java.util.List;
 
+import Modelo.Employee;
+import Modelo.Managers.TaskManager;
+import Modelo.Managers.VisitManager;
 import Modelo.Managers.WorkingManManager;
 import Modelo.RARResult;
 import Modelo.Task;
@@ -62,13 +69,15 @@ public class RARFragment extends Fragment {
         
         Context context = view.getContext();
             recyclerView.setLayoutManager(new LinearLayoutManager(context));
-        List<WorkingMan> lista = new WorkingManManager().trabajadoresEjemplo();
+        Collection<WorkingMan> lista = ((RARResult) mTarea.result).workingMen;
         recyclerView.setAdapter(new MyTrabajadorRecyclerViewAdapter(lista, mListener));
 
         view.findViewById(R.id.btn_agregarTrabajador).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                    mListener.onTrabajadorNuevo();
+                    WorkingMan workingMan = new WorkingMan();
+                    ((RARResult) mTarea.result).workingMen.add(workingMan);
+                mListener.onTrabajadorSeleccionado(workingMan);
             }
         });
 
@@ -86,14 +95,27 @@ public class RARFragment extends Fragment {
         }
     }
 
+
     @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        try {
+            new TaskManager(((MainActivity)getActivity()).getHelper()).persist(mTarea);
+        } catch (SQLException ex){
+            Toast.makeText(getActivity(), ex.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+
+
+    }
+
     public interface OnTrabajadoresFragmentInteractionListener {
-        void onTrabajadorNuevo();
         void onTrabajadorSeleccionado(WorkingMan workingMan);
     }
 }

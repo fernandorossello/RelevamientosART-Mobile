@@ -1,17 +1,24 @@
 package Modelo;
 
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
+
+@DatabaseTable
 public class Employee {
 
-    public int id;
-
+    @DatabaseField
     public String cuil;
 
+    @DatabaseField
     public String name;
 
+    @DatabaseField
     public String lastName;
 
+    @DatabaseField
     public String sector;
 
+    @DatabaseField
     public String type;
 
     public String nombreCompleto(){

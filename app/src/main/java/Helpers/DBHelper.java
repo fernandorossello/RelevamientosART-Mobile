@@ -12,11 +12,15 @@ import com.j256.ormlite.table.TableUtils;
 
 import java.sql.SQLException;
 
+import Modelo.Employee;
 import Modelo.Institution;
+import Modelo.RARResult;
+import Modelo.Result;
 import Modelo.Task;
 import Modelo.User;
 import Modelo.Visit;
 import Modelo.VisitRecord;
+import Modelo.WorkingMan;
 import Modelo.Zone;
 
 public class DBHelper extends OrmLiteSqliteOpenHelper {
@@ -40,6 +44,11 @@ public class DBHelper extends OrmLiteSqliteOpenHelper {
             TableUtils.createTable(connectionSource, Task.class);
             TableUtils.createTable(connectionSource, VisitRecord.class);
             TableUtils.createTable(connectionSource, Zone.class);
+            TableUtils.createTable(connectionSource, Employee.class);
+            TableUtils.createTable(connectionSource, WorkingMan.class);
+            TableUtils.createTable(connectionSource, Result.class);
+            TableUtils.createTable(connectionSource, RARResult.class);
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

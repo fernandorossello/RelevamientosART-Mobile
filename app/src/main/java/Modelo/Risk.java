@@ -17,6 +17,9 @@ public class Risk {
         return code + " - " +description;
     }
 
+    @DatabaseField(foreign = true,foreignAutoRefresh = true)
+    public WorkingMan workingMan;
+
     @Override
     public boolean equals(Object other) {
         if (other == null) return false;

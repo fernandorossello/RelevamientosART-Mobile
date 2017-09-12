@@ -17,11 +17,20 @@ public class WorkingMan extends Employee implements Serializable {
         riskList = new ArrayList<>();
     }
 
+    @DatabaseField(generatedId = true)
+    public int id;
+
+    @DatabaseField
     public Date checked_in_on;
 
+    @DatabaseField
     public Date exposed_from_at;
 
+    @DatabaseField
     public Date exposed_until_at;
+
+    @DatabaseField(foreign = true, foreignAutoRefresh = true)
+    public RARResult result;
 
     @ForeignCollectionField
     public Collection<Risk> riskList;

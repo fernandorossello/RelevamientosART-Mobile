@@ -49,12 +49,7 @@ public class RiskFragment extends Fragment {
     public static RiskFragment newInstance(WorkingMan workingMan) {
         RiskFragment fragment = new RiskFragment();
         Bundle args = new Bundle();
-
-        if (workingMan != null) {
-            args.putSerializable(RiskFragment.ARG_WORKING_MAN, workingMan);
-        } else {
-            args.putSerializable(RiskFragment.ARG_WORKING_MAN, new WorkingMan());
-        }
+        args.putSerializable(RiskFragment.ARG_WORKING_MAN, workingMan);
         fragment.setArguments(args);
         return fragment;
     }
@@ -72,7 +67,6 @@ public class RiskFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_riesgos_trabajador, container, false);
-
         RecyclerView recyclerView = view.findViewById(R.id.riskList);
 
         Context context = view.getContext();
@@ -90,13 +84,13 @@ public class RiskFragment extends Fragment {
         tvApellido.setText(mWorkingMan.lastName);
         tvCuil.setText(mWorkingMan.cuil);
 
-        if(mWorkingMan.checked_in_on != null)
+        if (mWorkingMan.checked_in_on != null)
             tvFechaIngreso.setText(formatearFecha(mWorkingMan.checked_in_on));
 
-        if(mWorkingMan.exposed_from_at != null)
+        if (mWorkingMan.exposed_from_at != null)
             tvFechaInicio.setText(formatearFecha(mWorkingMan.exposed_from_at));
 
-        if(mWorkingMan.exposed_until_at != null)
+        if (mWorkingMan.exposed_until_at != null)
             tvFechaFin.setText(formatearFecha(mWorkingMan.exposed_until_at));
 
         recyclerView.setAdapter(new MyRiskRecyclerViewAdapter(mWorkingMan.riskList));
@@ -113,10 +107,6 @@ public class RiskFragment extends Fragment {
                  }
              }
         );
-
-
-
-
 
         return view;
     }
@@ -224,4 +214,17 @@ public class RiskFragment extends Fragment {
         void onNewRiskFragmentInteraction(WorkingMan workingMan);
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        mWorkingMan.name = ((EditText)getView().findViewById(R.id.tv_worker_name)).getText().toString();
+        mWorkingMan.lastName = ((EditText)getView().findViewById(R.id.tv_worker_lastName)).getText().toString();
+        mWorkingMan.cuil = ((EditText)getView().findViewById(R.id.tv_worker_cuil)).getText().toString();
+        //TODO: formatearCorrectamente la fecha
+        //mWorkingMan.checked_in_on = new Date(((EditText)getView().findViewById(R.id.tv_worker_fechaIngreso)).getText().toString());
+        //mWorkingMan.exposed_from_at = new Date(((EditText)getView().findViewById(R.id.tv_worker_fechaInicio)).getText().toString());
+        //mWorkingMan.exposed_until_at = new Date(((EditText)getView().findViewById(R.id.tv_worker_fechaFin)).getText().toString());
+        //TODO: Persistir workingMan
+    }
 }

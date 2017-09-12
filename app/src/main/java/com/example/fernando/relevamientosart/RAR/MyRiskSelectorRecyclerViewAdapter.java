@@ -51,6 +51,8 @@ public class MyRiskSelectorRecyclerViewAdapter extends RecyclerView.Adapter<MyRi
 
         if (mRiesgosDelTrabajador.contains(holder.mItem)){
             holder.mImageView.setVisibility(View.VISIBLE);
+        } else {
+            holder.mImageView.setVisibility(View.INVISIBLE);
         }
 
         holder.mView.setOnClickListener(new View.OnClickListener() {

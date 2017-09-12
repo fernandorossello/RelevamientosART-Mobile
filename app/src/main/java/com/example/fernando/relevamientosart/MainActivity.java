@@ -208,14 +208,6 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onTrabajadorNuevo() {
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, new RiskFragment().newInstance(null))
-                .addToBackStack(null)
-                .commit();
-    }
-
-    @Override
     public void onTrabajadorSeleccionado(WorkingMan workingMan) {
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, new RiskFragment().newInstance(workingMan))

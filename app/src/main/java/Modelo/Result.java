@@ -6,9 +6,9 @@ import com.j256.ormlite.table.DatabaseTable;
 import java.util.Date;
 
 @DatabaseTable
-public class Result {
+public abstract class Result {
 
-    @DatabaseField(id = true)
+    @DatabaseField(generatedId = true)
     public int id;
 
     @DatabaseField
