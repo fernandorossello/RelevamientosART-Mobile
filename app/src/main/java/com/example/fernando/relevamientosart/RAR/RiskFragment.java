@@ -35,7 +35,6 @@ public class RiskFragment extends Fragment {
 
     private final Calendar myCalendar = Calendar.getInstance();
     private final List<Risk> riesgos = new ArrayList<>();
-    private final MyRiskRecyclerViewAdapter madapter = new MyRiskRecyclerViewAdapter(riesgos);
 
     private OnRiskFragmentInteractionListener mListener;
 
@@ -100,7 +99,7 @@ public class RiskFragment extends Fragment {
         if(mWorkingMan.exposed_until_at != null)
             tvFechaFin.setText(formatearFecha(mWorkingMan.exposed_until_at));
 
-        recyclerView.setAdapter(madapter);
+        recyclerView.setAdapter(new MyRiskRecyclerViewAdapter(mWorkingMan.riskList));
 
         cargarListenerFechaIngreso(view);
         cargarListenerFechaInicio(view);
@@ -111,8 +110,6 @@ public class RiskFragment extends Fragment {
                  @Override
                  public void onClick(View view) {
                      mListener.onNewRiskFragmentInteraction(mWorkingMan);
-                     //Toast.makeText(view.getContext(), "Aca debería llamar al RiskSelectorFragment", Toast.LENGTH_SHORT).show();
-                    madapter.notifyDataSetChanged();
                  }
              }
         );

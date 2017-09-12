@@ -9,6 +9,8 @@ import android.widget.TextView;
 
 import com.example.fernando.relevamientosart.R;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import Modelo.Risk;
@@ -18,8 +20,8 @@ public class MyRiskRecyclerViewAdapter extends RecyclerView.Adapter<MyRiskRecycl
 
     private final List<Risk> mValues;
 
-    public MyRiskRecyclerViewAdapter(List<Risk> items) {
-        mValues = items;
+    public MyRiskRecyclerViewAdapter(Collection<Risk> items) {
+        mValues = new ArrayList<>(items);
     }
 
     @Override
@@ -32,8 +34,7 @@ public class MyRiskRecyclerViewAdapter extends RecyclerView.Adapter<MyRiskRecycl
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).code);
-        holder.mContentView.setText(mValues.get(position).description);
+        holder.mContentView.setText(mValues.get(position).toString());
     }
 
     @Override
@@ -43,15 +44,13 @@ public class MyRiskRecyclerViewAdapter extends RecyclerView.Adapter<MyRiskRecycl
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
-        public final TextView mIdView;
         public final TextView mContentView;
         public Risk mItem;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mIdView = (TextView) view.findViewById(R.id.id);
-            mContentView = (TextView) view.findViewById(R.id.content);
+            mContentView = view.findViewById(R.id.content);
         }
 
         @Override
