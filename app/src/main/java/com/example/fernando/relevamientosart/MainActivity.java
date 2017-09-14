@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.example.fernando.relevamientosart.ConstanciaCapacitacion.ConstanciaCapacitacionFragment;
+import com.example.fernando.relevamientosart.ConstanciaCapacitacion.NewAttendeeFragment;
 import com.example.fernando.relevamientosart.RAR.RARFragment;
 import com.example.fernando.relevamientosart.RAR.RiskFragment;
 import com.example.fernando.relevamientosart.ConstanciaVisita.ConstanciaVisitaFragment;
@@ -25,6 +26,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import Helpers.DBHelper;
+import Modelo.Attendee;
 import Modelo.Enums.EnumTareas;
 import Modelo.Managers.VisitManager;
 import Modelo.Task;
@@ -33,7 +35,7 @@ import Modelo.WorkingMan;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,VisitFragment.OnVisitSelectedListener,
-        RARFragment.OnTrabajadoresFragmentInteractionListener {
+        RARFragment.OnTrabajadoresFragmentInteractionListener, ConstanciaCapacitacionFragment.OnNewAttendeeInteractionListener {
 
     private DBHelper mDBHelper;
 
@@ -222,4 +224,11 @@ public class MainActivity extends AppCompatActivity
                 .commit();
     }
 
+    @Override
+    public void onNewAttendee(Attendee attendee) {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, new NewAttendeeFragment().newInstance(attendee))
+                .addToBackStack(null)
+                .commit();
+    }
 }

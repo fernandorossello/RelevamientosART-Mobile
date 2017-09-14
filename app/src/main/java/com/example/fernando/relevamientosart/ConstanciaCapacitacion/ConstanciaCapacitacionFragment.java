@@ -27,6 +27,8 @@ public class ConstanciaCapacitacionFragment extends Fragment {
     private static final String ARG_TASK = "tarea";
     private Task mTarea;
 
+    private OnNewAttendeeInteractionListener mListener;
+
     public ConstanciaCapacitacionFragment() {
         // Required empty public constructor
     }
@@ -68,7 +70,7 @@ public class ConstanciaCapacitacionFragment extends Fragment {
         btnAgregarAttendee.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(view.getContext(), "Agregar Attendee", Toast.LENGTH_SHORT).show();
+                mListener.onNewAttendee(new Attendee());
             }
         });
 
@@ -78,11 +80,15 @@ public class ConstanciaCapacitacionFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        if (context instanceof OnNewAttendeeInteractionListener) {
+            mListener = (OnNewAttendeeInteractionListener) context;
+        }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
+        mListener = null;
     }
 
     /**
@@ -95,8 +101,7 @@ public class ConstanciaCapacitacionFragment extends Fragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+    public interface OnNewAttendeeInteractionListener {
+        void onNewAttendee(Attendee attendee);
     }
 }
