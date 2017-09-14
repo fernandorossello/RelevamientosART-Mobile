@@ -33,6 +33,7 @@ import com.example.fernando.relevamientosart.Login.LoginActivity;
 import com.example.fernando.relevamientosart.RAR.RARFragment;
 import com.example.fernando.relevamientosart.RAR.RiskFragment;
 import com.example.fernando.relevamientosart.ConstanciaVisita.ConstanciaVisitaFragment;
+import com.example.fernando.relevamientosart.RAR.RiskSelectorFragment;
 import com.example.fernando.relevamientosart.RGRL.PreguntaFragment;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.misc.TransactionManager;
@@ -57,13 +58,14 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,VisitFragment.OnVisitSelectedListener,
         RARFragment.OnTrabajadoresFragmentInteractionListener,
         ConstanciaVisitaFragment.OnEventoConstanciaListener,
-        ImageFragment.OnImageListFragmentInteractionListener {
+        ImageFragment.OnImageListFragmentInteractionListener,
+        RiskFragment.OnRiskFragmentInteractionListener {
 
     private static final int REQUEST_TAKE_PHOTO = 1500;
     private static final int REQUEST_READ = 2000;
-
     private static final String TAG_CONSTANCIA_VISITA = "ConstanciaVisitaTag";
     private static final String TAG_FRAGMENT_IMAGENES = "ListaImagensTag";
+
 
     private DBHelper mDBHelper;
 
@@ -326,12 +328,6 @@ public class MainActivity extends AppCompatActivity
                     URLImage = uriSavedImage.toString();
                 }};
 
-            /*    try {
-                    new ImageManager(getHelper()).persist(imagen);
-                }catch (SQLException ex){
-                    Toast.makeText(this, ex.getMessage(), Toast.LENGTH_SHORT).show();
-                }*/
-
             mVisitaEnCurso.images.add(imagen);
             }
 
@@ -384,5 +380,12 @@ public class MainActivity extends AppCompatActivity
                     .commit();
         }
 
+    }
+    
+    public void onNewRiskFragmentInteraction(WorkingMan workingMan) {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, RiskSelectorFragment.newInstance(workingMan))
+                .addToBackStack(null)
+                .commit();
     }
 }
