@@ -8,10 +8,13 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.StrictMode;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -73,6 +76,8 @@ public class MainActivity extends AppCompatActivity
 
     private Uri uriSavedImage = null;
 
+    private StrictMode.VmPolicy.Builder mBuilder;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,6 +90,10 @@ public class MainActivity extends AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
+
+        //Allow camera works in SDK targets above v24
+        mBuilder = new StrictMode.VmPolicy.Builder();
+        StrictMode.setVmPolicy(mBuilder.build());
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -274,6 +283,7 @@ public class MainActivity extends AppCompatActivity
         getSupportFragmentManager().popBackStack();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
     private void tomarFoto() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA)) {
@@ -296,6 +306,7 @@ public class MainActivity extends AppCompatActivity
                 Toast.makeText(this, "Error al guardar la imagen", Toast.LENGTH_SHORT).show();
             }
             if (photoFile != null) {
+                mBuilder.detectFileUriExposure();
                 uriSavedImage = Uri.fromFile(photoFile);
                 grantPermissionsToUri(this, takePictureIntent, uriSavedImage);
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, uriSavedImage);
