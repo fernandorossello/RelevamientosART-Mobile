@@ -4,225 +4,345 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.fernando.relevamientosart.VisitDetalleFragment">
-<ScrollView
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/razon_social"
-            android:textSize="@dimen/detalle_label"
-            android:textColor="@color/colorPrimary"/>
-
-        <TextView
-            android:id="@+id/tv_detalle_nombre_institucion"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/detalle_valor_label"/>
-
-        
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/domicilio"
-            android:textSize="@dimen/detalle_label"
-            android:textColor="@color/colorPrimary"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Medrano 950"
-            android:textSize="@dimen/detalle_valor_label"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/cuit"
-            android:textSize="@dimen/detalle_label"
-            android:textColor="@color/colorPrimary"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="30-12345678-9"
-            android:textSize="@dimen/detalle_valor_label"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/contrato_num"
-            android:textSize="@dimen/detalle_label"
-            android:textColor="@color/colorPrimary"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="123456789"
-            android:textSize="@dimen/detalle_valor_label"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/fecha_visita"
-            android:textSize="@dimen/detalle_label"
-            android:textColor="@color/colorPrimary"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="02/SEP/2017"
-            android:textSize="@dimen/detalle_valor_label"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/actividad"
-            android:textSize="@dimen/detalle_label"
-            android:textColor="@color/colorPrimary"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Venta de equipamiento infotmático"
-            android:textSize="@dimen/detalle_valor_label"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/ciuu"
-            android:textSize="@dimen/detalle_label"
-            android:textColor="@color/colorPrimary"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="123432123"
-            android:textSize="@dimen/detalle_valor_label"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/establec_nombre_numero"
-            android:textSize="@dimen/detalle_label"
-            android:textColor="@color/colorPrimary"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="establecimiento 1"
-            android:textSize="@dimen/detalle_valor_label"/>
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/trabajadores_num"
-            android:textSize="@dimen/detalle_label"
-            android:textColor="@color/colorPrimary"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Datos de la empresa"
+                android:textColor="@color/colorAsignada"
+                android:textSize="@dimen/label_size"
+                />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="9"
-            android:textSize="@dimen/detalle_valor_label"/>
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+                <EditText
+                    android:id="@+id/tv_detalle_nombre_institucion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/razon_social"
+                    android:imeActionLabel="@string/razon_social"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:enabled="false"/>
+            </android.support.design.widget.TextInputLayout>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/codigo_postal"
-            android:textSize="@dimen/detalle_label"
-            android:textColor="@color/colorPrimary"/>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="C436SSR"
-            android:textSize="@dimen/detalle_valor_label"/>
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+                <EditText
+                    android:id="@+id/tv_detalle_direccion_institucion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/domicilio"
+                    android:imeActionLabel="@string/domicilio"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:enabled="false"/>
+            </android.support.design.widget.TextInputLayout>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/localidad"
-            android:textSize="@dimen/detalle_label"
-            android:textColor="@color/colorPrimary"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Ciudad autonóma de Buenos Aires"
-            android:textSize="@dimen/detalle_valor_label"/>
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/provincia"
-            android:textSize="@dimen/detalle_label"
-            android:textColor="@color/colorPrimary"/>
+                    <EditText
+                        android:id="@+id/tv_provincia"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/provincia"
+                        android:imeActionLabel="@string/provincia"
+                        android:inputType="text"
+                        android:maxLines="1"
+                        android:enabled="false"/>
+                </android.support.design.widget.TextInputLayout>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="CABA"
-            android:textSize="@dimen/detalle_valor_label"/>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/telefono"
-            android:textSize="@dimen/detalle_label"
-            android:textColor="@color/colorPrimary"/>
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+                    <EditText
+                        android:id="@+id/tv_localidad"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/localidad"
+                        android:imeActionLabel="@string/localidad"
+                        android:inputType="text"
+                        android:maxLines="1"
+                        android:enabled="false"/>
+                </android.support.design.widget.TextInputLayout>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="4961-1234"
-            android:textSize="@dimen/detalle_valor_label"/>
+            </LinearLayout>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/codigo_estab_afip"
-            android:textSize="@dimen/detalle_label"
-            android:textColor="@color/colorPrimary"/>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="establecimientoAFIP 1"
-            android:textSize="@dimen/detalle_valor_label"/>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/persona_contactada"
-            android:textSize="@dimen/detalle_label"
-            android:textColor="@color/colorPrimary"/>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Cosme Fulanito"
-            android:textSize="@dimen/detalle_valor_label"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/e_mail"
-            android:textSize="@dimen/detalle_label"
-            android:textColor="@color/colorPrimary"/>
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="establecimiento1@utn.com"
-            android:textSize="@dimen/detalle_valor_label"/>
-    </LinearLayout>
+                    <EditText
+                        android:id="@+id/tv_cuit"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="CUIT"
+                        android:imeActionLabel="CUIT"
+                        android:inputType="text"
+                        android:maxLines="1"
+                        android:enabled="false"/>
+                </android.support.design.widget.TextInputLayout>
 
-</ScrollView>
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+                    <EditText
+                        android:id="@+id/tv_contrato"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Contrato N°"
+                        android:imeActionLabel="Contrato N°"
+                        android:inputType="text"
+                        android:maxLines="1"
+                        android:enabled="false"/>
+                </android.support.design.widget.TextInputLayout>
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <EditText
+                        android:id="@+id/tv_actividad"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Actividad"
+                        android:imeActionLabel="Actividad"
+                        android:inputType="text"
+                        android:maxLines="1"
+                        android:enabled="false"/>
+                </android.support.design.widget.TextInputLayout>
+
+
+            </LinearLayout>
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <EditText
+                        android:id="@+id/tv_NumYNomEstablecimiento"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Numero y nombre del establecimiento"
+                        android:imeActionLabel="Numero y nombre del establecimiento"
+                        android:inputType="text"
+                        android:maxLines="1"
+                        android:enabled="false"/>
+                </android.support.design.widget.TextInputLayout>
+
+
+            </LinearLayout>
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <EditText
+                        android:id="@+id/tv_numTrabajadores"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="N° trabajadores"
+                        android:imeActionLabel="N° trabajadores"
+                        android:inputType="numberSigned"
+                        android:maxLines="1"
+                        android:enabled="false"/>
+                </android.support.design.widget.TextInputLayout>
+
+
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+                    <EditText
+                        android:id="@+id/tv_codPostal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Código Postal"
+                        android:imeActionLabel="Código Postal"
+                        android:inputType="text"
+                        android:maxLines="1"
+                        android:enabled="false"/>
+                </android.support.design.widget.TextInputLayout>
+
+
+            </LinearLayout>
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2">
+
+                    <EditText
+                        android:id="@+id/tv_telefono"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Teléfono"
+                        android:imeActionLabel="Teléfono"
+                        android:inputType="text"
+                        android:maxLines="1"
+                        android:enabled="false"/>
+                </android.support.design.widget.TextInputLayout>
+
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <EditText
+                        android:id="@+id/tv_email"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Correo electrónico"
+                        android:imeActionLabel="Correo electrónico"
+                        android:inputType="text"
+                        android:maxLines="1"
+                        android:enabled="false"/>
+                </android.support.design.widget.TextInputLayout>
+
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <EditText
+                        android:id="@+id/tv_contacto"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Contacto"
+                        android:imeActionLabel="Contacto"
+                        android:inputType="text"
+                        android:maxLines="1"
+                        android:enabled="false"/>
+                </android.support.design.widget.TextInputLayout>
+
+
+
+
+            </LinearLayout>
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3">
+
+                    <EditText
+                        android:id="@+id/tv_ciiu"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="CIIU"
+                        android:imeActionLabel="CIIU"
+                        android:inputType="text"
+                        android:maxLines="1"
+                        android:enabled="false"/>
+                </android.support.design.widget.TextInputLayout>
+
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <EditText
+                        android:id="@+id/tv_codAFIP"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Código establ. AFIP"
+                        android:imeActionLabel="Código establ. AFIP"
+                        android:inputType="text"
+                        android:maxLines="1"
+                        android:enabled="false"/>
+                </android.support.design.widget.TextInputLayout>
+
+            </LinearLayout>
+
+
+
+        </LinearLayout>
+    </ScrollView>
 </android.support.design.widget.CoordinatorLayout>
