@@ -18,13 +18,12 @@ public class TaskManager extends Manager<Task> {
     public void persist(Task item) throws SQLException {
         {
             Dao daoTareas = dbHelper.getTaskDao();
-            ResultManager  resultadosManager = new ResultManager(dbHelper);
 
             if (!daoTareas.idExists(item.id)) {
                 daoTareas.create(item);
+            } else {
+                daoTareas.update(item);
             }
-
-
         }
     }
 

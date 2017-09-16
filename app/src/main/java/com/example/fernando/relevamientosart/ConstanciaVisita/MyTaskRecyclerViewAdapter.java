@@ -7,7 +7,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.fernando.relevamientosart.R;
+import com.j256.ormlite.dao.ForeignCollection;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import Modelo.Task;
@@ -16,8 +19,8 @@ public class MyTaskRecyclerViewAdapter extends RecyclerView.Adapter<MyTaskRecycl
 
     private List<Task> mValues;
 
-    public MyTaskRecyclerViewAdapter(List<Task> items) {
-        mValues = items;
+    public MyTaskRecyclerViewAdapter(Collection<Task> items) {
+        mValues = new ArrayList<Task>(items);;
     }
 
     @Override

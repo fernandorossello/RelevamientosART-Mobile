@@ -1,56 +1,49 @@
 package com.example.fernando.relevamientosart.ConstanciaVisita;
 
-import android.Manifest;
 import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.FileProvider;
 import android.support.v7.widget.AppCompatImageButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.fernando.relevamientosart.MainActivity;
 import com.example.fernando.relevamientosart.R;
+import com.example.fernando.relevamientosart.RAR.RARFragment;
 
-import java.io.File;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
+
+import org.w3c.dom.Text;
+
+import java.sql.SQLException;
 import java.util.Date;
-import java.util.List;
 
-import Modelo.Task;
+import Helpers.DBHelper;
+import Modelo.Managers.VisitManager;
+import Modelo.Visit;
+import Modelo.VisitRecord;
 
 
 public class ConstanciaVisitaFragment extends Fragment {
-    private static final String ARG_PARAM1 = "visita";
+    private static final String ARG_visita = "visita";
 
-    private String mVisit;
+    private Visit mVisit;
+    private OnEventoConstanciaListener mListener;
 
     public ConstanciaVisitaFragment() {
         // Required empty public constructor
     }
 
-    private static final int REQUEST_TAKE_PHOTO = 1500;
-    private static final int REQUEST_READ = 2000;
-
-
-    public static ConstanciaVisitaFragment newInstance(String param1) {
+    public static ConstanciaVisitaFragment newInstance(Visit visit) {
         ConstanciaVisitaFragment fragment = new ConstanciaVisitaFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
+        args.putSerializable(ARG_visita, visit);
         fragment.setArguments(args);
         return fragment;
     }
@@ -59,7 +52,10 @@ public class ConstanciaVisitaFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mVisit = getArguments().getString(ARG_PARAM1);
+            mVisit = (Visit)getArguments().getSerializable(ARG_visita);
+            if(mVisit.visitRecord == null){
+                mVisit.visitRecord = new VisitRecord();
+            }
         }
     }
 
@@ -70,19 +66,28 @@ public class ConstanciaVisitaFragment extends Fragment {
 
         RecyclerView recyclerView  = view.findViewById(R.id.taskList);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+        recyclerView.setAdapter(new MyTaskRecyclerViewAdapter(mVisit.tasks));
 
-        List<Task> tareas = new ArrayList<>();
-        tareas.add(new Task(){{type=1;}});
-        tareas.add(new Task(){{type=2;}});
-        tareas.add(new Task(){{type=3;}});
-        recyclerView.setAdapter(new MyTaskRecyclerViewAdapter(tareas));
+        EditText etObservaciones = view.findViewById(R.id.et_observaciones);
+        etObservaciones.setText(mVisit.visitRecord.observations);
+
+        TextView tvVerFotos = view.findViewById(R.id.tv_ver_fotos);
+
+        if(mVisit.images == null || mVisit.images.isEmpty()) {
+            tvVerFotos.setVisibility(View.INVISIBLE);
+        }
+        tvVerFotos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mListener.OnVerFotosClick(mVisit);
+            }
+        });
 
         AppCompatImageButton btnFoto = view.findViewById(R.id.btn_camera);
         btnFoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                   //tomarFoto();
-                Toast.makeText(view.getContext(), "Tomar foto", Toast.LENGTH_SHORT).show();
+                mListener.OnTomarFoto();
             }
         });
 
@@ -90,10 +95,11 @@ public class ConstanciaVisitaFragment extends Fragment {
         btnGuardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(view.getContext(), "Guardar", Toast.LENGTH_SHORT).show();
+                Toast.makeText(view.getContext(), R.string.guardado, Toast.LENGTH_SHORT).show();
+                guardarConstanciaDeVisita(view);
+                mListener.OnGuardarConstanciaDeVisita();
             }
         });
-
 
         AppCompatImageButton btnAudio = view.findViewById(R.id.btn_audio);
         btnAudio.setOnClickListener(new View.OnClickListener() {
@@ -106,65 +112,44 @@ public class ConstanciaVisitaFragment extends Fragment {
         return view;
     }
 
+    private void guardarConstanciaDeVisita(View view) {
+        EditText etObservaciones = ((View)view.getParent()).findViewById(R.id.et_observaciones);
+        mVisit.visitRecord.observations = etObservaciones.getText().toString();
+
+        mVisit.visitRecord.completed_at = new Date();
+
+
+        DBHelper dbHelper = ((MainActivity)view.getContext()).getHelper();
+
+        try {
+            (new VisitManager(dbHelper)).persist(mVisit);
+        }catch (SQLException ex){
+            Toast.makeText(view.getContext(), ex.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        if (context instanceof OnEventoConstanciaListener) {
+            mListener = (OnEventoConstanciaListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnTrabajadoresFragmentInteractionListener");
+        }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
+        mListener = null;
     }
 
 
-    //TODO: Revisar por qué está fallando al tomar la foto
-    private void tomarFoto() {
-        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this.getActivity(), Manifest.permission.CAMERA)) {
-                Toast.makeText(getContext(), R.string.permission_rationale, Toast.LENGTH_LONG).show();
-            } else {
-                ActivityCompat.requestPermissions(this.getActivity(), new String[]{Manifest.permission.CAMERA}, REQUEST_READ);
-            }
-            return;
-        }
-
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
-            File photoFile = null;
-            try {
-                photoFile = crearArchivoDeImagen();
-            } catch (IOException ex) {
-                Toast.makeText(getContext(), "Error al guardar la imagen", Toast.LENGTH_SHORT).show();
-            }
-            if (photoFile != null) {
-                String prueba = getContext().getApplicationContext().getPackageName();
-                Uri photoURI = FileProvider.getUriForFile(getContext(),getContext().getApplicationContext().getPackageName()+".fileprovider", photoFile);
-                grantPermissionsToUri(this.getActivity(), takePictureIntent, photoURI);
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
-            }
-        }
+    public interface OnEventoConstanciaListener {
+        void OnTomarFoto();
+        void OnVerFotosClick(Visit visit);
+        void OnGuardarConstanciaDeVisita();
     }
 
-    private static void grantPermissionsToUri(Context context, Intent intent, Uri uri) {
-        List<ResolveInfo> resInfoList = context.getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
-        for (ResolveInfo resolveInfo : resInfoList) {
-            String packageName = resolveInfo.activityInfo.packageName;
-            context.grantUriPermission(packageName, uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        }
-    }
-
-    private File crearArchivoDeImagen() throws IOException {
-        // Create an image file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_";
-        File storageDir = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(
-                imageFileName,  /* prefix */
-                ".jpg",         /* suffix */
-                storageDir      /* directory */
-        );
-        //currentPhotoPath = image.getAbsolutePath();
-        return image;
-    }
 }

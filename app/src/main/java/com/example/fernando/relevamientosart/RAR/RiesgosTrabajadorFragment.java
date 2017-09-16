@@ -11,30 +11,19 @@ import android.view.ViewGroup;
 import com.example.fernando.relevamientosart.R;
 
 public class RiesgosTrabajadorFragment extends Fragment {
-    private static final String ARG_PARAM1 = "param1";
 
-    private String mParam1;
-
-    private OnFragmentInteractionListener mListener;
 
     public RiesgosTrabajadorFragment() {
         // Required empty public constructor
     }
 
-    public static RiesgosTrabajadorFragment newInstance(String param1) {
-        RiesgosTrabajadorFragment fragment = new RiesgosTrabajadorFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        fragment.setArguments(args);
-        return fragment;
+    public static RiesgosTrabajadorFragment newInstance() {
+        return new RiesgosTrabajadorFragment();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-        }
     }
 
     @Override
@@ -47,21 +36,10 @@ public class RiesgosTrabajadorFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
-    }
-
-    public interface OnFragmentInteractionListener {
-        void onFragmentInteraction(Uri uri);
     }
 }

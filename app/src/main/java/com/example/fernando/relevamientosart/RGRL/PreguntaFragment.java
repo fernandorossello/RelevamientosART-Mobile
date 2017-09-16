@@ -47,9 +47,7 @@ public class PreguntaFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mTarea = (Task) getArguments().getSerializable(ARG_TASK);
-            if(mTarea.result == null){
-                mTarea.result = new RGRLResult();
-            }
+
         }
     }
 

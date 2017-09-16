@@ -20,8 +20,6 @@ public class VisitDetalleFragment extends Fragment {
 
     private Visit mVisit;
 
-    private OnFragmentInteractionListener mListener;
-
     public VisitDetalleFragment() {
         // Required empty public constructor
     }
@@ -78,18 +76,11 @@ public class VisitDetalleFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
     }
 
-    public interface OnFragmentInteractionListener {
-        void onFragmentInteraction(Uri uri);
-    }
 }

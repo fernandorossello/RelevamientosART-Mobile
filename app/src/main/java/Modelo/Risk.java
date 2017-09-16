@@ -1,12 +1,17 @@
 package Modelo;
 
+
+import java.io.Serializable;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
 @DatabaseTable
-public class Risk {
+public class Risk implements Serializable{
 
-    @DatabaseField(id = true)
+    @DatabaseField(generatedId = true)
+    public int id;
+
+    @DatabaseField
     public String code;
 
     @DatabaseField
@@ -17,7 +22,7 @@ public class Risk {
         return code + " - " +description;
     }
 
-    @DatabaseField(foreign = true,foreignAutoRefresh = true)
+    @DatabaseField(foreign = true)
     public WorkingMan workingMan;
 
     @Override

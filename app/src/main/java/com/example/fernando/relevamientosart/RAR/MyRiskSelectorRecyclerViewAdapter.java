@@ -6,35 +6,24 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.example.fernando.relevamientosart.RAR.RiskSelectorFragment.OnRiskSelectorFragmentInteractionListener;
 import com.example.fernando.relevamientosart.R;
-
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import Modelo.Managers.RiskManager;
 import Modelo.Risk;
 import Modelo.WorkingMan;
 
-/**
- * {@link RecyclerView.Adapter} that can display a {@link Risk} and makes a call to the
- * specified {@link OnRiskSelectorFragmentInteractionListener}.
- * TODO: Replace the implementation with code for your data type.
- */
 public class MyRiskSelectorRecyclerViewAdapter extends RecyclerView.Adapter<MyRiskSelectorRecyclerViewAdapter.ViewHolder> {
 
     private final List<Risk> mValues;
     private final List<Risk> mRiesgosDelTrabajador;
-    private final OnRiskSelectorFragmentInteractionListener mListener;
     private final WorkingMan mWorkingMan;
 
-    public MyRiskSelectorRecyclerViewAdapter(WorkingMan workingMan, OnRiskSelectorFragmentInteractionListener listener) {
+    public MyRiskSelectorRecyclerViewAdapter(WorkingMan workingMan) {
         mValues = new RiskManager().obtenerRiesgos();
         mRiesgosDelTrabajador = new ArrayList<>(workingMan.riskList);
         mWorkingMan = workingMan;
-        mListener = listener;
     }
 
     @Override
@@ -60,11 +49,13 @@ public class MyRiskSelectorRecyclerViewAdapter extends RecyclerView.Adapter<MyRi
             public void onClick(View v) {
                 if (mRiesgosDelTrabajador.contains(holder.mItem))
                 {
+                    holder.mItem.workingMan = null;
                     mRiesgosDelTrabajador.remove(holder.mItem);
                     holder.mImageView.setVisibility(View.INVISIBLE);
                 }
                 else
                 {
+                    holder.mItem.workingMan = mWorkingMan;
                     mRiesgosDelTrabajador.add(holder.mItem);
                     holder.mImageView.setVisibility(View.VISIBLE);
                 }
