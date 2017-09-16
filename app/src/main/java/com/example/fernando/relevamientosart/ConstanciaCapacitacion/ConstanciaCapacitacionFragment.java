@@ -19,6 +19,7 @@ import java.util.List;
 
 import Modelo.Attendee;
 import Modelo.CAPResult;
+import Modelo.Managers.AttendeeManager;
 import Modelo.Task;
 
 public class ConstanciaCapacitacionFragment extends Fragment {
@@ -60,11 +61,9 @@ public class ConstanciaCapacitacionFragment extends Fragment {
         RecyclerView recyclerView  = view.findViewById(R.id.attendeeList);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
 
-        List<Attendee> attendees = new ArrayList<>();
-        attendees.add(new Attendee(){{name = "Fernando";lastName = "Roselló";cuil = "34898398";}});
-        attendees.add(new Attendee(){{name = "Tomás";lastName = "Ramos";cuil = "30989490";}});
-        attendees.add(new Attendee(){{name = "Julieta";lastName = "Feld";cuil = "31552899";}});
-        recyclerView.setAdapter(new MyAttendeeRecyclerViewAdapter(attendees));
+        List<Attendee> attendees = new AttendeeManager().attendeesEjemplo();
+
+        recyclerView.setAdapter(new MyAttendeeRecyclerViewAdapter(attendees, mListener));
 
         FloatingActionButton btnAgregarAttendee = view.findViewById(R.id.btn_agregarAttendee);
         btnAgregarAttendee.setOnClickListener(new View.OnClickListener() {
