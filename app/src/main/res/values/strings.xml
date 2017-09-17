@@ -75,6 +75,10 @@
     <string name="parar">Parar</string>
     <string name="descripciondb">Descripción</string>
     <string name="registrar">Registrar</string>
+    <string name="borrarRuido">¿Desea borrar la medición seleccionada?</string>
+    <string name="borrarImagen_Title">Borrar medición</string>
+    <string name="aceptar">Aceptar</string>
+    <string name="cancelar">Cancelar</string>
 
 
 </resources>

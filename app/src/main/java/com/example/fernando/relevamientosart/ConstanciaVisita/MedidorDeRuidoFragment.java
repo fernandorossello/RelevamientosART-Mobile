@@ -36,6 +36,9 @@ public class MedidorDeRuidoFragment extends Fragment {
     private EditText mDecibelesET;
     private Double maxNoise = MIN_DB;
 
+    private OnNoiseListFragmentInteractionListener mListener;
+
+
     public MedidorDeRuidoFragment() {
         // Required empty public constructor
     }
@@ -81,7 +84,7 @@ public class MedidorDeRuidoFragment extends Fragment {
         });
 
         final RecyclerView recyclerView = view.findViewById(R.id.noise_list);
-        recyclerView.setAdapter(new MyNoiseRecyclerViewAdapter(mVisit.noises));
+        recyclerView.setAdapter(new MyNoiseRecyclerViewAdapter(mVisit.noises,mListener));
 
         final EditText etDescripcion = view.findViewById(R.id.etDescripcionDecibeles);
         Button btnRegistrar = view.findViewById(R.id.btn_registrarRuido);
@@ -96,7 +99,7 @@ public class MedidorDeRuidoFragment extends Fragment {
                 noise.description = etDescripcion.getText().toString();
                 mVisit.noises.add(noise);
 
-                recyclerView.setAdapter(new MyNoiseRecyclerViewAdapter(mVisit.noises));
+                recyclerView.setAdapter(new MyNoiseRecyclerViewAdapter(mVisit.noises,mListener));
                 inicializar();
             }
         });
@@ -129,13 +132,19 @@ public class MedidorDeRuidoFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        if (context instanceof OnNoiseListFragmentInteractionListener) {
+            mListener = (OnNoiseListFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnNoiseListFragmentInteractionListener");
+        }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
+        mListener = null;
     }
-
 
     public void startRecording() {
         if (mRecorder == null) {
@@ -221,5 +230,9 @@ public class MedidorDeRuidoFragment extends Fragment {
 
     public String formatearDecibeles(Double decibeles){
         return new Formatter().format("%03.1f", decibeles).toString();
+    }
+
+    public interface OnNoiseListFragmentInteractionListener {
+        void onRuidoPressed(Noise ruido);
     }
 }

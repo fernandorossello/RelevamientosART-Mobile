@@ -17,9 +17,11 @@ import Modelo.Noise;
 public class MyNoiseRecyclerViewAdapter extends RecyclerView.Adapter<MyNoiseRecyclerViewAdapter.ViewHolder> {
 
     private final List<Noise> mValues;
+    private MedidorDeRuidoFragment.OnNoiseListFragmentInteractionListener mListener;
 
-    public MyNoiseRecyclerViewAdapter(Collection<Noise> items) {
+    public MyNoiseRecyclerViewAdapter(Collection<Noise> items, MedidorDeRuidoFragment.OnNoiseListFragmentInteractionListener listener) {
         mValues = new ArrayList<>(items);
+        mListener = listener;
     }
 
     @Override
@@ -37,6 +39,7 @@ public class MyNoiseRecyclerViewAdapter extends RecyclerView.Adapter<MyNoiseRecy
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mListener.onRuidoPressed(holder.mItem);
             }
         });
     }
