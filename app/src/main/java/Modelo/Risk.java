@@ -31,6 +31,6 @@ public class Risk implements Serializable{
         if (other == this) return true;
         if (!(other instanceof Risk))return false;
         Risk otherRisk = (Risk)other;
-        return code == otherRisk.code;
+        return code.equals(otherRisk.code);
     }
 }

@@ -17,14 +17,18 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.fernando.relevamientosart.MainActivity;
 import com.example.fernando.relevamientosart.R;
 
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import Helpers.DBHelper;
+import Modelo.Managers.WorkingManManager;
 import Modelo.Risk;
 import Modelo.WorkingMan;
 
@@ -221,10 +225,22 @@ public class RiskFragment extends Fragment {
         mWorkingMan.name = ((EditText)getView().findViewById(R.id.tv_worker_name)).getText().toString();
         mWorkingMan.lastName = ((EditText)getView().findViewById(R.id.tv_worker_lastName)).getText().toString();
         mWorkingMan.cuil = ((EditText)getView().findViewById(R.id.tv_worker_cuil)).getText().toString();
-        //TODO: formatearCorrectamente la fecha
+        //TODO: formatear Correctamente la fecha
+
         //mWorkingMan.checked_in_on = new Date(((EditText)getView().findViewById(R.id.tv_worker_fechaIngreso)).getText().toString());
         //mWorkingMan.exposed_from_at = new Date(((EditText)getView().findViewById(R.id.tv_worker_fechaInicio)).getText().toString());
         //mWorkingMan.exposed_until_at = new Date(((EditText)getView().findViewById(R.id.tv_worker_fechaFin)).getText().toString());
-        //TODO: Persistir workingMan
+
+
+
+
+        DBHelper dbHelper = ((MainActivity)getActivity()).getHelper();
+        try {
+            new WorkingManManager(dbHelper).persist(mWorkingMan);
+        }
+        catch (SQLException ex){
+            Toast.makeText(getActivity(), ex.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+
     }
 }

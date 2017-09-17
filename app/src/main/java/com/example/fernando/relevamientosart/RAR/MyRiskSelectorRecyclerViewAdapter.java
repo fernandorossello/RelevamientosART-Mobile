@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.example.fernando.relevamientosart.R;
-import java.util.ArrayList;
 import java.util.List;
 
 import Modelo.Managers.RiskManager;
@@ -17,12 +16,10 @@ import Modelo.WorkingMan;
 public class MyRiskSelectorRecyclerViewAdapter extends RecyclerView.Adapter<MyRiskSelectorRecyclerViewAdapter.ViewHolder> {
 
     private final List<Risk> mValues;
-    private final List<Risk> mRiesgosDelTrabajador;
     private final WorkingMan mWorkingMan;
 
     public MyRiskSelectorRecyclerViewAdapter(WorkingMan workingMan) {
         mValues = new RiskManager().obtenerRiesgos();
-        mRiesgosDelTrabajador = new ArrayList<>(workingMan.riskList);
         mWorkingMan = workingMan;
     }
 
@@ -38,7 +35,7 @@ public class MyRiskSelectorRecyclerViewAdapter extends RecyclerView.Adapter<MyRi
         holder.mItem = mValues.get(position);
         holder.mContentView.setText(mValues.get(position).toString());
 
-        if (mRiesgosDelTrabajador.contains(holder.mItem)){
+        if (mWorkingMan.riskList.contains(holder.mItem)){
             holder.mImageView.setVisibility(View.VISIBLE);
         } else {
             holder.mImageView.setVisibility(View.INVISIBLE);
@@ -47,19 +44,18 @@ public class MyRiskSelectorRecyclerViewAdapter extends RecyclerView.Adapter<MyRi
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mRiesgosDelTrabajador.contains(holder.mItem))
+                if (mWorkingMan.riskList.contains(holder.mItem))
                 {
                     holder.mItem.workingMan = null;
-                    mRiesgosDelTrabajador.remove(holder.mItem);
+                    mWorkingMan.riskList.remove(holder.mItem);
                     holder.mImageView.setVisibility(View.INVISIBLE);
                 }
                 else
                 {
                     holder.mItem.workingMan = mWorkingMan;
-                    mRiesgosDelTrabajador.add(holder.mItem);
+                    mWorkingMan.riskList.add(holder.mItem);
                     holder.mImageView.setVisibility(View.VISIBLE);
                 }
-                mWorkingMan.riskList = mRiesgosDelTrabajador;
             }
         });
     }

@@ -88,7 +88,7 @@ public class RARFragment extends Fragment {
         view.findViewById(R.id.btn_agregarTrabajador).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                    WorkingMan workingMan = new WorkingMan(){{result = mResult;}};
+                WorkingMan workingMan = new WorkingMan(){{result = mResult;}};
                 mResult.workingMen.add(workingMan);
                 mListener.onTrabajadorSeleccionado(workingMan);
             }
