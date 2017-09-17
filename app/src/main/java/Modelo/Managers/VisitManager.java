@@ -1,5 +1,6 @@
 package Modelo.Managers;
 
+import android.provider.ContactsContract;
 import android.widget.Toast;
 
 import com.j256.ormlite.dao.Dao;
@@ -30,7 +31,24 @@ public class VisitManager extends Manager<Visit> {
         final Task tareaRGRL = new Task(){{id = 2; type = 2;}};
         final Task tareaCAP = new Task(){{id = 3; type = 3;}};
 
-        final Institution institucion = new Institution(){{this.id = 1; this.name="Y.P.F.";}};
+        final Institution institucion = new Institution()
+        {{  id = 1;
+            name="Y.P.F.";
+            address = "Medrano 950";
+            cuit = "30-54668997-9";
+            province="Buenos Aires";
+            city="C.A.B.A.";
+            activity="Extracción de petróleo crudo";
+            contract="34343434";
+            number="Y.P.F Sucursal 1";
+            workers_count=5;
+            postal_code="C1015";
+            phone="4961-1234";
+            contact="Cosme Fulanito";
+            email="empresa1@ypf.gob.ar";
+            ciiu="01113";
+            afip_cod="Código AFIP 1";
+        }};
         final Institution institucion2 = new Institution(){{this.id = 2; this.name="Rancho relaxo";}};
         final Institution institucion3 = new Institution(){{this.id = 3; this.name="Santillana";}};
         final Institution institucion4 = new Institution(){{this.id = 4; this.name="MercadoLibre";}};

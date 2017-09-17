@@ -49,6 +49,10 @@ public class Visit implements Serializable {
         return institution.name;
     }
 
+    public String direccionInstitucion(){
+        return institution.address;
+    }
+
     public Task obtenerTarea(EnumTareas tipo) throws IllegalArgumentException  {
         Task ret = null;
 
