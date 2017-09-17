@@ -10,13 +10,16 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.fernando.relevamientosart.R;
 
+import java.util.ArrayList;
 import java.util.Formatter;
+import java.util.List;
 
 import Modelo.Noise;
 import Modelo.Visit;
@@ -31,7 +34,6 @@ public class MedidorDeRuidoFragment extends Fragment {
     private MediaRecorder mRecorder;
     private boolean listening = false;
     private EditText mDecibelesET;
-
     private Double maxNoise = MIN_DB;
 
     public MedidorDeRuidoFragment() {
@@ -69,6 +71,7 @@ public class MedidorDeRuidoFragment extends Fragment {
                 if(listening) {
                     listening = false;
                     ((Button)view).setText(R.string.medir);
+                    habilitarRegistrar();
                 } else {
                     listening = true;
                     new Ear().execute();
@@ -77,9 +80,12 @@ public class MedidorDeRuidoFragment extends Fragment {
             }
         });
 
-        final EditText etDescripcion = view.findViewById(R.id.etDescripcionDecibeles);
+        final RecyclerView recyclerView = view.findViewById(R.id.noise_list);
+        recyclerView.setAdapter(new MyNoiseRecyclerViewAdapter(mVisit.noises));
 
+        final EditText etDescripcion = view.findViewById(R.id.etDescripcionDecibeles);
         Button btnRegistrar = view.findViewById(R.id.btn_registrarRuido);
+
         btnRegistrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -88,17 +94,37 @@ public class MedidorDeRuidoFragment extends Fragment {
                     visit = mVisit;
                 }};
                 noise.description = etDescripcion.getText().toString();
-
                 mVisit.noises.add(noise);
+
+                recyclerView.setAdapter(new MyNoiseRecyclerViewAdapter(mVisit.noises));
+                inicializar();
             }
         });
-
-        RecyclerView recyclerView = view.findViewById(R.id.noise_list);
-        recyclerView.setAdapter(new MyNoiseRecyclerViewAdapter(mVisit.noises));
 
         return view;
     }
 
+
+    private void inicializar(){
+        EditText etDescripcion = getView().findViewById(R.id.etDescripcionDecibeles);
+        etDescripcion.setText("");
+        etDescripcion.setEnabled(false);
+
+
+        EditText etDecibeles = getView().findViewById(R.id.etDecibeles);
+        etDecibeles.setText("");
+
+        Button btnRegistrar = getView().findViewById(R.id.btn_registrarRuido);
+        btnRegistrar.setEnabled(false);
+    }
+
+    private void habilitarRegistrar(){
+        Button btnRegistrar = getView().findViewById(R.id.btn_registrarRuido);
+        btnRegistrar.setEnabled(true);
+
+        EditText etDescripcion = getView().findViewById(R.id.etDescripcionDecibeles);
+        etDescripcion.setEnabled(true);
+    }
 
     @Override
     public void onAttach(Context context) {
