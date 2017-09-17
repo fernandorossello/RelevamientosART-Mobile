@@ -33,7 +33,7 @@ public class Institution implements Serializable{
     public String postal_code;
 
     @DatabaseField
-    public int number;
+    public String number;
 
     @DatabaseField
     public String activity;
@@ -55,6 +55,19 @@ public class Institution implements Serializable{
 
     @DatabaseField
     public String phone;
+
+    @DatabaseField
+    public String email;
+
+    @DatabaseField
+    public String contact;
+
+    @DatabaseField
+    public String ciiu;
+
+    @DatabaseField
+    public String afip_cod;
+
 
     @DatabaseField(foreign = true)
     public Zone zone;
