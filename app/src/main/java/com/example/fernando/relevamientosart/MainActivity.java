@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.example.fernando.relevamientosart.ConstanciaCapacitacion.ConstanciaCapacitacionFragment;
+import com.example.fernando.relevamientosart.ConstanciaVisita.MedidorDeRuidoFragment;
 import com.example.fernando.relevamientosart.RAR.RARFragment;
 import com.example.fernando.relevamientosart.RAR.RiskFragment;
 import com.example.fernando.relevamientosart.ConstanciaVisita.ConstanciaVisitaFragment;
@@ -34,7 +35,8 @@ import Modelo.WorkingMan;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,VisitFragment.OnVisitSelectedListener,
-        RARFragment.OnTrabajadoresFragmentInteractionListener, RiskFragment.OnRiskFragmentInteractionListener {
+        RARFragment.OnTrabajadoresFragmentInteractionListener, RiskFragment.OnRiskFragmentInteractionListener,
+        ConstanciaVisitaFragment.OnEventoConstanciaListener {
 
     private DBHelper mDBHelper;
 
@@ -227,6 +229,29 @@ public class MainActivity extends AppCompatActivity
     public void onNewRiskFragmentInteraction(WorkingMan workingMan) {
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, RiskSelectorFragment.newInstance(workingMan))
+                .addToBackStack(null)
+                .commit();
+    }
+
+    @Override
+    public void OnTomarFoto() {
+
+    }
+
+    @Override
+    public void OnVerFotosClick(Visit visit) {
+
+    }
+
+    @Override
+    public void OnGuardarConstanciaDeVisita() {
+
+    }
+
+    @Override
+    public void OnMedirRuido() {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, MedidorDeRuidoFragment.newInstance(mVisitaEnCurso))
                 .addToBackStack(null)
                 .commit();
     }

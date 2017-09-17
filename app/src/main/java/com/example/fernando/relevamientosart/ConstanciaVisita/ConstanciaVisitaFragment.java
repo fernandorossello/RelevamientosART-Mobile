@@ -32,11 +32,12 @@ import java.util.Date;
 import java.util.List;
 
 import Modelo.Task;
+import Modelo.Visit;
 
 
 public class ConstanciaVisitaFragment extends Fragment {
     private static final String ARG_PARAM1 = "visita";
-
+    private OnEventoConstanciaListener mListener;
     private String mVisit;
 
     public ConstanciaVisitaFragment() {
@@ -99,7 +100,7 @@ public class ConstanciaVisitaFragment extends Fragment {
         btnAudio.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(view.getContext(), "Medir audio", Toast.LENGTH_SHORT).show();
+                mListener.OnMedirRuido();
             }
         });
 
@@ -109,11 +110,18 @@ public class ConstanciaVisitaFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        if (context instanceof OnEventoConstanciaListener) {
+            mListener = (OnEventoConstanciaListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnEventoConstanciaListener");
+        }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
+        mListener = null;
     }
 
 
@@ -166,5 +174,12 @@ public class ConstanciaVisitaFragment extends Fragment {
         );
         //currentPhotoPath = image.getAbsolutePath();
         return image;
+    }
+
+    public interface OnEventoConstanciaListener {
+        void OnTomarFoto();
+        void OnVerFotosClick(Visit visit);
+        void OnGuardarConstanciaDeVisita();
+        void OnMedirRuido();
     }
 }

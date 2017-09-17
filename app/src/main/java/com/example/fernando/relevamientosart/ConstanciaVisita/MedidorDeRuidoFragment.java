@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -24,7 +25,7 @@ public class MedidorDeRuidoFragment extends Fragment {
 
     private Visit mVisit;
     private MediaRecorder mRecorder;
-    private boolean listening;
+    private boolean listening = false;
     private EditText mDecibelesET;
 
     private OnRuidoFragmentInteractionListener mListener;
@@ -56,6 +57,22 @@ public class MedidorDeRuidoFragment extends Fragment {
 
         mDecibelesET = view.findViewById(R.id.etDecibeles);
 
+        Button btnMedir = view.findViewById(R.id.btn_medir);
+
+        btnMedir.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(listening) {
+                    listening = false;
+                    ((Button)view).setText(R.string.medir);
+                } else {
+                    listening = true;
+                    new Ear().execute();
+                    ((Button)view).setText(R.string.parar);
+                }
+            }
+        });
+
         return view;
     }
 
@@ -65,10 +82,11 @@ public class MedidorDeRuidoFragment extends Fragment {
         super.onAttach(context);
         if (context instanceof OnRuidoFragmentInteractionListener) {
             mListener = (OnRuidoFragmentInteractionListener) context;
-        } else {
+        }
+        /*else {
             throw new RuntimeException(context.toString()
                     + " must implement OnRuidoFragmentInteractionListener");
-        }
+        }*/
     }
 
     @Override
@@ -80,7 +98,6 @@ public class MedidorDeRuidoFragment extends Fragment {
     public interface OnRuidoFragmentInteractionListener {
         void onMedirRuido(Visit visit);
     }
-
 
 
     public void startRecording() {
@@ -117,20 +134,6 @@ public class MedidorDeRuidoFragment extends Fragment {
             return (mRecorder.getMaxAmplitude());
         else
             return 0;
-    }
-
-
-    @Override
-    public void onResume() {
-        listening = true;
-        new Ear().execute();
-        super.onResume();
-    }
-
-    @Override
-    public void onPause() {
-        listening = false;
-        super.onPause();
     }
 
     public class Ear extends AsyncTask<Void, Double, Void> {

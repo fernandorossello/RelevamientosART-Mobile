@@ -68,6 +68,9 @@
     <string name="metodologia">Metodología</string>
     <string name="contenidos">Contenidos</string>
     <string name="curso">Curso</string>
+    <string name="medicion_ruido_title">Medición de ruido</string>
+    <string name="medir">Medir</string>
+    <string name="parar">Parar</string>
 
 
 </resources>
