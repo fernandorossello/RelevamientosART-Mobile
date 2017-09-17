@@ -19,7 +19,9 @@ import Modelo.Enums.EnumTareas;
 public class Visit implements Serializable {
 
     public Visit(){
+
         tasks = new ArrayList<>();
+        noises = new ArrayList<>();
     }
 
     @DatabaseField(id = true)
@@ -44,6 +46,9 @@ public class Visit implements Serializable {
 
     @DatabaseField
     public Date postponed_at;
+
+    @ForeignCollectionField
+    public Collection<Noise> noises;
 
     public String nombreInstitucion(){
         return institution.name;

@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,20 +16,23 @@ import android.widget.Toast;
 
 import com.example.fernando.relevamientosart.R;
 
-import java.io.IOException;
 import java.util.Formatter;
 
+import Modelo.Noise;
 import Modelo.Visit;
 
 public class MedidorDeRuidoFragment extends Fragment {
     private static final String ARG_VISIT = "visita";
+
+    private static final Double MIN_DB = -80d;
+    private static final Double MAX_DB = 0d;
 
     private Visit mVisit;
     private MediaRecorder mRecorder;
     private boolean listening = false;
     private EditText mDecibelesET;
 
-    private OnRuidoFragmentInteractionListener mListener;
+    private Double maxNoise = MIN_DB;
 
     public MedidorDeRuidoFragment() {
         // Required empty public constructor
@@ -73,6 +77,25 @@ public class MedidorDeRuidoFragment extends Fragment {
             }
         });
 
+        final EditText etDescripcion = view.findViewById(R.id.etDescripcionDecibeles);
+
+        Button btnRegistrar = view.findViewById(R.id.btn_registrarRuido);
+        btnRegistrar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Noise noise = new Noise(){{
+                    decibels = maxNoise;
+                    visit = mVisit;
+                }};
+                noise.description = etDescripcion.getText().toString();
+
+                mVisit.noises.add(noise);
+            }
+        });
+
+        RecyclerView recyclerView = view.findViewById(R.id.noise_list);
+        recyclerView.setAdapter(new MyNoiseRecyclerViewAdapter(mVisit.noises));
+
         return view;
     }
 
@@ -80,23 +103,11 @@ public class MedidorDeRuidoFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnRuidoFragmentInteractionListener) {
-            mListener = (OnRuidoFragmentInteractionListener) context;
-        }
-        /*else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnRuidoFragmentInteractionListener");
-        }*/
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
-    }
-
-    public interface OnRuidoFragmentInteractionListener {
-        void onMedirRuido(Visit visit);
     }
 
 
@@ -158,37 +169,31 @@ public class MedidorDeRuidoFragment extends Fragment {
         protected void onProgressUpdate(Double... values) {
             Double value = values[0];
 
-            if (value < -80) {
-                value = new Double(-80);
-            } else if (value > 0) {
-                value = new Double(0);
+            if (value < MIN_DB) {
+                value = new Double(MIN_DB);
+            } else if (value > MAX_DB) {
+                value = new Double(MAX_DB);
             }
 
-            String db = new Formatter().format("%03.1f",value).toString();
+            String db = formatearDecibeles(value);
 
             mDecibelesET.setText(db + " dB");
 
-            updateBar(value);
-
+            if(value > maxNoise){
+                maxNoise = value;
+            }
         }
 
         @Override
         protected void onPostExecute(Void result) {
             stopRecording();
+            String db = formatearDecibeles(maxNoise);
+            mDecibelesET.setText("Máximo: " + db + " dB");
         }
 
-        public void updateBar(Double db) {
-            Double width;
+    }
 
-            // Factor de escala para convertir a Dips
-            final float scale = getResources().getDisplayMetrics().density;
-
-            width = (db * 250 * scale) / -80; // Anchura en pixeles
-
-            //RelativeLayout.LayoutParams lyParams = new RelativeLayout.LayoutParams(width.intValue(), barDB.getHeight());
-            //lyParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-            //barDB.setLayoutParams(lyParams);
-        }
-
+    public String formatearDecibeles(Double decibeles){
+        return new Formatter().format("%03.1f", decibeles).toString();
     }
 }
