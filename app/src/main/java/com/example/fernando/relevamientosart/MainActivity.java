@@ -1,13 +1,16 @@
 package com.example.fernando.relevamientosart;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -15,6 +18,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.example.fernando.relevamientosart.ConstanciaCapacitacion.ConstanciaCapacitacionFragment;
+import com.example.fernando.relevamientosart.ConstanciaVisita.MedidorDeRuidoFragment;
 import com.example.fernando.relevamientosart.RAR.RARFragment;
 import com.example.fernando.relevamientosart.RAR.RiskFragment;
 import com.example.fernando.relevamientosart.ConstanciaVisita.ConstanciaVisitaFragment;
@@ -28,13 +32,19 @@ import java.util.List;
 import Helpers.DBHelper;
 import Modelo.Enums.EnumTareas;
 import Modelo.Managers.VisitManager;
+import Modelo.Noise;
 import Modelo.Task;
 import Modelo.Visit;
 import Modelo.WorkingMan;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,VisitFragment.OnVisitSelectedListener,
-        RARFragment.OnTrabajadoresFragmentInteractionListener, RiskFragment.OnRiskFragmentInteractionListener {
+        RARFragment.OnTrabajadoresFragmentInteractionListener, RiskFragment.OnRiskFragmentInteractionListener,
+        ConstanciaVisitaFragment.OnEventoConstanciaListener,
+        MedidorDeRuidoFragment.OnNoiseListFragmentInteractionListener
+{
+
+    private final String TAG_FRAGMENT_MEDICION_RUIDO = "tag_frg_medicion_ruido";
 
     private DBHelper mDBHelper;
 
@@ -230,4 +240,64 @@ public class MainActivity extends AppCompatActivity
                 .addToBackStack(null)
                 .commit();
     }
+
+    @Override
+    public void OnTomarFoto() {
+
+    }
+
+    @Override
+    public void OnVerFotosClick(Visit visit) {
+
+    }
+
+    @Override
+    public void OnGuardarConstanciaDeVisita() {
+
+    }
+
+    @Override
+    public void OnMedirRuido() {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, MedidorDeRuidoFragment.newInstance(mVisitaEnCurso),TAG_FRAGMENT_MEDICION_RUIDO)
+                .addToBackStack(null)
+                .commit();
+    }
+
+    @Override
+    public void onRuidoPressed(final Noise ruido) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setMessage(R.string.borrarRuido)
+                .setTitle(R.string.borrarImagen_Title)
+                .setPositiveButton(R.string.aceptar, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        borrarRuido(ruido);
+                    }
+                });
+        builder.setNegativeButton(R.string.cancelar, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.cancel();
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+
+        dialog.show();
+    }
+
+
+    private void borrarRuido(Noise ruido) {
+
+        mVisitaEnCurso.noises.remove(ruido);
+
+        Fragment frg = getSupportFragmentManager().findFragmentByTag(TAG_FRAGMENT_MEDICION_RUIDO);
+        getSupportFragmentManager()
+                .beginTransaction()
+                .detach(frg)
+                .attach(frg)
+                .commit();
+    }
+
 }

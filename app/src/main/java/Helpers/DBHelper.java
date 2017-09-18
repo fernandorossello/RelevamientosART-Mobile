@@ -13,6 +13,7 @@ import com.j256.ormlite.table.TableUtils;
 import java.sql.SQLException;
 
 import Modelo.Institution;
+import Modelo.Noise;
 import Modelo.Task;
 import Modelo.User;
 import Modelo.Visit;
@@ -40,6 +41,7 @@ public class DBHelper extends OrmLiteSqliteOpenHelper {
             TableUtils.createTable(connectionSource, Task.class);
             TableUtils.createTable(connectionSource, VisitRecord.class);
             TableUtils.createTable(connectionSource, Zone.class);
+            TableUtils.createTable(connectionSource, Noise.class);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
