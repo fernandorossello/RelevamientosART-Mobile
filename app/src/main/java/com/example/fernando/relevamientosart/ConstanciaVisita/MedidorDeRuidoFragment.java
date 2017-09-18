@@ -1,11 +1,15 @@
 package com.example.fernando.relevamientosart.ConstanciaVisita;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.media.MediaRecorder;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -76,9 +80,19 @@ public class MedidorDeRuidoFragment extends Fragment {
                     ((Button)view).setText(R.string.medir);
                     habilitarRegistrar();
                 } else {
-                    listening = true;
-                    new Ear().execute();
-                    ((Button)view).setText(R.string.parar);
+
+                    if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+                        if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.RECORD_AUDIO)) {
+                            Toast.makeText(getContext(), R.string.permission_rationale, Toast.LENGTH_LONG).show();
+                        } else {
+                            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.RECORD_AUDIO},1);
+                        }
+                    }
+                    if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED) {
+                        listening = true;
+                        new Ear().execute();
+                        ((Button) view).setText(R.string.parar);
+                    }
                 }
             }
         });
