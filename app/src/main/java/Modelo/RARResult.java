@@ -1,10 +1,26 @@
 package Modelo;
 
-import java.util.List;
+import com.j256.ormlite.field.ForeignCollectionField;
+import com.j256.ormlite.table.DatabaseTable;
+import java.util.ArrayList;
+import java.util.Collection;
+import Modelo.Enums.EnumTareas;
+import java.io.Serializable;
 
-public class RARResult extends Result {
+@DatabaseTable
+public class RARResult extends Result implements Serializable {
+
+    public RARResult(){
+
+        if(workingMen == null) {
+            workingMen = new ArrayList<>();
+        }
+
+        type = EnumTareas.RAR.id;
+    }
 
     public String topic;
 
-    public List<WorkingMan> workingMen;
+    @ForeignCollectionField
+    public Collection<WorkingMan> workingMen;
 }

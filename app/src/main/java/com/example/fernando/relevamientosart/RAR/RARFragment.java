@@ -8,20 +8,34 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.example.fernando.relevamientosart.MainActivity;
 import com.example.fernando.relevamientosart.R;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
-import Modelo.Managers.WorkingManManager;
+import Helpers.DBHelper;
+import Modelo.Enums.EnumTareas;
+import Modelo.Managers.ResultManager;
+import Modelo.Managers.TaskManager;
 import Modelo.RARResult;
+import Modelo.Result;
 import Modelo.Task;
+import Modelo.Visit;
 import Modelo.WorkingMan;
 
 public class RARFragment extends Fragment {
 
-    private static final String ARG_TASK = "tarea";
+    private static final String ARG_VISIT = "visita";
     private Task mTarea;
+    private Visit mVisit;
+    private RARResult mResult;
+    private DBHelper dbHelper;
+
 
     private OnTrabajadoresFragmentInteractionListener mListener;
 
@@ -33,11 +47,10 @@ public class RARFragment extends Fragment {
     }
 
     @SuppressWarnings("unused")
-    public static RARFragment newInstance(Task task) {
+    public static RARFragment newInstance(Visit visit) {
         RARFragment fragment = new RARFragment();
-
         Bundle args = new Bundle();
-        args.putSerializable(ARG_TASK,task);
+        args.putSerializable(ARG_VISIT,visit);
         fragment.setArguments(args);
         return fragment;
     }
@@ -46,9 +59,17 @@ public class RARFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mTarea = (Task) getArguments().getSerializable(ARG_TASK);
-            if(mTarea.result == null){
-                mTarea.result = new RARResult();
+
+            mVisit = (Visit) getArguments().getSerializable(ARG_VISIT);
+            mTarea = mVisit.obtenerTarea(EnumTareas.RAR);
+            dbHelper = ((MainActivity)getActivity()).getHelper();
+            Result result = new ResultManager(dbHelper).getResult(mTarea);
+
+            if(result == null){
+                mResult = new RARResult();
+                mResult.task = mTarea;
+            } else {
+                mResult = (RARResult) result;
             }
         }
     }
@@ -61,14 +82,15 @@ public class RARFragment extends Fragment {
         RecyclerView recyclerView  = view.findViewById(R.id.workerList);
         
         Context context = view.getContext();
-            recyclerView.setLayoutManager(new LinearLayoutManager(context));
-        List<WorkingMan> lista = new WorkingManManager().trabajadoresEjemplo();
-        recyclerView.setAdapter(new MyTrabajadorRecyclerViewAdapter(lista, mListener));
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        recyclerView.setAdapter(new MyTrabajadorRecyclerViewAdapter(mResult.workingMen, mListener));
 
         view.findViewById(R.id.btn_agregarTrabajador).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                    mListener.onTrabajadorNuevo();
+                WorkingMan workingMan = new WorkingMan(){{result = mResult;}};
+                mResult.workingMen.add(workingMan);
+                mListener.onTrabajadorSeleccionado(workingMan);
             }
         });
 
@@ -86,14 +108,24 @@ public class RARFragment extends Fragment {
         }
     }
 
+
     @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        try {
+            new ResultManager(dbHelper).persist(mResult);
+        } catch (SQLException ex){
+            Toast.makeText(getActivity(), ex.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
     public interface OnTrabajadoresFragmentInteractionListener {
-        void onTrabajadorNuevo();
         void onTrabajadorSeleccionado(WorkingMan workingMan);
     }
 }

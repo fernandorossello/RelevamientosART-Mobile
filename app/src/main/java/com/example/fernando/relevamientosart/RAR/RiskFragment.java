@@ -17,14 +17,19 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.fernando.relevamientosart.MainActivity;
 import com.example.fernando.relevamientosart.R;
 
+import java.sql.SQLException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import Helpers.DBHelper;
+import Modelo.Managers.WorkingManManager;
 import Modelo.Risk;
 import Modelo.WorkingMan;
 
@@ -49,12 +54,7 @@ public class RiskFragment extends Fragment {
     public static RiskFragment newInstance(WorkingMan workingMan) {
         RiskFragment fragment = new RiskFragment();
         Bundle args = new Bundle();
-
-        if (workingMan != null) {
-            args.putSerializable(RiskFragment.ARG_WORKING_MAN, workingMan);
-        } else {
-            args.putSerializable(RiskFragment.ARG_WORKING_MAN, new WorkingMan());
-        }
+        args.putSerializable(RiskFragment.ARG_WORKING_MAN, workingMan);
         fragment.setArguments(args);
         return fragment;
     }
@@ -72,7 +72,6 @@ public class RiskFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_riesgos_trabajador, container, false);
-
         RecyclerView recyclerView = view.findViewById(R.id.riskList);
 
         Context context = view.getContext();
@@ -90,13 +89,13 @@ public class RiskFragment extends Fragment {
         tvApellido.setText(mWorkingMan.lastName);
         tvCuil.setText(mWorkingMan.cuil);
 
-        if(mWorkingMan.checked_in_on != null)
+        if (mWorkingMan.checked_in_on != null)
             tvFechaIngreso.setText(formatearFecha(mWorkingMan.checked_in_on));
 
-        if(mWorkingMan.exposed_from_at != null)
+        if (mWorkingMan.exposed_from_at != null)
             tvFechaInicio.setText(formatearFecha(mWorkingMan.exposed_from_at));
 
-        if(mWorkingMan.exposed_until_at != null)
+        if (mWorkingMan.exposed_until_at != null)
             tvFechaFin.setText(formatearFecha(mWorkingMan.exposed_until_at));
 
         recyclerView.setAdapter(new MyRiskRecyclerViewAdapter(mWorkingMan.riskList));
@@ -113,11 +112,6 @@ public class RiskFragment extends Fragment {
                  }
              }
         );
-
-
-
-
-
         return view;
     }
 
@@ -224,4 +218,38 @@ public class RiskFragment extends Fragment {
         void onNewRiskFragmentInteraction(WorkingMan workingMan);
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        mWorkingMan.name = ((EditText)getView().findViewById(R.id.tv_worker_name)).getText().toString();
+        mWorkingMan.lastName = ((EditText)getView().findViewById(R.id.tv_worker_lastName)).getText().toString();
+        mWorkingMan.cuil = ((EditText)getView().findViewById(R.id.tv_worker_cuil)).getText().toString();
+
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
+
+        try {
+
+            String fechaIngreso =((EditText) getView().findViewById(R.id.tv_worker_fechaIngreso)).getText().toString();
+            String fechaInicio = ((EditText)getView().findViewById(R.id.tv_worker_fechaInicio)).getText().toString();
+            String fechaFin = ((EditText)getView().findViewById(R.id.tv_worker_fechaFin)).getText().toString();
+
+            if (!fechaIngreso.isEmpty()) mWorkingMan.checked_in_on = sdf.parse(fechaIngreso);
+            if(!fechaInicio.isEmpty()) mWorkingMan.exposed_from_at = sdf.parse(fechaInicio);
+            if(!fechaFin.isEmpty()) mWorkingMan.exposed_until_at = sdf.parse(fechaFin);
+
+        } catch (ParseException ex){
+            Toast.makeText(getActivity(), ex.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+
+        DBHelper dbHelper = ((MainActivity)getActivity()).getHelper();
+
+        try {
+            new WorkingManManager(dbHelper).persist(mWorkingMan);
+        }
+        catch (SQLException ex){
+            Toast.makeText(getActivity(), ex.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+
+    }
 }

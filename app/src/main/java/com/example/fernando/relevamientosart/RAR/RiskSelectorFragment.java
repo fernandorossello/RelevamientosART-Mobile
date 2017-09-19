@@ -14,20 +14,10 @@ import com.example.fernando.relevamientosart.R;
 
 import Modelo.WorkingMan;
 
-/**
- * A fragment representing a list of Items.
- * <p/>
- * Activities containing this fragment MUST implement the {@link OnRiskSelectorFragmentInteractionListener}
- * interface.
- */
 public class RiskSelectorFragment extends Fragment {
 
-    // TODO: Customize parameter argument names
     private static final String ARG_WORKING_MAN = "working_Man";
     private WorkingMan mWorkingMan;
-    // TODO: Customize parameters
-    private int mColumnCount = 1;
-    private OnRiskSelectorFragmentInteractionListener mListener;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -36,13 +26,12 @@ public class RiskSelectorFragment extends Fragment {
     public RiskSelectorFragment() {
     }
 
-    // TODO: Customize parameter initialization
+
     @SuppressWarnings("unused")
     public static RiskSelectorFragment newInstance(WorkingMan workingMan) {
         RiskSelectorFragment fragment = new RiskSelectorFragment();
         Bundle args = new Bundle();
         args.putSerializable(RiskSelectorFragment.ARG_WORKING_MAN, workingMan);
-
         fragment.setArguments(args);
         return fragment;
     }
@@ -65,7 +54,7 @@ public class RiskSelectorFragment extends Fragment {
 
         Context context = view.getContext();
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
-        recyclerView.setAdapter(new MyRiskSelectorRecyclerViewAdapter(mWorkingMan, mListener));
+        recyclerView.setAdapter(new MyRiskSelectorRecyclerViewAdapter(mWorkingMan));
 
         return view;
     }
@@ -74,33 +63,11 @@ public class RiskSelectorFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnRiskSelectorFragmentInteractionListener) {
-            mListener = (OnRiskSelectorFragmentInteractionListener) context;
-        }
-        /*else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnRiskSelectorFragmentInteractionListener");
-        }*/
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnRiskSelectorFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onRiskSelectorFragmentInteraction();
-    }
 }

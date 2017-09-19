@@ -21,6 +21,8 @@ public class TaskManager extends Manager<Task> {
 
             if (!daoTareas.idExists(item.id)) {
                 daoTareas.create(item);
+            } else {
+                daoTareas.update(item);
             }
         }
     }

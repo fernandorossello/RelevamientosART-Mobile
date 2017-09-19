@@ -19,8 +19,8 @@ import Modelo.Enums.EnumTareas;
 public class Visit implements Serializable {
 
     public Visit(){
-
         tasks = new ArrayList<>();
+        images=  new ArrayList<>();
         noises = new ArrayList<>();
     }
 
@@ -36,9 +36,13 @@ public class Visit implements Serializable {
     @DatabaseField
     public int priority;
 
-    @ForeignCollectionField(eager = true)
+    @ForeignCollectionField
     public Collection<Task> tasks;
 
+    @ForeignCollectionField
+    public Collection<Image> images;
+
+    @DatabaseField(foreign = true,foreignAutoRefresh = true)
     public VisitRecord visitRecord;
 
     @DatabaseField
@@ -49,14 +53,6 @@ public class Visit implements Serializable {
 
     @ForeignCollectionField
     public Collection<Noise> noises;
-
-    public String nombreInstitucion(){
-        return institution.name;
-    }
-
-    public String direccionInstitucion(){
-        return institution.address;
-    }
 
     public Task obtenerTarea(EnumTareas tipo) throws IllegalArgumentException  {
         Task ret = null;
