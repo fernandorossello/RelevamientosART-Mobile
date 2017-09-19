@@ -75,5 +75,12 @@
     <string name="cancelar">Cancelar</string>
     <string name="guardado">Guardado</string>
 
+    <!--Strings related to medición de ruido -->
+    <string name="medicion_ruido_title">Medición de ruido</string>
+    <string name="medir">Medir</string>
+    <string name="parar">Parar</string>
+    <string name="descripciondb">Descripción</string>
+    <string name="registrar">Registrar</string>
+    <string name="borrarRuido">¿Desea borrar la medición seleccionada?</string>
 
 </resources>

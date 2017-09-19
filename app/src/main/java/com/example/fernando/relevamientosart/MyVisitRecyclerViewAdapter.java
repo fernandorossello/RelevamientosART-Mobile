@@ -36,7 +36,7 @@ public class MyVisitRecyclerViewAdapter extends RecyclerView.Adapter<MyVisitRecy
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mListaVisitas.get(position);
-        holder.mInstitutionNameView.setText(holder.mItem.nombreInstitucion());
+        holder.mInstitutionNameView.setText(holder.mItem.institution.name);
         holder.mFechaVisita.setText("17/08/2017");
 
         if(holder.mItem.status != 0) {

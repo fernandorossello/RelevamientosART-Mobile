@@ -21,6 +21,7 @@ public class Visit implements Serializable {
     public Visit(){
         tasks = new ArrayList<>();
         images=  new ArrayList<>();
+        noises = new ArrayList<>();
     }
 
     @DatabaseField(id = true)
@@ -50,13 +51,8 @@ public class Visit implements Serializable {
     @DatabaseField
     public Date postponed_at;
 
-    public String nombreInstitucion(){
-        return institution.name;
-    }
-
-    public String direccionInstitucion(){
-        return institution.address;
-    }
+    @ForeignCollectionField
+    public Collection<Noise> noises;
 
     public Task obtenerTarea(EnumTareas tipo) throws IllegalArgumentException  {
         Task ret = null;

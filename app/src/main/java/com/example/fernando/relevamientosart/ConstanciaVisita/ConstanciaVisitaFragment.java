@@ -1,7 +1,12 @@
 package com.example.fernando.relevamientosart.ConstanciaVisita;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.AppCompatImageButton;
@@ -13,16 +18,19 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.example.fernando.relevamientosart.MainActivity;
 import com.example.fernando.relevamientosart.R;
 import com.example.fernando.relevamientosart.RAR.RARFragment;
-
-
+import Modelo.Task;
+import Modelo.Visit;
 import org.w3c.dom.Text;
 
+import java.io.File;
+import java.io.IOException;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import Helpers.DBHelper;
 import Modelo.Managers.VisitManager;
@@ -105,7 +113,7 @@ public class ConstanciaVisitaFragment extends Fragment {
         btnAudio.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(view.getContext(), "Medir audio", Toast.LENGTH_SHORT).show();
+                mListener.OnMedirRuido();
             }
         });
 
@@ -135,7 +143,7 @@ public class ConstanciaVisitaFragment extends Fragment {
             mListener = (OnEventoConstanciaListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnTrabajadoresFragmentInteractionListener");
+                    + " must implement OnEventoConstanciaListener");
         }
     }
 
@@ -146,10 +154,32 @@ public class ConstanciaVisitaFragment extends Fragment {
     }
 
 
+    private static void grantPermissionsToUri(Context context, Intent intent, Uri uri) {
+        List<ResolveInfo> resInfoList = context.getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+        for (ResolveInfo resolveInfo : resInfoList) {
+            String packageName = resolveInfo.activityInfo.packageName;
+            context.grantUriPermission(packageName, uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        }
+    }
+
+    private File crearArchivoDeImagen() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+        return image;
+    }
+
     public interface OnEventoConstanciaListener {
         void OnTomarFoto();
         void OnVerFotosClick(Visit visit);
         void OnGuardarConstanciaDeVisita();
+        void OnMedirRuido();
     }
 
 }

@@ -17,6 +17,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -26,10 +27,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
-
 import com.example.fernando.relevamientosart.ConstanciaCapacitacion.ConstanciaCapacitacionFragment;
 import com.example.fernando.relevamientosart.ConstanciaVisita.ImageFragment;
 import com.example.fernando.relevamientosart.Login.LoginActivity;
+import com.example.fernando.relevamientosart.ConstanciaVisita.MedidorDeRuidoFragment;
 import com.example.fernando.relevamientosart.RAR.RARFragment;
 import com.example.fernando.relevamientosart.RAR.RiskFragment;
 import com.example.fernando.relevamientosart.ConstanciaVisita.ConstanciaVisitaFragment;
@@ -52,6 +53,7 @@ import Modelo.Managers.ImageManager;
 import Modelo.Managers.TaskManager;
 import Modelo.Managers.VisitManager;
 import Modelo.RARResult;
+import Modelo.Noise;
 import Modelo.Task;
 import Modelo.Visit;
 import Modelo.WorkingMan;
@@ -61,13 +63,14 @@ public class MainActivity extends AppCompatActivity
         RARFragment.OnTrabajadoresFragmentInteractionListener,
         ConstanciaVisitaFragment.OnEventoConstanciaListener,
         ImageFragment.OnImageListFragmentInteractionListener,
-        RiskFragment.OnRiskFragmentInteractionListener {
+        RiskFragment.OnRiskFragmentInteractionListener,
+        MedidorDeRuidoFragment.OnNoiseListFragmentInteractionListener{
 
     private static final int REQUEST_TAKE_PHOTO = 1500;
     private static final int REQUEST_READ = 2000;
     private static final String TAG_CONSTANCIA_VISITA = "ConstanciaVisitaTag";
     private static final String TAG_FRAGMENT_IMAGENES = "ListaImagensTag";
-
+    private final String TAG_FRAGMENT_MEDICION_RUIDO = "tag_frg_medicion_ruido";
 
     private DBHelper mDBHelper;
 
@@ -145,25 +148,6 @@ public class MainActivity extends AppCompatActivity
                 return true;
 
             case R.id.action_rar:
-              /*  selectedTask = mVisitaEnCurso.obtenerTarea(EnumTareas.RAR);
-
-                if(selectedTask.result == null){
-                    selectedTask.result = new RARResult(){{task = selectedTask;}};
-                }
-
-                List<RARResult> result = null;
-            try {
-                result = getHelper().getrARResultDao().queryForAll();
-            }catch (SQLException ex){
-
-            }
-
-                List<WorkingMan> wmresult = null;
-                try {
-                    wmresult  = getHelper().getworkingManDao().queryForAll();
-                }catch (SQLException ex){
-
-                }*/
 
                 getSupportFragmentManager()
                         .beginTransaction()
@@ -302,7 +286,7 @@ public class MainActivity extends AppCompatActivity
             File photoFile = null;
             try {
                 String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-                String name = mVisitaEnCurso.nombreInstitucion() +"_"  + timeStamp + "_";
+                String name = mVisitaEnCurso.institution.name +"_"  + timeStamp + "_";
                 photoFile = crearArchivoDeImagen(name);
             } catch (IOException ex) {
                 Toast.makeText(this, "Error al guardar la imagen", Toast.LENGTH_SHORT).show();
@@ -400,4 +384,49 @@ public class MainActivity extends AppCompatActivity
                 .addToBackStack(null)
                 .commit();
     }
+
+    @Override
+    public void OnMedirRuido() {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, MedidorDeRuidoFragment.newInstance(mVisitaEnCurso),TAG_FRAGMENT_MEDICION_RUIDO)
+                .addToBackStack(null)
+                .commit();
+    }
+
+    @Override
+    public void onRuidoPressed(final Noise ruido) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setMessage(R.string.borrarRuido)
+                .setTitle(R.string.borrarImagen_Title)
+                .setPositiveButton(R.string.aceptar, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        borrarRuido(ruido);
+                    }
+                });
+        builder.setNegativeButton(R.string.cancelar, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.cancel();
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+
+        dialog.show();
+    }
+
+
+    private void borrarRuido(Noise ruido) {
+
+        mVisitaEnCurso.noises.remove(ruido);
+
+        Fragment frg = getSupportFragmentManager().findFragmentByTag(TAG_FRAGMENT_MEDICION_RUIDO);
+        getSupportFragmentManager()
+                .beginTransaction()
+                .detach(frg)
+                .attach(frg)
+                .commit();
+    }
+
 }

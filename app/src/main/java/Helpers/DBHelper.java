@@ -14,8 +14,8 @@ import Modelo.Employee;
 import Modelo.Image;
 import Modelo.Institution;
 import Modelo.RARResult;
-import Modelo.Result;
 import Modelo.Risk;
+import Modelo.Noise;
 import Modelo.Task;
 import Modelo.Visit;
 import Modelo.VisitRecord;
@@ -53,6 +53,7 @@ public class DBHelper extends OrmLiteSqliteOpenHelper {
             TableUtils.createTable(connectionSource, RARResult.class);
             TableUtils.createTable(connectionSource, Image.class);
             TableUtils.createTable(connectionSource, Risk.class);
+            TableUtils.createTable(connectionSource, Noise.class);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
