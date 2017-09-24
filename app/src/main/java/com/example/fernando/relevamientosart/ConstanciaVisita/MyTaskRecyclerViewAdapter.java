@@ -1,8 +1,13 @@
 package com.example.fernando.relevamientosart.ConstanciaVisita;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.DialogInterface;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -56,12 +61,27 @@ public class MyTaskRecyclerViewAdapter extends RecyclerView.Adapter<MyTaskRecycl
                 .setPositiveButton(R.string.aceptar, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                      try{
-                        ResultManager resultManager = new ResultManager(((MainActivity)view.getContext()).getHelper());
-                        new PDFHelper().crearPDF(resultManager.getResult(holder.mItem),holder.mItem);
-                         Toast.makeText(view.getContext(), R.string.pdfGenerado, Toast.LENGTH_SHORT).show();
+                        if(garantizarPermisosDeEscritura()) {
+                            ResultManager resultManager = new ResultManager(((MainActivity) view.getContext()).getHelper());
+                            new PDFHelper().crearPDF(resultManager.getResult(holder.mItem), holder.mItem);
+                            Toast.makeText(view.getContext(), R.string.pdfGenerado, Toast.LENGTH_SHORT).show();
+                        }
                     }catch (Exception ex){
                         Toast.makeText(view.getContext(), ex.getMessage(), Toast.LENGTH_SHORT).show();
                     }
+                    }
+
+                    private boolean garantizarPermisosDeEscritura() {
+                        if (ContextCompat.checkSelfPermission(view.getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                            if (ActivityCompat.shouldShowRequestPermissionRationale((Activity) view.getContext(), Manifest.permission.CAMERA)) {
+                                Toast.makeText(view.getContext(), R.string.permission_rationale, Toast.LENGTH_LONG).show();
+                                return false;
+                            } else {
+                                ActivityCompat.requestPermissions((Activity) view.getContext(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                                return false;
+                            }
+                        }
+                        return true;
                     }
                 });
 

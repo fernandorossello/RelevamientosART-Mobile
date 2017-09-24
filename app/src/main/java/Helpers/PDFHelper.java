@@ -373,5 +373,4 @@ public class PDFHelper {
     private void contenidoRGRL(Document document, RGRLResult result) throws DocumentException {
     }
 
-
 }

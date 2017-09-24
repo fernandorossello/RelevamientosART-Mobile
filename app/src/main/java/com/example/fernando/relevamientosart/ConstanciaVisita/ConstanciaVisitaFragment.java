@@ -1,5 +1,7 @@
 package com.example.fernando.relevamientosart.ConstanciaVisita;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -8,7 +10,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatImageButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -72,7 +76,7 @@ public class ConstanciaVisitaFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_constancia_visita, container, false);
+        final View view = inflater.inflate(R.layout.fragment_constancia_visita, container, false);
 
         RecyclerView recyclerView  = view.findViewById(R.id.taskList);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
@@ -107,12 +111,28 @@ public class ConstanciaVisitaFragment extends Fragment {
             public void onClick(View view) {
                 try {
                     guardarConstanciaDeVisita(view);
-                    new PDFHelper().crearPDF(mVisit);
-                    Toast.makeText(view.getContext(), R.string.guardadoYpdf, Toast.LENGTH_SHORT).show();
-                    mListener.OnGuardarConstanciaDeVisita();
+
+                    if(garantizarPermisosDeEscritura()) {
+                        new PDFHelper().crearPDF(mVisit);
+                        Toast.makeText(view.getContext(), R.string.guardadoYpdf, Toast.LENGTH_SHORT).show();
+                        mListener.OnGuardarConstanciaDeVisita();
+                    }
                 } catch (Exception ex){
                     Toast.makeText(getContext(), R.string.error_pdf_constancia_visita, Toast.LENGTH_SHORT).show();
                 }
+            }
+
+            private boolean garantizarPermisosDeEscritura() {
+                if (ContextCompat.checkSelfPermission(view.getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    if (ActivityCompat.shouldShowRequestPermissionRationale((Activity) view.getContext(), Manifest.permission.CAMERA)) {
+                        Toast.makeText(view.getContext(), R.string.permission_rationale, Toast.LENGTH_LONG).show();
+                        return false;
+                    } else {
+                        ActivityCompat.requestPermissions((Activity) view.getContext(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                        return false;
+                    }
+                }
+                return true;
             }
         });
 
