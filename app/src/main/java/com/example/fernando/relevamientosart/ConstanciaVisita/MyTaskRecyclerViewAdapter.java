@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.fernando.relevamientosart.MainActivity;
 import com.example.fernando.relevamientosart.R;
 import com.j256.ormlite.dao.ForeignCollection;
 import com.j256.ormlite.stmt.query.Exists;
@@ -19,7 +20,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import Helpers.DBHelper;
 import Helpers.PDFHelper;
+import Modelo.Managers.ResultManager;
 import Modelo.Task;
 
 public class MyTaskRecyclerViewAdapter extends RecyclerView.Adapter<MyTaskRecyclerViewAdapter.ViewHolder> {
@@ -53,7 +56,8 @@ public class MyTaskRecyclerViewAdapter extends RecyclerView.Adapter<MyTaskRecycl
                 .setPositiveButton(R.string.aceptar, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                      try{
-                        new PDFHelper().crearPDF(holder.mItem);
+                        ResultManager resultManager = new ResultManager(((MainActivity)view.getContext()).getHelper());
+                        new PDFHelper().crearPDF(resultManager.getResult(holder.mItem),holder.mItem);
                          Toast.makeText(view.getContext(), R.string.pdfGenerado, Toast.LENGTH_SHORT).show();
                     }catch (Exception ex){
                         Toast.makeText(view.getContext(), ex.getMessage(), Toast.LENGTH_SHORT).show();

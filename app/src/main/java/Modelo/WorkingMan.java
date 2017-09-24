@@ -39,4 +39,14 @@ public class WorkingMan extends Employee implements Serializable {
         WorkingMan otherWM = (WorkingMan)other;
         return id == otherWM.id;
     }
+
+    public String obtenerCodigosDeRiesgos() {
+        String codigos = "";
+
+        for (Risk riesgo: this.riskList) {
+            codigos += riesgo.code + "; ";
+        }
+
+        return codigos;
+    }
 }

@@ -21,16 +21,27 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfPageEventHelper;
 import com.itextpdf.text.pdf.PdfWriter;
+
+import org.w3c.dom.DOMException;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Formatter;
+
+import Modelo.CAPResult;
+import Modelo.Enums.EnumTareas;
 import Modelo.Institution;
+import Modelo.Managers.ResultManager;
 import Modelo.Noise;
+import Modelo.RARResult;
+import Modelo.RGRLResult;
+import Modelo.Result;
 import Modelo.Task;
 import Modelo.Visit;
+import Modelo.WorkingMan;
 
 public class PDFHelper {
 
@@ -39,23 +50,35 @@ public class PDFHelper {
     private final Font fontLabel = FontFactory.getFont(FontFactory.HELVETICA, 12, Font.BOLD);
     private final Font fontTexto = FontFactory.getFont(FontFactory.HELVETICA, 11);
 
-    Document document = new Document(PageSize.A4);
-
     //Se utiliza para generar los PDF de cada tarea
-    public void crearPDF(Task tarea) throws IOException, DocumentException {
+    public void crearPDF(Result result,Task tarea) throws IOException, DocumentException {
+        Document document;
+        if(tarea.type == EnumTareas.RAR.id) {
+            document = new Document(PageSize.A4.rotate());
+        } else {
+            document = new Document(PageSize.A4);
+        }
 
         File archivo = crearArchivo(tarea.getTypeShortName()+ "_"+tarea.visit.institution.name);
         FileOutputStream output = new FileOutputStream(archivo);
 
-        PdfWriter.getInstance(document, output);
+        PdfWriter writer = PdfWriter.getInstance(document, output);
 
         document.open();
 
         Paragraph titulo = new Paragraph(tarea.getTypeShortName(),fontTitulo);
         titulo.setAlignment(Element.ALIGN_CENTER);
         document.add(titulo);
-
         generarCabeceraVisita(tarea.visit, document);
+
+        if(tarea.type == EnumTareas.RAR.id){
+            contenidoRAR(document,(RARResult) result);
+            writer.setPageEvent(new FooterRAR());
+        } else if (tarea.type == EnumTareas.RGRL.id){
+            contenidoRGRL(document,(RGRLResult) result);
+        } else if (tarea.type == EnumTareas.CAPACITACION.id) {
+            contenidoCapacitacion(document,(CAPResult)result);
+        }
 
         document.close();
     }
@@ -65,6 +88,8 @@ public class PDFHelper {
 
         File archivo = crearArchivo("Constancia_visita" + "_"+ visit.institution.name);
         FileOutputStream output = new FileOutputStream(archivo);
+
+        Document document = new Document(PageSize.A4);
 
         PdfWriter writer = PdfWriter.getInstance(document, output);
         writer.setPageEvent(new FooterFirmas());
@@ -104,7 +129,6 @@ public class PDFHelper {
 
         document.close();
     }
-
 
     private String formatearFecha(Date date){
         String myFormat = "dd/MM/yy";
@@ -229,5 +253,71 @@ public class PDFHelper {
             return firmas;
         }
     }
+
+    private void contenidoRAR(Document document, RARResult result) throws DocumentException{
+
+        Paragraph titulo = new Paragraph("Trabajadores expuestos",fontSubtitulo);
+        titulo.setSpacingAfter(10f);
+        document.add(titulo);
+
+        float[] columnWidths = {2, 2, 2, 2, 2, 2, 5};
+        PdfPTable tabla = new PdfPTable(columnWidths);
+        tabla.setWidthPercentage(100);
+        tabla.addCell("Nombre");
+        tabla.addCell("Apellido");
+        tabla.addCell("C.U.I.L.");
+        tabla.addCell("Fecha de ingreso");
+        tabla.addCell("Fecha inicio exposición");
+        tabla.addCell("Fecha fin exposición");
+        tabla.addCell("Códigos de agentes de riesgos");
+
+        for (WorkingMan trabajador: result.workingMen) {
+            tabla.addCell(trabajador.name);
+            tabla.addCell(trabajador.lastName);
+            tabla.addCell(trabajador.cuil);
+            tabla.addCell(formatearFecha(trabajador.checked_in_on));
+            tabla.addCell(formatearFecha(trabajador.exposed_from_at));
+            tabla.addCell(formatearFecha(trabajador.exposed_until_at));
+            tabla.addCell(trabajador.obtenerCodigosDeRiesgos());
+        }
+
+        document.add(tabla);
+    }
+
+    class FooterRAR extends PdfPageEventHelper {
+
+        public void onEndPage(PdfWriter writer, Document document) {
+            footer(document).writeSelectedRows(0, -1, 36, 64, writer.getDirectContent());
+        }
+
+        private PdfPTable footer(Document document) {
+            PdfPTable firmas = new PdfPTable(3);
+            firmas.setTotalWidth(document.right() - document.left());
+
+            PdfPCell celda1 = new PdfPCell(new Phrase("Firma representante de la empresa",fontTexto));
+            PdfPCell celda2 = new PdfPCell(new Phrase("Firma representante Higiene y seguridad",fontTexto));
+            PdfPCell celda3 = new PdfPCell(new Phrase("Firma representante ART",fontTexto));
+
+            celda1.setBorder(PdfPCell.NO_BORDER);
+            celda2.setBorder(PdfPCell.NO_BORDER);
+            celda3.setBorder(PdfPCell.NO_BORDER);
+            celda1.setHorizontalAlignment(Element.ALIGN_CENTER);
+            celda2.setHorizontalAlignment(Element.ALIGN_CENTER);
+            celda3.setHorizontalAlignment(Element.ALIGN_CENTER);
+
+            firmas.addCell(celda1);
+            firmas.addCell(celda2);
+            firmas.addCell(celda3);
+
+            return firmas;
+        }
+    }
+
+    private void contenidoCapacitacion(Document document, CAPResult result) throws DocumentException {
+    }
+
+    private void contenidoRGRL(Document document, RGRLResult result) throws DocumentException {
+    }
+
 
 }
