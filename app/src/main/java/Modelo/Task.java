@@ -31,4 +31,8 @@ public class Task implements Serializable {
         return EnumTareas.getById(this.type).name;
     };
 
+    public String getTypeShortName(){
+        return EnumTareas.getById(this.type).shortName;
+    };
+
 }

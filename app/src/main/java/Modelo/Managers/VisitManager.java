@@ -7,6 +7,7 @@ import com.j256.ormlite.dao.Dao;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -87,6 +88,7 @@ public class VisitManager extends Manager<Visit> {
             institution = institucion;
             status = 1;
             priority = 2;
+            to_visit_on = new Date(1,1,2017);
             tasks.add(tareaRGRL);
             tasks.add(tareaCAP);
             tasks.add(tareaRAR);
@@ -100,6 +102,7 @@ public class VisitManager extends Manager<Visit> {
             this.institution = institucion2;
             this.status = 2;
             this.priority = 1;
+            to_visit_on = new Date(1,2,2017);
                 tasks.add(tareaRGRL1);
                 tasks.add(tareaCAP1);
                 tasks.add(tareaRAR1);
