@@ -26,6 +26,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -325,6 +326,11 @@ public class MainActivity extends AppCompatActivity
 
     private File crearArchivoDeImagen(String fileName) throws IOException {
         File imagesFolder = new File(Environment.getExternalStorageDirectory(), "ARTImages");
+        if(!imagesFolder.exists()){
+            imagesFolder.mkdir();
+            Log.i(this.toString(),"Creada carpeta de imagenes");
+        }
+
         File image = new File(imagesFolder, fileName + ".jpg");
         return image;
     }
