@@ -51,6 +51,9 @@ public class Visit implements Serializable {
     @DatabaseField
     public Date postponed_at;
 
+    @DatabaseField
+    public Date to_visit_on;
+
     @ForeignCollectionField
     public Collection<Noise> noises;
 
@@ -70,4 +73,5 @@ public class Visit implements Serializable {
 
         return ret;
     }
+
 }

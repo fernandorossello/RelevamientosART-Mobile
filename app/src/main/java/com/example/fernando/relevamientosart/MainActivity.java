@@ -416,7 +416,6 @@ public class MainActivity extends AppCompatActivity
         dialog.show();
     }
 
-
     private void borrarRuido(Noise ruido) {
 
         mVisitaEnCurso.noises.remove(ruido);
