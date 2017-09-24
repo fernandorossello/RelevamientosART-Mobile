@@ -1,7 +1,9 @@
 package com.example.fernando.relevamientosart.ConstanciaVisita;
 
+import android.content.DialogInterface;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,7 +27,7 @@ public class MyTaskRecyclerViewAdapter extends RecyclerView.Adapter<MyTaskRecycl
     private List<Task> mValues;
 
     public MyTaskRecyclerViewAdapter(Collection<Task> items) {
-        mValues = new ArrayList<Task>(items);;
+        mValues = new ArrayList<>(items);;
     }
 
     @Override
@@ -41,15 +43,33 @@ public class MyTaskRecyclerViewAdapter extends RecyclerView.Adapter<MyTaskRecycl
         holder.mTareaView.setText(mValues.get(position).getTypeName());
 
         holder.mTareaView.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
-            public void onClick(View view) {
-                try {
-                    new PDFHelper().crearPDF(holder.mItem);
-                }catch (Exception ex){
-                    Toast.makeText(view.getContext(), ex.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-                Toast.makeText(view.getContext(), "Archivo creado", Toast.LENGTH_SHORT).show();
+            public void onClick(final View view) {
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+
+                builder.setMessage(R.string.generarPDf)
+                .setTitle(R.string.generarPDF_Title)
+                .setPositiveButton(R.string.aceptar, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                     try{
+                        new PDFHelper().crearPDF(holder.mItem);
+                         Toast.makeText(view.getContext(), R.string.pdfGenerado, Toast.LENGTH_SHORT).show();
+                    }catch (Exception ex){
+                        Toast.makeText(view.getContext(), ex.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                    }
+                });
+
+                builder.setNegativeButton(R.string.cancelar, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
+
+                    AlertDialog dialog = builder.create();
+
+                    dialog.show();
             }
         });
     }

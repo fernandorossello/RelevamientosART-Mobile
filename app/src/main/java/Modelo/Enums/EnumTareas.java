@@ -6,7 +6,7 @@ public enum EnumTareas implements Serializable{
 
     RAR(1,"Confección planilla de Relevamiento de agentes de riesgo","RAR"),
     RGRL(2, "Confección planilla RGRL","RGRL"),
-    CAPACITACION(3, "Brindar capacitación","Capacitacion");
+    CAPACITACION(3, "Brindar capacitación","Capacitación");
 
 
     public String name;

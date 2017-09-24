@@ -73,4 +73,5 @@ public class Visit implements Serializable {
 
         return ret;
     }
+
 }

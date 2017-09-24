@@ -21,6 +21,8 @@ import android.widget.Toast;
 import com.example.fernando.relevamientosart.MainActivity;
 import com.example.fernando.relevamientosart.R;
 import com.example.fernando.relevamientosart.RAR.RARFragment;
+
+import Helpers.PDFHelper;
 import Modelo.Task;
 import Modelo.Visit;
 import org.w3c.dom.Text;
@@ -103,9 +105,14 @@ public class ConstanciaVisitaFragment extends Fragment {
         btnGuardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(view.getContext(), R.string.guardado, Toast.LENGTH_SHORT).show();
-                guardarConstanciaDeVisita(view);
-                mListener.OnGuardarConstanciaDeVisita();
+                try {
+                    guardarConstanciaDeVisita(view);
+                    new PDFHelper().crearPDF(mVisit);
+                    Toast.makeText(view.getContext(), R.string.guardadoYpdf, Toast.LENGTH_SHORT).show();
+                    mListener.OnGuardarConstanciaDeVisita();
+                } catch (Exception ex){
+                    Toast.makeText(getContext(), R.string.error_pdf_constancia_visita, Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
