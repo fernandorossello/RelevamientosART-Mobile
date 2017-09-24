@@ -31,6 +31,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Formatter;
 
+import Modelo.Attendee;
 import Modelo.CAPResult;
 import Modelo.Enums.EnumTareas;
 import Modelo.Institution;
@@ -76,6 +77,7 @@ public class PDFHelper {
             writer.setPageEvent(new FooterRAR());
         } else if (tarea.type == EnumTareas.RGRL.id){
             contenidoRGRL(document,(RGRLResult) result);
+            writer.setPageEvent(new FooterCapacitacion());
         } else if (tarea.type == EnumTareas.CAPACITACION.id) {
             contenidoCapacitacion(document,(CAPResult)result);
         }
@@ -314,6 +316,58 @@ public class PDFHelper {
     }
 
     private void contenidoCapacitacion(Document document, CAPResult result) throws DocumentException {
+
+        Paragraph titulo = new Paragraph("Asistentes",fontSubtitulo);
+        titulo.setSpacingAfter(10f);
+        document.add(titulo);
+
+        Paragraph curso = new Paragraph();
+        curso.add(new Chunk("Curso:",fontLabel));
+        curso.add(result.topic);
+
+        Paragraph contenidos = new Paragraph();
+        contenidos.add(new Chunk("Contenidos:",fontLabel));
+
+
+        Paragraph metodologia = new Paragraph();
+        metodologia.add(new Chunk("Metodología:",fontLabel));
+
+        PdfPTable tabla = new PdfPTable(3);
+        tabla.setWidthPercentage(100);
+        tabla.addCell("Apellido y nombre");
+        tabla.addCell("N° Documento");
+        tabla.addCell("Firma");
+
+        for (Attendee asistente :result.attendees) {
+            tabla.addCell(asistente.nombreCompleto());
+            tabla.addCell(asistente.cuil);
+            tabla.addCell("");
+        }
+    }
+
+    class FooterCapacitacion extends PdfPageEventHelper {
+
+        public void onEndPage(PdfWriter writer, Document document) {
+            footer(document).writeSelectedRows(0, -1, 36, 64, writer.getDirectContent());
+        }
+
+        private PdfPTable footer(Document document) {
+            PdfPTable firmas = new PdfPTable(2);
+            firmas.setTotalWidth(document.right() - document.left());
+
+            PdfPCell celda1 = new PdfPCell(new Phrase("Firma representante de la empresa",fontTexto));
+            PdfPCell celda2 = new PdfPCell(new Phrase("Firma instructor ART",fontTexto));
+
+            celda1.setBorder(PdfPCell.NO_BORDER);
+            celda2.setBorder(PdfPCell.NO_BORDER);
+            celda1.setHorizontalAlignment(Element.ALIGN_CENTER);
+            celda2.setHorizontalAlignment(Element.ALIGN_CENTER);
+
+            firmas.addCell(celda1);
+            firmas.addCell(celda2);
+
+            return firmas;
+        }
     }
 
     private void contenidoRGRL(Document document, RGRLResult result) throws DocumentException {
