@@ -36,29 +36,12 @@ public class MyVisitRecyclerViewAdapter extends RecyclerView.Adapter<MyVisitRecy
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mListaVisitas.get(position);
-        holder.mInstitutionNameView.setText(holder.mItem.nombreInstitucion());
+        holder.mInstitutionNameView.setText(holder.mItem.institution.name);
         holder.mFechaVisita.setText("17/08/2017");
 
         if(holder.mItem.status != 0) {
             EnumStatus status = EnumStatus.getById(holder.mItem.status);
             Context context = holder.mInstitutionNameView.getContext();
-            /*int color;
-            switch (status) {
-                case ASIGNADA:
-                    color = ContextCompat.getColor(context, R.color.colorAsignada);
-                    break;
-                case ENPROCESO:
-                    color = ContextCompat.getColor(context, R.color.colorEnCurso);
-                    break;
-                case POSTERGADA:
-                    color = ContextCompat.getColor(context, R.color.colorPostergada);
-                    break;
-                default:
-                    color = ContextCompat.getColor(context, R.color.colorFinalizada);
-                    break;
-            }
-            //holder.mStatusView.setText(status.name);
-            holder.mBadge.setBackgroundColor(color);*/
         }
 
         holder.mView.setOnClickListener(new View.OnClickListener() {

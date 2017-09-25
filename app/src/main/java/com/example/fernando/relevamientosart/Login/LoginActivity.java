@@ -1,10 +1,12 @@
-package com.example.fernando.relevamientosart;
+package com.example.fernando.relevamientosart.Login;
 
 import android.content.Intent;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.Toast;
+
+import com.example.fernando.relevamientosart.MainActivity;
+import com.example.fernando.relevamientosart.R;
 
 
 public class LoginActivity extends AppCompatActivity implements LoginFragment.OnRecuperarContraseniaListener {

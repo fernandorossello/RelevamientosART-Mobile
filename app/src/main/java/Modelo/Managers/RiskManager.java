@@ -1,34 +1,271 @@
 package Modelo.Managers;
 
+import com.j256.ormlite.dao.Dao;
+
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import Helpers.DBHelper;
 import Modelo.Risk;
 
-public class RiskManager {
+public class RiskManager extends Manager<Risk> {
+
+    public RiskManager(){}
+
+    public RiskManager(DBHelper helper){
+        dbHelper = helper;
+    }
+
+    @Override
+    public void persist(Risk item) throws SQLException {
+        Dao dao = dbHelper.getRiskDao();
+
+        if (!dao.idExists(item.id)) {
+            dao.create(item);
+        } else {
+            dao.update(item);
+        }
+    }
 
     public ArrayList<Risk> obtenerRiesgos(){
         ArrayList<Risk> riesgos = new ArrayList<>();
 
-        riesgos.add(new Risk(){{
-            code="00001";
-            description="Radiación";
-        }});
-
-        riesgos.add(new Risk(){{
-            code="00002";
-            description="Alturas";
-        }});
-
-        riesgos.add(new Risk(){{
-            code="00003";
-            description="Veneno";
-        }});
-
-        riesgos.add(new Risk(){{
-            code="00004";
-            description="Animales";
-        }});
+        riesgos.add(new Risk(){{code="40001"; description="Aceites minerales";}});
+        riesgos.add(new Risk(){{code="40002"; description="Ácido Cianhídrico";}});
+        riesgos.add(new Risk(){{code="40003"; description="Ácido Clorhídrico";}});
+        riesgos.add(new Risk(){{code="40004"; description="Ácido Fluorhídrico";}});
+        riesgos.add(new Risk(){{code="40005"; description="Ácido Fosfórico";}});
+        riesgos.add(new Risk(){{code="40006"; description="Ácido Mercaptopropiónico";}});
+        riesgos.add(new Risk(){{code="40007"; description="Ácido Nítrico";}});
+        riesgos.add(new Risk(){{code="40008"; description="Ácido Perclórico";}});
+        riesgos.add(new Risk(){{code="40009"; description="Ácido Sulfúrico";}});
+        riesgos.add(new Risk(){{code="40010"; description="Acrilonitrilo (Cianuro de vinilo)";}});
+        riesgos.add(new Risk(){{code="40011"; description="Alcohol butílico (Butanol)";}});
+        riesgos.add(new Risk(){{code="40012"; description="Alcohol furfurílico";}});
+        riesgos.add(new Risk(){{code="40013"; description="Alcohol Isopropílico (Isopropanol)";}});
+        riesgos.add(new Risk(){{code="40014"; description="Alcohol Metílico (Metanol)";}});
+        riesgos.add(new Risk(){{code="40015"; description="Alcohol propílico";}});
+        riesgos.add(new Risk(){{code="40016"; description="Algodón";}});
+        riesgos.add(new Risk(){{code="40017"; description="Alúmina calcinada";}});
+        riesgos.add(new Risk(){{code="40019"; description="Aminas aromáticas y derivados";}});
+        riesgos.add(new Risk(){{code="40020"; description="Amoníaco (gas)";}});
+        riesgos.add(new Risk(){{code="40021"; description="Amonios cuaternarios";}});
+        riesgos.add(new Risk(){{code="40022"; description="Anhídrido ftálico";}});
+        riesgos.add(new Risk(){{code="40023"; description="Anhídrido hexahidroftalico";}});
+        riesgos.add(new Risk(){{code="40024"; description="Anhídrido hímico";}});
+        riesgos.add(new Risk(){{code="40025"; description="Anhídrido sulfuroso";}});
+        riesgos.add(new Risk(){{code="40026"; description="Anhídridos trimetílicos";}});
+        riesgos.add(new Risk(){{code="40027"; description="Anilinas";}});
+        riesgos.add(new Risk(){{code="40028"; description="Antibióticos macrólidos";}});
+        riesgos.add(new Risk(){{code="40028"; description="Antibióticos macrólidos";}});
+        riesgos.add(new Risk(){{code="40029"; description="Antimonio";}});
+        riesgos.add(new Risk(){{code="40030"; description="Arsénico y sus compuestos (Res 310/03)";}});
+        riesgos.add(new Risk(){{code="40031"; description="Amianto (Asbesto) (Res 310/03)";}});
+        riesgos.add(new Risk(){{code="40033"; description="Azodicarbonamida";}});
+        riesgos.add(new Risk(){{code="40034"; description="Azúcares";}});
+        riesgos.add(new Risk(){{code="40035"; description="Berilio y sus compuestos (Res 310/03)";}});
+        riesgos.add(new Risk(){{code="40036"; description="Benceno (Res 310/03)";}});
+        riesgos.add(new Risk(){{code="40039"; description="Benzonitrilos";}});
+        riesgos.add(new Risk(){{code="40040"; description="Bromoxinil";}});
+        riesgos.add(new Risk(){{code="40041"; description="Bromuro de metilo";}});
+        riesgos.add(new Risk(){{code="40042"; description="Bisulfitos";}});
+        riesgos.add(new Risk(){{code="40043"; description="Bifenilos Policlorados (PCB)";}});
+        riesgos.add(new Risk(){{code="40044"; description="Cadmio y sus compuestos (Res 310/03)";}});
+        riesgos.add(new Risk(){{code="40045"; description="Cáñamo";}});
+        riesgos.add(new Risk(){{code="40046"; description="Caolín";}});
+        riesgos.add(new Risk(){{code="40047"; description="Carbaril";}});
+        riesgos.add(new Risk(){{code="40048"; description="Carbón Mineral";}});
+        riesgos.add(new Risk(){{code="40049"; description="Cemento (Alumino silicato de Calcio)";}});
+        riesgos.add(new Risk(){{code="40050"; description="Cetonas";}});
+        riesgos.add(new Risk(){{code="40051"; description="Cianocrilatos";}});
+        riesgos.add(new Risk(){{code="40052"; description="Cianuros";}});
+        riesgos.add(new Risk(){{code="40053"; description="Cloro (gas)";}});
+        riesgos.add(new Risk(){{code="40054"; description="Clorometil.metil.éter (Res 310/03)";}});
+        riesgos.add(new Risk(){{code="40055"; description="Cloroplatinatos";}});
+        riesgos.add(new Risk(){{code="40056"; description="Clorpirifos";}});
+        riesgos.add(new Risk(){{code="40057"; description="Cloruro de Metileno";}});
+        riesgos.add(new Risk(){{code="40058"; description="Cloruro de vinilo (Res 310/03)";}});
+        riesgos.add(new Risk(){{code="40059"; description="Cobalto";}});
+        riesgos.add(new Risk(){{code="40061"; description="Cromo y sus compuestos";}});
+        riesgos.add(new Risk(){{code="40062"; description="DDT";}});
+        riesgos.add(new Risk(){{code="40063"; description="Derivados del fenol";}});
+        riesgos.add(new Risk(){{code="40064"; description="Derivados del petróleo";}});
+        riesgos.add(new Risk(){{code="40065"; description="Diacrilatos";}});
+        riesgos.add(new Risk(){{code="40066"; description="Diazinon";}});
+        riesgos.add(new Risk(){{code="40067"; description="Sales de Diazonio";}});
+        riesgos.add(new Risk(){{code="40068"; description="Diciclo hexil carbonimida";}});
+        riesgos.add(new Risk(){{code="40069"; description="Dicloroetano";}});
+        riesgos.add(new Risk(){{code="40071"; description="Dicloropropano";}});
+        riesgos.add(new Risk(){{code="40072"; description="Diclorvos";}});
+        riesgos.add(new Risk(){{code="40073"; description="Dicloroetileno";}});
+        riesgos.add(new Risk(){{code="40074"; description="Dieldrin";}});
+        riesgos.add(new Risk(){{code="40075"; description="Diisocianato de hexametileno (HDI)";}});
+        riesgos.add(new Risk(){{code="40076"; description="Dinitrofenol y sus derivados";}});
+        riesgos.add(new Risk(){{code="40077"; description="Dinitro orto cresol";}});
+        riesgos.add(new Risk(){{code="40078"; description="Dinoseb";}});
+        riesgos.add(new Risk(){{code="40079"; description="Dióxido de nitrógeno";}});
+        riesgos.add(new Risk(){{code="40080"; description="Disulfuro de Carbono (Sulfuro de carbono)";}});
+        riesgos.add(new Risk(){{code="40081"; description="Ditiocarbamatos";}});
+        riesgos.add(new Risk(){{code="40082"; description="Dodecil amino etil glicina";}});
+        riesgos.add(new Risk(){{code="40083"; description="Epiclorhidrina";}});
+        riesgos.add(new Risk(){{code="40084"; description="Esmeril";}});
+        riesgos.add(new Risk(){{code="40085"; description="Estireno (Vinilbenceno)";}});
+        riesgos.add(new Risk(){{code="40086"; description="Estrógenos de síntesis";}});
+        riesgos.add(new Risk(){{code="40087"; description="Éteres";}});
+        riesgos.add(new Risk(){{code="40088"; description="Fenotiazinas";}});
+        riesgos.add(new Risk(){{code="40089"; description="Flúor (gas)";}});
+        riesgos.add(new Risk(){{code="40090"; description="Flúor y derivados";}});
+        riesgos.add(new Risk(){{code="40091"; description="Fluoruros";}});
+        riesgos.add(new Risk(){{code="40092"; description="Formaldehido (Formol)";}});
+        riesgos.add(new Risk(){{code="40093"; description="Fósforo y sus compuestos";}});
+        riesgos.add(new Risk(){{code="40094"; description="Fosfuros";}});
+        riesgos.add(new Risk(){{code="40095"; description="Furfural";}});
+        riesgos.add(new Risk(){{code="40096"; description="Gases crudos de fábrica de coque";}});
+        riesgos.add(new Risk(){{code="40097"; description="Granito";}});
+        riesgos.add(new Risk(){{code="40098"; description="Hexaclorobenceno";}});
+        riesgos.add(new Risk(){{code="40099"; description="Hexacloronaftaleno";}});
+        riesgos.add(new Risk(){{code="40100"; description="n - Hexano";}});
+        riesgos.add(new Risk(){{code="40101"; description="Hidrocarburos Aromáticos policíclicos";}});
+        riesgos.add(new Risk(){{code="40102"; description="Hidrógeno seleniado";}});
+        riesgos.add(new Risk(){{code="40103"; description="Hidrógeno sulfurado (sulfuro de hidrógeno - ácido sulfhídrico)";}});
+        riesgos.add(new Risk(){{code="40104"; description="Hidroquinonas";}});
+        riesgos.add(new Risk(){{code="40105"; description="Hipocloritos alcalinos";}});
+        riesgos.add(new Risk(){{code="40106"; description="Sustancias hipopigmentantes de la piel";}});
+        riesgos.add(new Risk(){{code="40107"; description="Insecticidas carbamatos";}});
+        riesgos.add(new Risk(){{code="40108"; description="Insecticidas organofosforados";}});
+        riesgos.add(new Risk(){{code="40109"; description="Isocianatos orgánicos";}});
+        riesgos.add(new Risk(){{code="40110"; description="N-Isopropil n-parafenil endiamina";}});
+        riesgos.add(new Risk(){{code="40111"; description="Ioxinil";}});
+        riesgos.add(new Risk(){{code="40112"; description="Lindano";}});
+        riesgos.add(new Risk(){{code="40113"; description="Lino";}});
+        riesgos.add(new Risk(){{code="40114"; description="Malathion";}});
+        riesgos.add(new Risk(){{code="40115"; description="Manganeso";}});
+        riesgos.add(new Risk(){{code="40116"; description="Mercapto benzotioacetol";}});
+        riesgos.add(new Risk(){{code="40117"; description="Mercurio Inorgánico";}});
+        riesgos.add(new Risk(){{code="40119"; description="Metacrilato de butilo";}});
+        riesgos.add(new Risk(){{code="40120"; description="Metacrilato de etilo";}});
+        riesgos.add(new Risk(){{code="40121"; description="Metacrilato de metilo";}});
+        riesgos.add(new Risk(){{code="40122"; description="Metil-butil-cetona";}});
+        riesgos.add(new Risk(){{code="40123"; description="Metileno difenil isocianatos (MDI)";}});
+        riesgos.add(new Risk(){{code="40124"; description="Metomil";}});
+        riesgos.add(new Risk(){{code="40125"; description="Mica";}});
+        riesgos.add(new Risk(){{code="40126"; description="Monoclorobenceno";}});
+        riesgos.add(new Risk(){{code="40127"; description="Monocrotophos";}});
+        riesgos.add(new Risk(){{code="40128"; description="Monóxido de carbono";}});
+        riesgos.add(new Risk(){{code="40129"; description="Nieblas y aerosoles de Ácidos Minerales";}});
+        riesgos.add(new Risk(){{code="40130"; description="Níquel y sus compuestos (Res 310/03)";}});
+        riesgos.add(new Risk(){{code="40131"; description="Nitratos alifáticos";}});
+        riesgos.add(new Risk(){{code="40132"; description="Nitrobenceno";}});
+        riesgos.add(new Risk(){{code="40134"; description="Nitroderivados aromáticos";}});
+        riesgos.add(new Risk(){{code="40135"; description="Nitroglicerina";}});
+        riesgos.add(new Risk(){{code="40136"; description="Óxido de etileno (Res 310/03)";}});
+        riesgos.add(new Risk(){{code="40137"; description="Óxidos de Hierro (humos y polvo)";}});
+        riesgos.add(new Risk(){{code="40138"; description="Para-terT-butil-catecol";}});
+        riesgos.add(new Risk(){{code="40139"; description="Para-ter-butil-fenol";}});
+        riesgos.add(new Risk(){{code="40140"; description="Parathion";}});
+        riesgos.add(new Risk(){{code="40141"; description="Penicilina y sus sales";}});
+        riesgos.add(new Risk(){{code="40142"; description="Pentaclorofenol";}});
+        riesgos.add(new Risk(){{code="40143"; description="Pentóxido de vanadio";}});
+        riesgos.add(new Risk(){{code="40144"; description="Persulfatos alcalinos";}});
+        riesgos.add(new Risk(){{code="40145"; description="Plomo (compuestos alquílicos)";}});
+        riesgos.add(new Risk(){{code="40146"; description="Plomo (compuestos Inorgánicos)";}});
+        riesgos.add(new Risk(){{code="40147"; description="Polvo abrasivo";}});
+        riesgos.add(new Risk(){{code="40148"; description="Propoxur";}});
+        riesgos.add(new Risk(){{code="40149"; description="Ranitidina";}});
+        riesgos.add(new Risk(){{code="40150"; description="Resinas epoxicas";}});
+        riesgos.add(new Risk(){{code="40151"; description="Selenio";}});
+        riesgos.add(new Risk(){{code="40152"; description="Sericina";}});
+        riesgos.add(new Risk(){{code="40153"; description="Sílice (Res 310/03)";}});
+        riesgos.add(new Risk(){{code="40154"; description="Sisal";}});
+        riesgos.add(new Risk(){{code="40155"; description="Sulfitos";}});
+        riesgos.add(new Risk(){{code="40156"; description="Sulfuro de tetrametil tiouram";}});
+        riesgos.add(new Risk(){{code="40157"; description="Sustancias nocivas para el esmalte y estructura de los dientes";}});
+        riesgos.add(new Risk(){{code="40158"; description="Sustancias sensibilizantes de la piel";}});
+        riesgos.add(new Risk(){{code="40159"; description="Sustancias sensibilizantes del pulmón";}});
+        riesgos.add(new Risk(){{code="40160"; description="Sustancias sensibilizantes de las vías respiratorias";}});
+        riesgos.add(new Risk(){{code="40161"; description="Talco";}});
+        riesgos.add(new Risk(){{code="40162"; description="Teflón";}});
+        riesgos.add(new Risk(){{code="40164"; description="Tetracloruro de carbono";}});
+        riesgos.add(new Risk(){{code="40165"; description="Tioglicolato de amonio";}});
+        riesgos.add(new Risk(){{code="40166"; description="Tiourea (derivados)";}});
+        riesgos.add(new Risk(){{code="40167"; description="Titanio";}});
+        riesgos.add(new Risk(){{code="40168"; description="Tolueno";}});
+        riesgos.add(new Risk(){{code="40169"; description="Toluen di-isocianato (TDI)";}});
+        riesgos.add(new Risk(){{code="40170"; description="o-Toluidina";}});
+        riesgos.add(new Risk(){{code="40171"; description="Tribromometano";}});
+        riesgos.add(new Risk(){{code="40172"; description="Tricloroetano (Metilcloroformo)";}});
+        riesgos.add(new Risk(){{code="40173"; description="Tricloroetileno";}});
+        riesgos.add(new Risk(){{code="40174"; description="Triclorometano (Cloroformo)";}});
+        riesgos.add(new Risk(){{code="40175"; description="Trinitrotolueno (TNT)";}});
+        riesgos.add(new Risk(){{code="40176"; description="Tungsteno (Wolframio)";}});
+        riesgos.add(new Risk(){{code="40179"; description="Xileno";}});
+        riesgos.add(new Risk(){{code="40180"; description="Cefalosporinas y sus derivados";}});
+        riesgos.add(new Risk(){{code="40181"; description="Enzimas de origen vegetal, animal o bacteriano";}});
+        riesgos.add(new Risk(){{code="40182"; description="Sustancias irritantes de las vías respiratorias";}});
+        riesgos.add(new Risk(){{code="40183"; description="Monobromobenceno";}});
+        riesgos.add(new Risk(){{code="40184"; description="Tricloroetano";}});
+        riesgos.add(new Risk(){{code="40185"; description="Acrilatos";}});
+        riesgos.add(new Risk(){{code="40186"; description="Benzoquinona";}});
+        riesgos.add(new Risk(){{code="40187"; description="Dinitrotolueno";}});
+        riesgos.add(new Risk(){{code="40188"; description="Fenol";}});
+        riesgos.add(new Risk(){{code="40189"; description="Metacrilatos";}});
+        riesgos.add(new Risk(){{code="40190"; description="Dinitrobenceno";}});
+        riesgos.add(new Risk(){{code="40191"; description="Alcohol Isobutílico";}});
+        riesgos.add(new Risk(){{code="40192"; description="Harinas";}});
+        riesgos.add(new Risk(){{code="40192"; description="Harinas";}});
+        riesgos.add(new Risk(){{code="40193"; description="Tetracloroetileno (Percloroetileno)";}});
+        riesgos.add(new Risk(){{code="40201"; description="Aceites minerales no tratados o ligeramente tratados (Res 310/03)";}});
+        riesgos.add(new Risk(){{code="40202"; description="Alcohol Isopropílico (Manufactura por el método de los ácidos fuertes) (Res 310/03)";}});
+        riesgos.add(new Risk(){{code="40203"; description="Alquitranes (Res 310/03)";}});
+        riesgos.add(new Risk(){{code="40204"; description="Aminobifenilo (Res 310/03)";}});
+        riesgos.add(new Risk(){{code="40205"; description="Asfalto (Res 310/03)";}});
+        riesgos.add(new Risk(){{code="40206"; description="Auramina, manufactura de (Res 310/03)";}});
+        riesgos.add(new Risk(){{code="40207"; description="Bencidina (Res 310/03)";}});
+        riesgos.add(new Risk(){{code="40208"; description="Cromo hexavalente y sus compuestos (Res 310/03)";}});
+        riesgos.add(new Risk(){{code="40210"; description="Gas mostaza (Res 310/03)";}});
+        riesgos.add(new Risk(){{code="40211"; description="Hematita. Minería de profundidad con exposición a Radón (Res 310/03)";}});
+        riesgos.add(new Risk(){{code="40212"; description="Hollín (Res 310/03)";}});
+        riesgos.add(new Risk(){{code="40213"; description="Magenta, manufactura (Res 310/03)";}});
+        riesgos.add(new Risk(){{code="40214"; description="Beta-naftilamina (Res 310/03)";}});
+        riesgos.add(new Risk(){{code="40216"; description="Radón 222 y sus productos de decaimiento (Res 310/03)";}});
+        riesgos.add(new Risk(){{code="40217"; description="Talco (conteniendo fibras asbestiformes)(Res 310/03)";}});
+        riesgos.add(new Risk(){{code="60001"; description="Brucella";}});
+        riesgos.add(new Risk(){{code="60002"; description="Virus de la hepatitis A";}});
+        riesgos.add(new Risk(){{code="60003"; description="Virus de la hepatitis B y C";}});
+        riesgos.add(new Risk(){{code="60004"; description="Bacilus anthracis (Carbunclo)";}});
+        riesgos.add(new Risk(){{code="60005"; description="Mycobacterium Tuberculosis";}});
+        riesgos.add(new Risk(){{code="60006"; description="Leptospira (lectospirosis)";}});
+        riesgos.add(new Risk(){{code="60007"; description="Clamydia psittaci (psitacosis)";}});
+        riesgos.add(new Risk(){{code="60008"; description="Histoplasma capsulatum (histoplasmosis)";}});
+        riesgos.add(new Risk(){{code="60009"; description="Cestodes: equinococus granulosus, equinococus multilocularis (hidati dosis)";}});
+        riesgos.add(new Risk(){{code="60010"; description="Plasmodium (paludismo)";}});
+        riesgos.add(new Risk(){{code="60011"; description="Leishmania donovani chagasi (leishmaniasis)";}});
+        riesgos.add(new Risk(){{code="60012"; description="Virus amarilicus (fiebre amarilla)";}});
+        riesgos.add(new Risk(){{code="60013"; description="Arbovirus-adenovirus-virus Junín(fiebre hemorrágica argentina)";}});
+        riesgos.add(new Risk(){{code="60014"; description="Citomegalovirus";}});
+        riesgos.add(new Risk(){{code="60015"; description="Virus de la inmunodeficiencia humana (HIV)";}});
+        riesgos.add(new Risk(){{code="60016"; description="Virus del herpes simple";}});
+        riesgos.add(new Risk(){{code="60017"; description="Cándida albicans";}});
+        riesgos.add(new Risk(){{code="60018"; description="Hantavirus";}});
+        riesgos.add(new Risk(){{code="60019"; description="Trypanosoma Cruzi";}});
+        riesgos.add(new Risk(){{code="80001"; description="Calor";}});
+        riesgos.add(new Risk(){{code="80002"; description="Presión superior a la atmosférica estándar";}});
+        riesgos.add(new Risk(){{code="80003"; description="Presión inferior a la atmosférica estándar";}});
+        riesgos.add(new Risk(){{code="80004"; description="Posiciones forzadas y gestos repetitivos en el trabajo I(extremidades superiores)";}});
+        riesgos.add(new Risk(){{code="80005"; description="Posiciones forzadas y gestos repetitivos en el trabajo II (extremidades inferiores)";}});
+        riesgos.add(new Risk(){{code="80006"; description="Sobrecarga en el uso de la voz";}});
+        riesgos.add(new Risk(){{code="80009"; description="Aumento de la presión intraabdominal";}});
+        riesgos.add(new Risk(){{code="80010"; description="Aumento de la presión venosa en miembros inferiores";}});
+        riesgos.add(new Risk(){{code="80011"; description="Carga, posiciones forzadas y gestos repetitivos de la columna vertebral lumbosacra";}});
+        riesgos.add(new Risk(){{code="90001"; description="Ruido";}});
+        riesgos.add(new Risk(){{code="90002"; description="Radiaciones ionizantes";}});
+        riesgos.add(new Risk(){{code="90003"; description="Radiaciones infrarrojas";}});
+        riesgos.add(new Risk(){{code="90004"; description="Radiaciones ultravioletas";}});
+        riesgos.add(new Risk(){{code="90005"; description="Rayos laser";}});
+        riesgos.add(new Risk(){{code="90006"; description="Iluminación insuficiente";}});
+        riesgos.add(new Risk(){{code="90007"; description="Vibraciones transmitidas a las extremidades superiores por máquinas y herramientas";}});
+        riesgos.add(new Risk(){{code="90008"; description="Vibraciones de cuerpo entero";}});
 
         return riesgos;
     }

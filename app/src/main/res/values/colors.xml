@@ -12,6 +12,8 @@
     <color name="background_card">#dadada</color>
     <color name="color_TextView_visita">#dadada</color>
     <color name="color_TextView_valor_visita">#dadada</color>
+    <color name="color_TextView_color_fondo">#ccc8c8</color>
+
 
 
 </resources>

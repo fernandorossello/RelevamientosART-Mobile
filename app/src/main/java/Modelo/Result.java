@@ -3,12 +3,14 @@ package Modelo;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
+import java.io.Serializable;
 import java.util.Date;
 
-@DatabaseTable
-public class Result {
 
-    @DatabaseField(id = true)
+@DatabaseTable
+public class Result implements Serializable {
+
+    @DatabaseField(generatedId = true)
     public int id;
 
     @DatabaseField
@@ -16,5 +18,8 @@ public class Result {
 
     @DatabaseField
     public Date completed_at;
+
+    @DatabaseField(foreign = true)
+    public Task task;
 
 }

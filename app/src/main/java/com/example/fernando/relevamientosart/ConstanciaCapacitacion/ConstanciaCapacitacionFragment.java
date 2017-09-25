@@ -12,14 +12,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.example.fernando.relevamientosart.MainActivity;
 import com.example.fernando.relevamientosart.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import Helpers.DBHelper;
 import Modelo.Attendee;
 import Modelo.CAPResult;
 import Modelo.Managers.AttendeeManager;
+import Modelo.Managers.ResultManager;
+import Modelo.Result;
 import Modelo.Task;
 
 public class ConstanciaCapacitacionFragment extends Fragment {
@@ -27,6 +31,7 @@ public class ConstanciaCapacitacionFragment extends Fragment {
 
     private static final String ARG_TASK = "tarea";
     private Task mTarea;
+    private CAPResult mResult;
 
     private OnNewAttendeeInteractionListener mListener;
 
@@ -47,9 +52,8 @@ public class ConstanciaCapacitacionFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mTarea = (Task) getArguments().getSerializable(ARG_TASK);
-            if(mTarea.result == null){
-                mTarea.result = new CAPResult();
-            }
+            DBHelper dbHelper = ((MainActivity)getActivity()).getHelper();
+            Result result = new ResultManager(dbHelper).getResult(mTarea);
         }
     }
 

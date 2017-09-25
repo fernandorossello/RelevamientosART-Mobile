@@ -9,8 +9,11 @@ import android.widget.TextView;
 import com.example.fernando.relevamientosart.R;
 import com.example.fernando.relevamientosart.RAR.RARFragment.OnTrabajadoresFragmentInteractionListener;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
+import Modelo.Employee;
 import Modelo.WorkingMan;
 
 public class MyTrabajadorRecyclerViewAdapter extends RecyclerView.Adapter<MyTrabajadorRecyclerViewAdapter.ViewHolder> {
@@ -18,8 +21,8 @@ public class MyTrabajadorRecyclerViewAdapter extends RecyclerView.Adapter<MyTrab
     private final List<WorkingMan> mValues;
     private final OnTrabajadoresFragmentInteractionListener mListener;
 
-    public MyTrabajadorRecyclerViewAdapter(List<WorkingMan> items, RARFragment.OnTrabajadoresFragmentInteractionListener listener) {
-        mValues = items;
+    public MyTrabajadorRecyclerViewAdapter(Collection<WorkingMan> items, RARFragment.OnTrabajadoresFragmentInteractionListener listener) {
+        mValues = new ArrayList<>(items);
         mListener = listener;
     }
 

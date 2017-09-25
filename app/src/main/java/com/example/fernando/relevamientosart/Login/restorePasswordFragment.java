@@ -1,4 +1,4 @@
-package com.example.fernando.relevamientosart;
+package com.example.fernando.relevamientosart.Login;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -15,6 +15,8 @@ import android.view.ViewGroup;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.Toast;
+
+import com.example.fernando.relevamientosart.R;
 
 
 /**

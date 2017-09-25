@@ -1,6 +1,8 @@
 package Modelo.Enums;
 
-public enum EnumStatus {
+import java.io.Serializable;
+
+public enum EnumStatus  implements Serializable{
 
     PENDIENTE(1,"Pendiente"),
     ASIGNADA(2, "Asignada"),
