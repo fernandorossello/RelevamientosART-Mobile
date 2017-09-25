@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -18,7 +17,6 @@ import android.support.annotation.RequiresApi;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -30,30 +28,27 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
-
 import com.example.fernando.relevamientosart.ConstanciaCapacitacion.ConstanciaCapacitacionFragment;
 import com.example.fernando.relevamientosart.ConstanciaVisita.ImageFragment;
 import com.example.fernando.relevamientosart.Login.LoginActivity;
+import com.example.fernando.relevamientosart.ConstanciaVisita.MedidorDeRuidoFragment;
 import com.example.fernando.relevamientosart.RAR.RARFragment;
 import com.example.fernando.relevamientosart.RAR.RiskFragment;
 import com.example.fernando.relevamientosart.ConstanciaVisita.ConstanciaVisitaFragment;
 import com.example.fernando.relevamientosart.RAR.RiskSelectorFragment;
 import com.example.fernando.relevamientosart.RGRL.PreguntaFragment;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
-import com.j256.ormlite.misc.TransactionManager;
-
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-
 import Helpers.DBHelper;
 import Modelo.Enums.EnumTareas;
 import Modelo.Image;
-import Modelo.Managers.ImageManager;
 import Modelo.Managers.VisitManager;
+import Modelo.Noise;
 import Modelo.Task;
 import Modelo.Visit;
 import Modelo.WorkingMan;
@@ -63,13 +58,15 @@ public class MainActivity extends AppCompatActivity
         RARFragment.OnTrabajadoresFragmentInteractionListener,
         ConstanciaVisitaFragment.OnEventoConstanciaListener,
         ImageFragment.OnImageListFragmentInteractionListener,
-        RiskFragment.OnRiskFragmentInteractionListener {
+        RiskFragment.OnRiskFragmentInteractionListener,
+        MedidorDeRuidoFragment.OnNoiseListFragmentInteractionListener{
+
 
     private static final int REQUEST_TAKE_PHOTO = 1500;
     private static final int REQUEST_READ = 2000;
     private static final String TAG_CONSTANCIA_VISITA = "ConstanciaVisitaTag";
     private static final String TAG_FRAGMENT_IMAGENES = "ListaImagensTag";
-
+    private final String TAG_FRAGMENT_MEDICION_RUIDO = "tag_frg_medicion_ruido";
 
     private DBHelper mDBHelper;
 
@@ -120,15 +117,15 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Task task;
+        final Task selectedTask;
         switch (item.getItemId()) {
             case R.id.action_rgrl: {
 
-                task = mVisitaEnCurso.obtenerTarea(EnumTareas.RGRL);
+                selectedTask = mVisitaEnCurso.obtenerTarea(EnumTareas.RGRL);
 
                 getSupportFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.fragment_container, PreguntaFragment.newInstance(task))
+                        .replace(R.id.fragment_container, PreguntaFragment.newInstance(selectedTask))
                         .addToBackStack(null)
                         .commit();
                 return true;
@@ -143,21 +140,20 @@ public class MainActivity extends AppCompatActivity
 
             case R.id.action_capacitacion:
 
-                task = mVisitaEnCurso.obtenerTarea(EnumTareas.CAPACITACION);
+                selectedTask = mVisitaEnCurso.obtenerTarea(EnumTareas.CAPACITACION);
 
                 getSupportFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.fragment_container, ConstanciaCapacitacionFragment.newInstance(task))
+                        .replace(R.id.fragment_container, ConstanciaCapacitacionFragment.newInstance(selectedTask))
                         .addToBackStack(null)
                         .commit();
                 return true;
 
             case R.id.action_rar:
-                task = mVisitaEnCurso.obtenerTarea(EnumTareas.RAR);
-                
+
                 getSupportFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.fragment_container, RARFragment.newInstance(task))
+                        .replace(R.id.fragment_container, RARFragment.newInstance(mVisitaEnCurso))
                         .addToBackStack(null)
                         .commit();
                 return true;
@@ -228,7 +224,7 @@ public class MainActivity extends AppCompatActivity
 
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.fragment_container, new VisitDetalleFragment().newInstance(visit))
+                .replace(R.id.fragment_container, VisitDetalleFragment.newInstance(visit))
                 .addToBackStack(null)
                 .commit();
         }
@@ -251,14 +247,6 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onTrabajadorNuevo() {
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, new RiskFragment().newInstance(null))
-                .addToBackStack(null)
-                .commit();
-    }
-
-    @Override
     public void onTrabajadorSeleccionado(WorkingMan workingMan) {
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, new RiskFragment().newInstance(workingMan))
@@ -266,6 +254,7 @@ public class MainActivity extends AppCompatActivity
                 .commit();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
     @Override
     public void OnTomarFoto() {
         tomarFoto();
@@ -278,6 +267,7 @@ public class MainActivity extends AppCompatActivity
                 .addToBackStack(null)
                 .commit();
     }
+
 
     @Override
     public void OnGuardarConstanciaDeVisita() {
@@ -310,7 +300,8 @@ public class MainActivity extends AppCompatActivity
             File photoFile = null;
             try {
                 String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-                String name = mVisitaEnCurso.nombreInstitucion() +"_"  + timeStamp + "_";
+
+                String name = mVisitaEnCurso.institution.name +"_"  + timeStamp + "_";
                 photoFile = crearArchivoDeImagen(name);
             } catch (IOException ex) {
                 Toast.makeText(this, "Error al guardar la imagen", Toast.LENGTH_SHORT).show();
@@ -414,4 +405,48 @@ public class MainActivity extends AppCompatActivity
                 .addToBackStack(null)
                 .commit();
     }
+
+    @Override
+    public void OnMedirRuido() {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, MedidorDeRuidoFragment.newInstance(mVisitaEnCurso),TAG_FRAGMENT_MEDICION_RUIDO)
+                .addToBackStack(null)
+                .commit();
+    }
+
+    @Override
+    public void onRuidoPressed(final Noise ruido) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setMessage(R.string.borrarRuido)
+                .setTitle(R.string.borrarImagen_Title)
+                .setPositiveButton(R.string.aceptar, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        borrarRuido(ruido);
+                    }
+                });
+        builder.setNegativeButton(R.string.cancelar, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.cancel();
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+
+        dialog.show();
+    }
+
+    private void borrarRuido(Noise ruido) {
+
+        mVisitaEnCurso.noises.remove(ruido);
+
+        Fragment frg = getSupportFragmentManager().findFragmentByTag(TAG_FRAGMENT_MEDICION_RUIDO);
+        getSupportFragmentManager()
+                .beginTransaction()
+                .detach(frg)
+                .attach(frg)
+                .commit();
+    }
+
 }

@@ -73,7 +73,17 @@
     <string name="borrarImagen_Title">Borrar imagen</string>
     <string name="aceptar">Aceptar</string>
     <string name="cancelar">Cancelar</string>
-    <string name="guardado">Guardado</string>
+    <string name="guardadoYpdf">Se ha guardardo y generado PDF</string>
 
-
+    <!--Strings related to medición de ruido -->
+    <string name="medicion_ruido_title">Medición de ruido</string>
+    <string name="medir">Medir</string>
+    <string name="parar">Parar</string>
+    <string name="descripciondb">Descripción</string>
+    <string name="registrar">Registrar</string>
+    <string name="borrarRuido">¿Desea borrar la medición seleccionada?</string>
+    <string name="error_pdf_constancia_visita">Se ha producido un error al generar el PDF de constancia de visitas.</string>
+    <string name="generarPDF_Title">PDF</string>
+    <string name="generarPDf">¿Desea generar archivo PDF?</string>
+    <string name="pdfGenerado">Se ha generado el PDF</string>
 </resources>

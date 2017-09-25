@@ -1,9 +1,18 @@
 package com.example.fernando.relevamientosart.ConstanciaVisita;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatImageButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,20 +22,18 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.example.fernando.relevamientosart.MainActivity;
 import com.example.fernando.relevamientosart.R;
-import com.example.fernando.relevamientosart.RAR.RARFragment;
-
-
-import org.w3c.dom.Text;
-
 import java.sql.SQLException;
+import Helpers.PDFHelper;
+import Modelo.Visit;
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
-
+import java.util.List;
 import Helpers.DBHelper;
 import Modelo.Managers.VisitManager;
-import Modelo.Visit;
 import Modelo.VisitRecord;
 
 
@@ -62,7 +69,7 @@ public class ConstanciaVisitaFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_constancia_visita, container, false);
+        final View view = inflater.inflate(R.layout.fragment_constancia_visita, container, false);
 
         RecyclerView recyclerView  = view.findViewById(R.id.taskList);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
@@ -70,6 +77,7 @@ public class ConstanciaVisitaFragment extends Fragment {
 
         EditText etObservaciones = view.findViewById(R.id.et_observaciones);
         etObservaciones.setText(mVisit.visitRecord.observations);
+
 
         TextView tvVerFotos = view.findViewById(R.id.tv_ver_fotos);
 
@@ -95,9 +103,30 @@ public class ConstanciaVisitaFragment extends Fragment {
         btnGuardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(view.getContext(), R.string.guardado, Toast.LENGTH_SHORT).show();
-                guardarConstanciaDeVisita(view);
-                mListener.OnGuardarConstanciaDeVisita();
+                try {
+                    guardarConstanciaDeVisita(view);
+
+                    if(garantizarPermisosDeEscritura()) {
+                        new PDFHelper().crearPDF(mVisit);
+                        Toast.makeText(view.getContext(), R.string.guardadoYpdf, Toast.LENGTH_SHORT).show();
+                        mListener.OnGuardarConstanciaDeVisita();
+                    }
+                } catch (Exception ex){
+                    Toast.makeText(getContext(), R.string.error_pdf_constancia_visita, Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            private boolean garantizarPermisosDeEscritura() {
+                if (ContextCompat.checkSelfPermission(view.getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    if (ActivityCompat.shouldShowRequestPermissionRationale((Activity) view.getContext(), Manifest.permission.CAMERA)) {
+                        Toast.makeText(view.getContext(), R.string.permission_rationale, Toast.LENGTH_LONG).show();
+                        return false;
+                    } else {
+                        ActivityCompat.requestPermissions((Activity) view.getContext(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                        return false;
+                    }
+                }
+                return true;
             }
         });
 
@@ -105,7 +134,7 @@ public class ConstanciaVisitaFragment extends Fragment {
         btnAudio.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(view.getContext(), "Medir audio", Toast.LENGTH_SHORT).show();
+                mListener.OnMedirRuido();
             }
         });
 
@@ -135,7 +164,7 @@ public class ConstanciaVisitaFragment extends Fragment {
             mListener = (OnEventoConstanciaListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnTrabajadoresFragmentInteractionListener");
+                    + " must implement OnEventoConstanciaListener");
         }
     }
 
@@ -145,11 +174,33 @@ public class ConstanciaVisitaFragment extends Fragment {
         mListener = null;
     }
 
+    private static void grantPermissionsToUri(Context context, Intent intent, Uri uri) {
+        List<ResolveInfo> resInfoList = context.getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+        for (ResolveInfo resolveInfo : resInfoList) {
+            String packageName = resolveInfo.activityInfo.packageName;
+            context.grantUriPermission(packageName, uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        }
+    }
+
+    private File crearArchivoDeImagen() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+        return image;
+    }
+
 
     public interface OnEventoConstanciaListener {
         void OnTomarFoto();
         void OnVerFotosClick(Visit visit);
         void OnGuardarConstanciaDeVisita();
+        void OnMedirRuido();
     }
 
 }

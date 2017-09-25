@@ -9,15 +9,17 @@ import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
-
 import java.sql.SQLException;
-
+import Modelo.Employee;
 import Modelo.Image;
 import Modelo.Institution;
+import Modelo.RARResult;
+import Modelo.Risk;
+import Modelo.Noise;
 import Modelo.Task;
-import Modelo.User;
 import Modelo.Visit;
 import Modelo.VisitRecord;
+import Modelo.WorkingMan;
 import Modelo.Zone;
 
 public class DBHelper extends OrmLiteSqliteOpenHelper {
@@ -30,6 +32,9 @@ public class DBHelper extends OrmLiteSqliteOpenHelper {
     private Dao<Task,Integer> taskDao;
     private Dao<VisitRecord,Integer> visitRecordDao;
     private Dao<Image,Integer> imageDao;
+    private Dao<RARResult,Integer> rARResultDao;
+    private Dao<WorkingMan,Integer> workingManDao;
+    private Dao<Risk,Integer> riskDao;
 
     public DBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -44,6 +49,11 @@ public class DBHelper extends OrmLiteSqliteOpenHelper {
             TableUtils.createTable(connectionSource, VisitRecord.class);
             TableUtils.createTable(connectionSource, Zone.class);
             TableUtils.createTable(connectionSource, Image.class);
+            TableUtils.createTable(connectionSource, Employee.class);
+            TableUtils.createTable(connectionSource, WorkingMan.class);
+            TableUtils.createTable(connectionSource, RARResult.class);
+            TableUtils.createTable(connectionSource, Risk.class);
+            TableUtils.createTable(connectionSource, Noise.class);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -86,6 +96,27 @@ public class DBHelper extends OrmLiteSqliteOpenHelper {
             imageDao = getDao(Image.class);
         }
         return imageDao;
+    }
+
+    public Dao<RARResult,Integer> getrARResultDao() throws SQLException{
+        if(rARResultDao == null){
+            rARResultDao= getDao(RARResult.class);
+        }
+        return rARResultDao;
+    }
+
+    public Dao<WorkingMan,Integer> getworkingManDao() throws SQLException{
+        if(workingManDao == null){
+            workingManDao= getDao(WorkingMan.class);
+        }
+        return workingManDao;
+    }
+
+    public Dao<Risk,Integer> getRiskDao() throws SQLException{
+        if(riskDao == null){
+            riskDao = getDao(Risk.class);
+        }
+        return riskDao;
     }
 
     @Override

@@ -1,11 +1,32 @@
 package Modelo.Managers;
 
+import com.j256.ormlite.dao.Dao;
+
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import Helpers.DBHelper;
 import Modelo.Risk;
 
-public class RiskManager {
+public class RiskManager extends Manager<Risk> {
+
+    public RiskManager(){}
+
+    public RiskManager(DBHelper helper){
+        dbHelper = helper;
+    }
+
+    @Override
+    public void persist(Risk item) throws SQLException {
+        Dao dao = dbHelper.getRiskDao();
+
+        if (!dao.idExists(item.id)) {
+            dao.create(item);
+        } else {
+            dao.update(item);
+        }
+    }
 
     public ArrayList<Risk> obtenerRiesgos(){
         ArrayList<Risk> riesgos = new ArrayList<>();

@@ -1,38 +1,46 @@
 package Modelo.Managers;
 
+import com.j256.ormlite.dao.Dao;
+
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import Helpers.DBHelper;
+import Modelo.RARResult;
 import Modelo.WorkingMan;
 
 public class WorkingManManager extends Manager<WorkingMan> {
-    @Override
-    public void persist(WorkingMan item) throws SQLException {
 
+    public WorkingManManager(DBHelper helper){
+        this.dbHelper = helper;
     }
 
+    @Override
+    public void persist(WorkingMan item) throws SQLException {
+        Dao daowm = dbHelper.getworkingManDao();
 
-    public List<WorkingMan> trabajadoresEjemplo(){
+        if (!daowm.idExists(item.id)) {
+            daowm.create(item);
+        } else {
+            daowm.update(item);
+        }
 
-        ArrayList<WorkingMan> lista = new ArrayList<>();
+        if(!item.riskList.isEmpty()) {
+            new RiskManager(dbHelper).persist(item.riskList);
+        }
+    }
 
-        lista.add(new WorkingMan()
-        {{
-            name = "Fernando";
-            lastName = "Rosselló";
-            cuil = "34585130";
-            checked_in_on = new Date(2017,10,10);
-        }});
+    public List<WorkingMan> getWorkingMen(RARResult result) throws  SQLException {
+        List<WorkingMan> trabajadores = dbHelper.getworkingManDao().queryForAll();
 
-        lista.add(new WorkingMan()
-        {{
-            name = "Tomás";
-            lastName = "Ramos";
-            cuil = "34898398";
-        }});
+        for (WorkingMan trabajador: trabajadores) {
+            if(trabajador.result.id != result.id){
+                trabajadores.remove(trabajador);
+            }
+        }
 
-        return lista;
+        return trabajadores;
     }
 }

@@ -6,10 +6,11 @@ import com.j256.ormlite.table.DatabaseTable;
 import java.io.Serializable;
 import java.util.Date;
 
+
 @DatabaseTable
 public class Result implements Serializable {
 
-    @DatabaseField(id = true)
+    @DatabaseField(generatedId = true)
     public int id;
 
     @DatabaseField
@@ -17,5 +18,8 @@ public class Result implements Serializable {
 
     @DatabaseField
     public Date completed_at;
+
+    @DatabaseField(foreign = true)
+    public Task task;
 
 }
