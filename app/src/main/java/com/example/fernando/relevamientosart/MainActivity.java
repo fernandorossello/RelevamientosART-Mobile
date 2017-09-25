@@ -6,24 +6,25 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.StrictMode;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -37,22 +38,16 @@ import com.example.fernando.relevamientosart.ConstanciaVisita.ConstanciaVisitaFr
 import com.example.fernando.relevamientosart.RAR.RiskSelectorFragment;
 import com.example.fernando.relevamientosart.RGRL.PreguntaFragment;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
-import com.j256.ormlite.misc.TransactionManager;
-
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-
 import Helpers.DBHelper;
 import Modelo.Enums.EnumTareas;
 import Modelo.Image;
-import Modelo.Managers.ImageManager;
-import Modelo.Managers.TaskManager;
 import Modelo.Managers.VisitManager;
-import Modelo.RARResult;
 import Modelo.Noise;
 import Modelo.Task;
 import Modelo.Visit;
@@ -66,6 +61,7 @@ public class MainActivity extends AppCompatActivity
         RiskFragment.OnRiskFragmentInteractionListener,
         MedidorDeRuidoFragment.OnNoiseListFragmentInteractionListener{
 
+
     private static final int REQUEST_TAKE_PHOTO = 1500;
     private static final int REQUEST_READ = 2000;
     private static final String TAG_CONSTANCIA_VISITA = "ConstanciaVisitaTag";
@@ -77,6 +73,8 @@ public class MainActivity extends AppCompatActivity
     private Visit mVisitaEnCurso;
 
     private Uri uriSavedImage = null;
+
+    private StrictMode.VmPolicy.Builder mBuilder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +88,10 @@ public class MainActivity extends AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
+
+        //Allow camera works in SDK targets above v24
+        mBuilder = new StrictMode.VmPolicy.Builder();
+        StrictMode.setVmPolicy(mBuilder.build());
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -252,6 +254,7 @@ public class MainActivity extends AppCompatActivity
                 .commit();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
     @Override
     public void OnTomarFoto() {
         tomarFoto();
@@ -265,11 +268,13 @@ public class MainActivity extends AppCompatActivity
                 .commit();
     }
 
+
     @Override
     public void OnGuardarConstanciaDeVisita() {
         getSupportFragmentManager().popBackStack();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
     private void tomarFoto() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA)) {
@@ -280,18 +285,29 @@ public class MainActivity extends AppCompatActivity
             return;
         }
 
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                Toast.makeText(this, R.string.permission_rationale, Toast.LENGTH_LONG).show();
+            } else {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_READ);
+            }
+            return;
+        }
+
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
         if (takePictureIntent.resolveActivity(this.getPackageManager()) != null) {
             File photoFile = null;
             try {
                 String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+
                 String name = mVisitaEnCurso.institution.name +"_"  + timeStamp + "_";
                 photoFile = crearArchivoDeImagen(name);
             } catch (IOException ex) {
                 Toast.makeText(this, "Error al guardar la imagen", Toast.LENGTH_SHORT).show();
             }
             if (photoFile != null) {
+                mBuilder.detectFileUriExposure();
                 uriSavedImage = Uri.fromFile(photoFile);
                 grantPermissionsToUri(this, takePictureIntent, uriSavedImage);
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, uriSavedImage);
@@ -310,6 +326,11 @@ public class MainActivity extends AppCompatActivity
 
     private File crearArchivoDeImagen(String fileName) throws IOException {
         File imagesFolder = new File(Environment.getExternalStorageDirectory(), "ARTImages");
+        if(!imagesFolder.exists()){
+            imagesFolder.mkdir();
+            Log.i(this.toString(),"Creada carpeta de imagenes");
+        }
+
         File image = new File(imagesFolder, fileName + ".jpg");
         return image;
     }

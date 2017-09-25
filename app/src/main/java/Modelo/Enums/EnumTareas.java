@@ -1,5 +1,4 @@
 package Modelo.Enums;
-
 import java.io.Serializable;
 
 public enum EnumTareas implements Serializable{

@@ -23,7 +23,6 @@ public class VisitManager extends Manager<Visit> {
         this.dbHelper = helper;
     }
 
-
     public List<Visit> simuladorParaTraerVisitasDelEndpoint() {
 
         List<Visit> lista = new ArrayList<>();
@@ -31,7 +30,6 @@ public class VisitManager extends Manager<Visit> {
         final Task tareaRAR = new Task(){{id = 1; type = 1;}};
         final Task tareaRGRL = new Task(){{id = 2; type = 2;}};
         final Task tareaCAP = new Task(){{id = 3; type = 3;}};
-
 
         final Task tareaRAR1 = new Task(){{id = 4; type = 1;}};
         final Task tareaRGRL1 = new Task(){{id = 5; type = 2;}};
@@ -103,9 +101,9 @@ public class VisitManager extends Manager<Visit> {
             this.status = 2;
             this.priority = 1;
             to_visit_on = new Date(1,2,2017);
-                tasks.add(tareaRGRL1);
-                tasks.add(tareaCAP1);
-                tasks.add(tareaRAR1);
+            tasks.add(tareaRGRL1);
+            tasks.add(tareaCAP1);
+            tasks.add(tareaRAR1);
             }};
 
         tareaRGRL1.visit = visita2;

@@ -24,23 +24,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.example.fernando.relevamientosart.MainActivity;
 import com.example.fernando.relevamientosart.R;
-import com.example.fernando.relevamientosart.RAR.RARFragment;
-
+import java.sql.SQLException;
 import Helpers.PDFHelper;
-import Modelo.Task;
 import Modelo.Visit;
-import org.w3c.dom.Text;
-
 import java.io.File;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-
 import Helpers.DBHelper;
 import Modelo.Managers.VisitManager;
-import Modelo.Visit;
 import Modelo.VisitRecord;
 
 
@@ -84,6 +77,7 @@ public class ConstanciaVisitaFragment extends Fragment {
 
         EditText etObservaciones = view.findViewById(R.id.et_observaciones);
         etObservaciones.setText(mVisit.visitRecord.observations);
+
 
         TextView tvVerFotos = view.findViewById(R.id.tv_ver_fotos);
 
@@ -180,7 +174,6 @@ public class ConstanciaVisitaFragment extends Fragment {
         mListener = null;
     }
 
-
     private static void grantPermissionsToUri(Context context, Intent intent, Uri uri) {
         List<ResolveInfo> resInfoList = context.getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
         for (ResolveInfo resolveInfo : resInfoList) {
@@ -201,6 +194,7 @@ public class ConstanciaVisitaFragment extends Fragment {
         );
         return image;
     }
+
 
     public interface OnEventoConstanciaListener {
         void OnTomarFoto();

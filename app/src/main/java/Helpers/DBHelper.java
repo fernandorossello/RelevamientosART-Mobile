@@ -48,10 +48,10 @@ public class DBHelper extends OrmLiteSqliteOpenHelper {
             TableUtils.createTable(connectionSource, Task.class);
             TableUtils.createTable(connectionSource, VisitRecord.class);
             TableUtils.createTable(connectionSource, Zone.class);
+            TableUtils.createTable(connectionSource, Image.class);
             TableUtils.createTable(connectionSource, Employee.class);
             TableUtils.createTable(connectionSource, WorkingMan.class);
             TableUtils.createTable(connectionSource, RARResult.class);
-            TableUtils.createTable(connectionSource, Image.class);
             TableUtils.createTable(connectionSource, Risk.class);
             TableUtils.createTable(connectionSource, Noise.class);
         } catch (SQLException e) {

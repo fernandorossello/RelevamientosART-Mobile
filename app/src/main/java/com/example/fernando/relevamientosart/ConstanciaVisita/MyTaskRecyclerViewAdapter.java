@@ -15,17 +15,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.example.fernando.relevamientosart.MainActivity;
 import com.example.fernando.relevamientosart.R;
-import com.j256.ormlite.dao.ForeignCollection;
-import com.j256.ormlite.stmt.query.Exists;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
-import Helpers.DBHelper;
 import Helpers.PDFHelper;
 import Modelo.Managers.ResultManager;
 import Modelo.Task;
@@ -36,6 +30,7 @@ public class MyTaskRecyclerViewAdapter extends RecyclerView.Adapter<MyTaskRecycl
 
     public MyTaskRecyclerViewAdapter(Collection<Task> items) {
         mValues = new ArrayList<>(items);;
+
     }
 
     @Override
