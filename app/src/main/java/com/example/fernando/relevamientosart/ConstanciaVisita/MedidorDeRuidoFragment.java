@@ -31,8 +31,9 @@ import Modelo.Visit;
 public class MedidorDeRuidoFragment extends Fragment {
     private static final String ARG_VISIT = "visita";
 
-    private static final Double MIN_DB = -80d;
-    private static final Double MAX_DB = 0d;
+    private static final Double MIN_DB = 0d;
+    private static final Double MAX_DB = 140d;
+    private static final Double OFFSET = 107d;
 
     private Visit mVisit;
     private MediaRecorder mRecorder;
@@ -80,7 +81,7 @@ public class MedidorDeRuidoFragment extends Fragment {
                     ((Button)view).setText(R.string.medir);
                     habilitarRegistrar();
                 } else {
-
+                    maxNoise = MIN_DB;
                     if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
                         if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.RECORD_AUDIO)) {
                             Toast.makeText(getContext(), R.string.permission_rationale, Toast.LENGTH_LONG).show();
@@ -207,7 +208,7 @@ public class MedidorDeRuidoFragment extends Fragment {
 
             while(listening) {
                 SystemClock.sleep(300); // Si es menor casi siempre da 0
-                Double amplitude = 20 * Math.log10(getAmplitude() / 32768.0);
+                Double amplitude = (20 * Math.log10(getAmplitude() / 32768.0))+ OFFSET;
                 publishProgress(amplitude);
             }
 
