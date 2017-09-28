@@ -86,4 +86,5 @@
     <string name="generarPDF_Title">PDF</string>
     <string name="generarPDf">¿Desea generar archivo PDF?</string>
     <string name="pdfGenerado">Se ha generado el PDF</string>
+    <string name="borrarMedicion_Title">Borrar medición</string>
 </resources>
