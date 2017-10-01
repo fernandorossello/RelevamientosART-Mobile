@@ -23,20 +23,17 @@ public class CAPResult extends Result implements Serializable{
     }
 
     @DatabaseField
-    public String topic;
-
-    @DatabaseField
     public int attendees_count;
 
     @ForeignCollectionField
     public Collection<Attendee> attendees;
 
     @DatabaseField
-    public String coordinators;
+    public String courseName;
 
     @DatabaseField
-    public String usedMaterials;
+    public String contents;
 
     @DatabaseField
-    public String deliveredMaterials;
+    public String methodology;
 }

@@ -10,6 +10,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.fernando.relevamientosart.MainActivity;
@@ -73,6 +75,10 @@ public class ConstanciaCapacitacionFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_constancia_capacitacion, container, false);
 
+        ((TextView) view.findViewById(R.id.tv_capr_course)).setText(mResult.courseName);
+        ((TextView) view.findViewById(R.id.tv_capr_content)).setText(mResult.contents);
+        ((TextView) view.findViewById(R.id.tv_capr_methodology)).setText(mResult.methodology);
+
         RecyclerView recyclerView  = view.findViewById(R.id.attendeeList);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
 
@@ -125,7 +131,15 @@ public class ConstanciaCapacitacionFragment extends Fragment {
 
         DBHelper dbHelper = ((MainActivity)getActivity()).getHelper();
 
-        Result result = new ResultManager(dbHelper).getResult(mTarea);
+
+
+        //Result result = new ResultManager(dbHelper).getResult(mTarea);
+
+        mResult.courseName = ((EditText)getView().findViewById(R.id.tv_capr_course)).getText().toString();
+        mResult.contents = ((EditText)getView().findViewById(R.id.tv_capr_content)).getText().toString();
+        mResult.methodology = ((EditText)getView().findViewById(R.id.tv_capr_methodology)).getText().toString();
+
+
 
 
         try {
