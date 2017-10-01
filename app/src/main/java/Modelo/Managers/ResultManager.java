@@ -5,6 +5,7 @@ import com.j256.ormlite.dao.Dao;
 import java.sql.SQLException;
 
 import Helpers.DBHelper;
+import Modelo.CAPResult;
 import Modelo.Enums.EnumTareas;
 import Modelo.RARResult;
 import Modelo.Result;
@@ -35,6 +36,18 @@ public class ResultManager extends Manager<Result> {
             }
         }
 
+        if(item.type == EnumTareas.CAPACITACION.id) {
+            daoResult = dbHelper.getCAPResultDao();
+            if (!daoResult.idExists(item.id)) {
+                daoResult.create(item);
+            }else{
+                daoResult.update(item);
+            }
+
+            if (!((CAPResult)item).attendees.isEmpty()) {
+                new AttendeeManager(dbHelper).persist(((CAPResult)item).attendees);
+            }
+        }
     }
 
     public RARResult getRARResult(Task task) throws SQLException {
@@ -42,10 +55,18 @@ public class ResultManager extends Manager<Result> {
         return (RARResult)daoRARResult.queryBuilder().where().eq("task_id",task.id).queryForFirst();
     }
 
+    public CAPResult getCAPResult(Task task) throws  SQLException {
+        Dao daoCAPResult = dbHelper.getCAPResultDao();
+        return (CAPResult)daoCAPResult.queryBuilder().where().eq("task_id",task.id).queryForFirst();
+    }
+
     public Result getResult(Task task){
         try {
             if (task.type == EnumTareas.RAR.id) {
                 return getRARResult(task);
+            }
+            if (task.type == EnumTareas.CAPACITACION.id) {
+                return  getCAPResult(task);
             }
         } catch (SQLException ex){}
 

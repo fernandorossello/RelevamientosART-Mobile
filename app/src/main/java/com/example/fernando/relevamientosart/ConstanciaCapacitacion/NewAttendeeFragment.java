@@ -7,11 +7,18 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.fernando.relevamientosart.MainActivity;
 import com.example.fernando.relevamientosart.R;
 
+import java.sql.SQLException;
+
+import Helpers.DBHelper;
 import Modelo.Attendee;
+import Modelo.Managers.AttendeeManager;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -85,6 +92,24 @@ public class NewAttendeeFragment extends Fragment {
 
     @Override
     public void onDetach() { super.onDetach(); }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        mAttendee.name = ((EditText)getView().findViewById(R.id.tv_worker_name)).getText().toString();
+        mAttendee.lastName = ((EditText)getView().findViewById(R.id.tv_worker_lastName)).getText().toString();
+        mAttendee.cuil = ((EditText)getView().findViewById(R.id.tv_worker_cuil)).getText().toString();
+
+        DBHelper dbHelper = ((MainActivity)getActivity()).getHelper();
+
+        try {
+            new AttendeeManager(dbHelper).persist(mAttendee);
+        }
+        catch (SQLException ex){
+            Toast.makeText(getActivity(), ex.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
 
     /**
      * This interface must be implemented by activities that contain this

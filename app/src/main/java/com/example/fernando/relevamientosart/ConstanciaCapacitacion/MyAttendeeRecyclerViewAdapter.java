@@ -8,6 +8,8 @@ import android.widget.TextView;
 
 import com.example.fernando.relevamientosart.R;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import Modelo.Attendee;
@@ -17,8 +19,9 @@ public class MyAttendeeRecyclerViewAdapter extends RecyclerView.Adapter<MyAttend
     private List<Attendee> mValues;
     private ConstanciaCapacitacionFragment.OnNewAttendeeInteractionListener mListener;
 
-    public MyAttendeeRecyclerViewAdapter(List<Attendee> items, ConstanciaCapacitacionFragment.OnNewAttendeeInteractionListener listener) {
-        mValues = items;
+
+    public MyAttendeeRecyclerViewAdapter(Collection<Attendee> items, ConstanciaCapacitacionFragment.OnNewAttendeeInteractionListener listener) {
+        mValues = new ArrayList<>(items);
         mListener = listener;
     }
 

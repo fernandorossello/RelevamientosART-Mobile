@@ -15,23 +15,27 @@ import android.widget.Toast;
 import com.example.fernando.relevamientosart.MainActivity;
 import com.example.fernando.relevamientosart.R;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 import Helpers.DBHelper;
 import Modelo.Attendee;
 import Modelo.CAPResult;
+import Modelo.Enums.EnumTareas;
 import Modelo.Managers.AttendeeManager;
 import Modelo.Managers.ResultManager;
+import Modelo.Managers.TaskManager;
 import Modelo.Result;
 import Modelo.Task;
+import Modelo.Visit;
 
 public class ConstanciaCapacitacionFragment extends Fragment {
-
-
     private static final String ARG_TASK = "tarea";
     private Task mTarea;
+    private Visit mVisit;
     private CAPResult mResult;
+    private DBHelper dbHelper;
 
     private OnNewAttendeeInteractionListener mListener;
 
@@ -42,7 +46,7 @@ public class ConstanciaCapacitacionFragment extends Fragment {
     public static ConstanciaCapacitacionFragment newInstance(Task task) {
         ConstanciaCapacitacionFragment fragment = new ConstanciaCapacitacionFragment();
         Bundle args = new Bundle();
-        args.putSerializable(ARG_TASK,task);
+        args.putSerializable(ARG_TASK ,task);
         fragment.setArguments(args);
         return fragment;
     }
@@ -52,8 +56,15 @@ public class ConstanciaCapacitacionFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mTarea = (Task) getArguments().getSerializable(ARG_TASK);
-            DBHelper dbHelper = ((MainActivity)getActivity()).getHelper();
+            dbHelper = ((MainActivity)getActivity()).getHelper();
             Result result = new ResultManager(dbHelper).getResult(mTarea);
+
+            if(result == null){
+                mResult = new CAPResult();
+                mResult.task = mTarea;
+            } else {
+                mResult = (CAPResult) result;
+            }
         }
     }
 
@@ -65,15 +76,15 @@ public class ConstanciaCapacitacionFragment extends Fragment {
         RecyclerView recyclerView  = view.findViewById(R.id.attendeeList);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
 
-        List<Attendee> attendees = new AttendeeManager().attendeesEjemplo();
-
-        recyclerView.setAdapter(new MyAttendeeRecyclerViewAdapter(attendees, mListener));
+        recyclerView.setAdapter(new MyAttendeeRecyclerViewAdapter(mResult.attendees, mListener));
 
         FloatingActionButton btnAgregarAttendee = view.findViewById(R.id.btn_agregarAttendee);
         btnAgregarAttendee.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mListener.onNewAttendee(new Attendee());
+                Attendee attendee = new Attendee(){{result = mResult;}};
+                mResult.attendees.add(attendee);
+                mListener.onNewAttendee(attendee);
             }
         });
 
@@ -106,5 +117,21 @@ public class ConstanciaCapacitacionFragment extends Fragment {
      */
     public interface OnNewAttendeeInteractionListener {
         void onNewAttendee(Attendee attendee);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        DBHelper dbHelper = ((MainActivity)getActivity()).getHelper();
+
+        Result result = new ResultManager(dbHelper).getResult(mTarea);
+
+
+        try {
+            new ResultManager(dbHelper).persist(mResult);
+        } catch (SQLException ex) {
+            Toast.makeText(getActivity(), ex.getMessage(), Toast.LENGTH_SHORT).show();
+        }
     }
 }
