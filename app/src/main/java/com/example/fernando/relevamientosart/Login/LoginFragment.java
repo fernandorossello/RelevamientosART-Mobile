@@ -45,8 +45,6 @@ import Modelo.User;
 
 public class LoginFragment extends Fragment{
     public static final String urlEndpointUsers = "https://relevamientos-art.herokuapp.com/users";
-    private static final int REQUEST_READ_CONTACTS = 0;
-
 
     private AutoCompleteTextView mEmailView;
     private EditText mPasswordView;

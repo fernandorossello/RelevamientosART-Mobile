@@ -1,5 +1,6 @@
 package Modelo;
 
+import com.google.gson.annotations.Expose;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.field.ForeignCollectionField;
 
@@ -16,18 +17,22 @@ public class WorkingMan extends Employee implements Serializable {
         }
     }
 
+    @Expose
     @DatabaseField
     public Date checked_in_on;
 
+    @Expose
     @DatabaseField
     public Date exposed_from_at;
 
+    @Expose
     @DatabaseField
     public Date exposed_until_at;
 
     @DatabaseField(foreign = true)
     public RARResult result;
 
+    @Expose
     @ForeignCollectionField
     public Collection<Risk> riskList;
 

@@ -2,6 +2,8 @@ package Modelo;
 
 
 import java.io.Serializable;
+
+import com.google.gson.annotations.Expose;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
@@ -11,6 +13,7 @@ public class Risk implements Serializable{
     @DatabaseField(generatedId = true)
     public int id;
 
+    @Expose
     @DatabaseField
     public String code;
 

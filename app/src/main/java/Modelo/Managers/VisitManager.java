@@ -12,6 +12,7 @@ import java.util.List;
 
 
 import Helpers.DBHelper;
+import Modelo.Enums.EnumStatus;
 import Modelo.Institution;
 import Modelo.Task;
 import Modelo.Visit;
@@ -98,7 +99,7 @@ public class VisitManager extends Manager<Visit> {
         Visit visita2 = new Visit(){
             {this.id = 2;
             this.institution = institucion2;
-            this.status = 2;
+            this.status = EnumStatus.FINALIZADA.id;
             this.priority = 1;
             to_visit_on = new Date(1,2,2017);
             tasks.add(tareaRGRL1);
@@ -159,4 +160,13 @@ public class VisitManager extends Manager<Visit> {
         }
     }
 
+    public List<Visit> obtenerVisitasCompletadas() throws SQLException{
+        Dao visitDao = dbHelper.getVisitDao();
+        return visitDao.queryBuilder().where().eq("status", EnumStatus.FINALIZADA.id).query();
+    }
+
+    public void borrarVisita(Visit visit) throws SQLException {
+        Dao visitDao = dbHelper.getVisitDao();
+        visitDao.delete(visit);
+    }
 }

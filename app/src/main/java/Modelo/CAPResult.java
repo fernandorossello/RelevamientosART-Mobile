@@ -1,5 +1,9 @@
 package Modelo;
 
+import com.google.gson.GsonBuilder;
+
+import org.json.JSONObject;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -16,4 +20,5 @@ public class CAPResult extends Result implements Serializable{
     public String usedMaterials;
 
     public String deliveredMaterials;
+
 }
