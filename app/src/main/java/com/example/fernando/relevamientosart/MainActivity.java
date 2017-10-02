@@ -29,6 +29,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 import com.example.fernando.relevamientosart.ConstanciaCapacitacion.ConstanciaCapacitacionFragment;
+import com.example.fernando.relevamientosart.ConstanciaCapacitacion.NewAttendeeFragment;
 import com.example.fernando.relevamientosart.ConstanciaVisita.ImageFragment;
 import com.example.fernando.relevamientosart.Login.LoginActivity;
 import com.example.fernando.relevamientosart.ConstanciaVisita.MedidorDeRuidoFragment;
@@ -45,6 +46,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import Helpers.DBHelper;
+import Modelo.Attendee;
 import Modelo.Enums.EnumTareas;
 import Modelo.Image;
 import Modelo.Managers.VisitManager;
@@ -56,17 +58,18 @@ import Modelo.WorkingMan;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,VisitFragment.OnVisitSelectedListener,
         RARFragment.OnTrabajadoresFragmentInteractionListener,
+        ConstanciaCapacitacionFragment.OnNewAttendeeInteractionListener,
         ConstanciaVisitaFragment.OnEventoConstanciaListener,
         ImageFragment.OnImageListFragmentInteractionListener,
         RiskFragment.OnRiskFragmentInteractionListener,
-        MedidorDeRuidoFragment.OnNoiseListFragmentInteractionListener{
-
-
+        MedidorDeRuidoFragment.OnNoiseListFragmentInteractionListener
+{
     private static final int REQUEST_TAKE_PHOTO = 1500;
     private static final int REQUEST_READ = 2000;
     private static final String TAG_CONSTANCIA_VISITA = "ConstanciaVisitaTag";
     private static final String TAG_FRAGMENT_IMAGENES = "ListaImagensTag";
     private final String TAG_FRAGMENT_MEDICION_RUIDO = "tag_frg_medicion_ruido";
+
 
     private DBHelper mDBHelper;
 
@@ -270,6 +273,15 @@ public class MainActivity extends AppCompatActivity
 
 
     @Override
+    public void onNewAttendee(Attendee attendee) {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, new NewAttendeeFragment().newInstance(attendee))
+                .addToBackStack(null)
+                .commit();
+    }
+
+
+    @Override
     public void OnGuardarConstanciaDeVisita() {
         getSupportFragmentManager().popBackStack();
     }
@@ -448,5 +460,6 @@ public class MainActivity extends AppCompatActivity
                 .attach(frg)
                 .commit();
     }
+
 
 }

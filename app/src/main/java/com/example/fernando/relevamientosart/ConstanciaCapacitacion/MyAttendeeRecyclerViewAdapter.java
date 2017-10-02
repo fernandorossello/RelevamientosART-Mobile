@@ -8,6 +8,8 @@ import android.widget.TextView;
 
 import com.example.fernando.relevamientosart.R;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import Modelo.Attendee;
@@ -15,9 +17,12 @@ import Modelo.Attendee;
 public class MyAttendeeRecyclerViewAdapter extends RecyclerView.Adapter<MyAttendeeRecyclerViewAdapter.ViewHolder> {
 
     private List<Attendee> mValues;
+    private ConstanciaCapacitacionFragment.OnNewAttendeeInteractionListener mListener;
 
-    public MyAttendeeRecyclerViewAdapter(List<Attendee> items) {
-        mValues = items;
+
+    public MyAttendeeRecyclerViewAdapter(Collection<Attendee> items, ConstanciaCapacitacionFragment.OnNewAttendeeInteractionListener listener) {
+        mValues = new ArrayList<>(items);
+        mListener = listener;
     }
 
     @Override
@@ -32,6 +37,17 @@ public class MyAttendeeRecyclerViewAdapter extends RecyclerView.Adapter<MyAttend
         holder.mItem = mValues.get(position);
         holder.mAttendeeView.setText(mValues.get(position).name + " " + mValues.get(position).lastName);
         holder.mCuilView.setText(mValues.get(position).cuil);
+
+        holder.mView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (null != mListener) {
+                    // Notify the active callbacks interface (the activity, if the
+                    // fragment is attached to one) that an item has been selected.
+                    mListener.onNewAttendee(holder.mItem);
+                }
+            }
+        });
     }
 
     @Override

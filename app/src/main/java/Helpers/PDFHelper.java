@@ -323,14 +323,16 @@ public class PDFHelper {
 
         Paragraph curso = new Paragraph();
         curso.add(new Chunk("Curso:",fontLabel));
-        curso.add(result.topic);
+        curso.add(result.courseName);
 
         Paragraph contenidos = new Paragraph();
         contenidos.add(new Chunk("Contenidos:",fontLabel));
+        contenidos.add(result.contents);
 
 
         Paragraph metodologia = new Paragraph();
         metodologia.add(new Chunk("Metodología:",fontLabel));
+        metodologia.add(result.methodology);
 
         PdfPTable tabla = new PdfPTable(3);
         tabla.setWidthPercentage(100);
