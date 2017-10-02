@@ -77,9 +77,9 @@ public class PDFHelper {
             writer.setPageEvent(new FooterRAR());
         } else if (tarea.type == EnumTareas.RGRL.id){
             contenidoRGRL(document,(RGRLResult) result);
-            writer.setPageEvent(new FooterCapacitacion());
         } else if (tarea.type == EnumTareas.CAPACITACION.id) {
             contenidoCapacitacion(document,(CAPResult)result);
+            writer.setPageEvent(new FooterCapacitacion());
         }
 
         document.close();
@@ -317,22 +317,28 @@ public class PDFHelper {
 
     private void contenidoCapacitacion(Document document, CAPResult result) throws DocumentException {
 
-        Paragraph titulo = new Paragraph("Asistentes",fontSubtitulo);
-        titulo.setSpacingAfter(10f);
-        document.add(titulo);
+        Paragraph datosGenerales = new Paragraph("Datos generales",fontSubtitulo);
+        datosGenerales.setSpacingAfter(10f);
+        document.add(datosGenerales);
 
         Paragraph curso = new Paragraph();
         curso.add(new Chunk("Curso:",fontLabel));
         curso.add(result.courseName);
+        document.add(curso);
 
         Paragraph contenidos = new Paragraph();
         contenidos.add(new Chunk("Contenidos:",fontLabel));
         contenidos.add(result.contents);
-
+        document.add(contenidos);
 
         Paragraph metodologia = new Paragraph();
         metodologia.add(new Chunk("Metodología:",fontLabel));
         metodologia.add(result.methodology);
+        document.add(metodologia);
+
+        Paragraph titulo = new Paragraph("Asistentes",fontSubtitulo);
+        titulo.setSpacingAfter(10f);
+        document.add(titulo);
 
         PdfPTable tabla = new PdfPTable(3);
         tabla.setWidthPercentage(100);
@@ -345,6 +351,8 @@ public class PDFHelper {
             tabla.addCell(asistente.cuil);
             tabla.addCell("");
         }
+
+        document.add(tabla);
     }
 
     class FooterCapacitacion extends PdfPageEventHelper {
