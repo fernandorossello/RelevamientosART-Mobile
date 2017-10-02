@@ -432,7 +432,7 @@ public class MainActivity extends AppCompatActivity
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         builder.setMessage(R.string.borrarRuido)
-                .setTitle(R.string.borrarImagen_Title)
+                .setTitle(R.string.borrarMedicion_Title)
                 .setPositiveButton(R.string.aceptar, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         borrarRuido(ruido);
