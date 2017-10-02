@@ -1,24 +1,43 @@
 package Modelo;
 
-import com.google.gson.GsonBuilder;
-
-import org.json.JSONObject;
-
+import com.google.gson.annotations.Expose;
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.field.ForeignCollectionField;
+import com.j256.ormlite.table.DatabaseTable;
 import java.io.Serializable;
-import java.util.List;
+import java.util.ArrayList;
+import java.util.Collection;
 
+import Modelo.Enums.EnumTareas;
+
+@DatabaseTable
 public class CAPResult extends Result implements Serializable{
 
-    public String topic;
+    public CAPResult(){
+        if(attendees == null) {
+            attendees = new ArrayList<>();
+        }
 
+        type = EnumTareas.CAPACITACION.id;
+    }
+
+    @DatabaseField
     public int attendees_count;
 
-    public List<Attendee> attendees;
+    @Expose
+    @ForeignCollectionField
+    public Collection<Attendee> attendees;
 
-    public String coordinators;
+    @Expose
+    @DatabaseField
+    public String courseName;
 
-    public String usedMaterials;
+    @Expose
+    @DatabaseField
+    public String contents;
 
-    public String deliveredMaterials;
+    @Expose
+    @DatabaseField
+    public String methodology;
 
 }

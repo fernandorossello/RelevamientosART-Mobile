@@ -38,6 +38,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.fernando.relevamientosart.ConstanciaCapacitacion.ConstanciaCapacitacionFragment;
+import com.example.fernando.relevamientosart.ConstanciaCapacitacion.NewAttendeeFragment;
 import com.example.fernando.relevamientosart.ConstanciaVisita.ImageFragment;
 import com.example.fernando.relevamientosart.Login.LoginActivity;
 import com.example.fernando.relevamientosart.ConstanciaVisita.MedidorDeRuidoFragment;
@@ -62,6 +63,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import Helpers.DBHelper;
+import Modelo.Attendee;
 import Modelo.Enums.EnumTareas;
 import Modelo.Image;
 import Modelo.Managers.ResultManager;
@@ -76,12 +78,12 @@ import Modelo.WorkingMan;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,VisitFragment.OnVisitSelectedListener,
         RARFragment.OnTrabajadoresFragmentInteractionListener,
+        ConstanciaCapacitacionFragment.OnNewAttendeeInteractionListener,
         ConstanciaVisitaFragment.OnEventoConstanciaListener,
         ImageFragment.OnImageListFragmentInteractionListener,
         RiskFragment.OnRiskFragmentInteractionListener,
-        MedidorDeRuidoFragment.OnNoiseListFragmentInteractionListener{
-
-
+        MedidorDeRuidoFragment.OnNoiseListFragmentInteractionListener
+{
     private static final int REQUEST_TAKE_PHOTO = 1500;
     private static final int REQUEST_READ = 2000;
     private static final String TAG_CONSTANCIA_VISITA = "ConstanciaVisitaTag";
@@ -292,6 +294,15 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
+    public void onNewAttendee(Attendee attendee) {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, new NewAttendeeFragment().newInstance(attendee))
+                .addToBackStack(null)
+                .commit();
+    }
+
+
+    @Override
     public void OnGuardarConstanciaDeVisita() {
         getSupportFragmentManager().popBackStack();
     }
@@ -470,7 +481,6 @@ public class MainActivity extends AppCompatActivity
                 .attach(frg)
                 .commit();
     }
-
     //************************************************DB HELPER************************************************
 
     public DBHelper getHelper() {

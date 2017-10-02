@@ -22,13 +22,16 @@
                 android:textColor="@color/colorPrimary"
                 android:textSize="@dimen/label_size"/>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Nombre del curso"
-                android:textSize="@dimen/detalle_valor_label" />
-
         </android.support.design.widget.TextInputLayout>
+
+        <EditText
+            android:id="@+id/tv_capr_course"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/hint_nombre_curso"
+            android:imeActionLabel="@string/hint_nombre_curso"
+            android:inputType="text"
+            android:maxLines="1" />
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
@@ -41,12 +44,16 @@
                 android:textColor="@color/colorPrimary"
                 android:textSize="@dimen/label_size"/>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Contenidos"
-                android:textSize="@dimen/detalle_valor_label" />
         </android.support.design.widget.TextInputLayout>
+
+        <EditText
+            android:id="@+id/tv_capr_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/hint_nombre_contenidos"
+            android:imeActionLabel="@string/hint_nombre_contenidos"
+            android:inputType="text"
+            android:maxLines="1" />
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
@@ -59,13 +66,16 @@
                 android:textColor="@color/colorPrimary"
                 android:textSize="@dimen/label_size"/>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Metodología empleada"
-                android:textSize="@dimen/detalle_valor_label" />
-
         </android.support.design.widget.TextInputLayout>
+
+        <EditText
+            android:id="@+id/tv_capr_methodology"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/hint_nombre_metodologia"
+            android:imeActionLabel="@string/hint_nombre_metodologia"
+            android:inputType="text"
+            android:maxLines="1" />
 
         <TextView
             android:layout_width="match_parent"

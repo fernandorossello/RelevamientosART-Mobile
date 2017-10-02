@@ -10,6 +10,9 @@ import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 import java.sql.SQLException;
+
+import Modelo.Attendee;
+import Modelo.CAPResult;
 import Modelo.Employee;
 import Modelo.Image;
 import Modelo.Institution;
@@ -35,6 +38,8 @@ public class DBHelper extends OrmLiteSqliteOpenHelper {
     private Dao<RARResult,Integer> rARResultDao;
     private Dao<WorkingMan,Integer> workingManDao;
     private Dao<Risk,Integer> riskDao;
+    private Dao<Attendee,Integer> attendeeDao;
+    private Dao<CAPResult,Integer> CAPResultDao;
 
     public DBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -49,11 +54,12 @@ public class DBHelper extends OrmLiteSqliteOpenHelper {
             TableUtils.createTable(connectionSource, VisitRecord.class);
             TableUtils.createTable(connectionSource, Zone.class);
             TableUtils.createTable(connectionSource, Image.class);
-            TableUtils.createTable(connectionSource, Employee.class);
             TableUtils.createTable(connectionSource, WorkingMan.class);
             TableUtils.createTable(connectionSource, RARResult.class);
+            TableUtils.createTable(connectionSource, CAPResult.class);
             TableUtils.createTable(connectionSource, Risk.class);
             TableUtils.createTable(connectionSource, Noise.class);
+            TableUtils.createTable(connectionSource, Attendee.class);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -117,6 +123,20 @@ public class DBHelper extends OrmLiteSqliteOpenHelper {
             riskDao = getDao(Risk.class);
         }
         return riskDao;
+    }
+
+    public Dao<Attendee,Integer> getAttendeeDao() throws SQLException{
+        if(attendeeDao == null){
+            attendeeDao = getDao(Attendee.class);
+        }
+        return attendeeDao;
+    }
+
+    public Dao<CAPResult,Integer> getCAPResultDao() throws SQLException{
+        if(CAPResultDao == null){
+            CAPResultDao = getDao(CAPResult.class);
+        }
+        return CAPResultDao;
     }
 
     @Override

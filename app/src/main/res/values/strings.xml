@@ -82,9 +82,17 @@
     <string name="descripciondb">Descripción</string>
     <string name="registrar">Registrar</string>
     <string name="borrarRuido">¿Desea borrar la medición seleccionada?</string>
+    <string name="borrarMedicion_Title">Borrar medición</string>
+
+    <!--Strings related to generacón de PDF-->
     <string name="error_pdf_constancia_visita">Se ha producido un error al generar el PDF de constancia de visitas.</string>
     <string name="generarPDF_Title">PDF</string>
     <string name="generarPDf">¿Desea generar archivo PDF?</string>
     <string name="pdfGenerado">Se ha generado el PDF</string>
-    <string name="borrarMedicion_Title">Borrar medición</string>
+
+    <!--Strings related to Constancia de Capacitacion -->
+    <string name="hint_nombre_curso">Nombre del Curso</string>
+    <string name="hint_nombre_contenidos">Contenidos</string>
+    <string name="hint_nombre_metodologia">Metodologia Empleada</string>
+
 </resources>

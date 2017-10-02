@@ -68,7 +68,7 @@ public class VisitFragment extends Fragment {
             try {
                 DBHelper helper = ((MainActivity) getActivity()).getHelper();
                 List<Visit> visitas = new VisitManager(helper).obtenerVisitasSincronizadas();
-                 recyclerView.setAdapter(new MyVisitRecyclerViewAdapter(visitas, mListener));
+                recyclerView.setAdapter(new MyVisitRecyclerViewAdapter(visitas, mListener));
             }catch(SQLException e){
                 Toast.makeText(context, R.string.error_carga_visitas, Toast.LENGTH_SHORT).show();
             }
