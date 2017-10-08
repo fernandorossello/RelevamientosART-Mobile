@@ -17,6 +17,7 @@ import android.support.annotation.RequiresApi;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -50,6 +51,7 @@ import Modelo.Attendee;
 import Modelo.Enums.EnumTareas;
 import Modelo.Image;
 import Modelo.Managers.VisitManager;
+import Modelo.Managers.WorkingManManager;
 import Modelo.Noise;
 import Modelo.Task;
 import Modelo.Visit;
@@ -68,6 +70,7 @@ public class MainActivity extends AppCompatActivity
     private static final int REQUEST_READ = 2000;
     private static final String TAG_CONSTANCIA_VISITA = "ConstanciaVisitaTag";
     private static final String TAG_FRAGMENT_IMAGENES = "ListaImagensTag";
+    private static final String TAG_WORKING_MAN = "WorkingManTag";
     private final String TAG_FRAGMENT_MEDICION_RUIDO = "tag_frg_medicion_ruido";
 
 
@@ -107,8 +110,13 @@ public class MainActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+                super.onBackPressed();
         }
+    }
+
+    private String getCurrentFragmentTag(){
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        return fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount() - 1).getName();
     }
 
     @Override
@@ -252,7 +260,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onTrabajadorSeleccionado(WorkingMan workingMan) {
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, new RiskFragment().newInstance(workingMan))
+                .replace(R.id.fragment_container, new RiskFragment().newInstance(workingMan),TAG_WORKING_MAN)
                 .addToBackStack(null)
                 .commit();
     }
@@ -416,6 +424,11 @@ public class MainActivity extends AppCompatActivity
                 .replace(R.id.fragment_container, RiskSelectorFragment.newInstance(workingMan))
                 .addToBackStack(null)
                 .commit();
+    }
+
+    @Override
+    public void onDescartar(WorkingMan workingMan) {
+        super.onBackPressed();
     }
 
     @Override

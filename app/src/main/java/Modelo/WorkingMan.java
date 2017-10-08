@@ -8,6 +8,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 
+import Excepciones.ValidationException;
+import Helpers.ValidacionHelper;
+
 public class WorkingMan extends Employee implements Serializable {
 
     public WorkingMan(){
@@ -48,5 +51,24 @@ public class WorkingMan extends Employee implements Serializable {
         }
 
         return codigos;
+    }
+
+    public void Validar() throws ValidationException{
+        
+        ValidacionHelper.NullOrEmpty(name,"nombre");
+        ValidacionHelper.NullOrEmpty(lastName,"apellido");
+        ValidacionHelper.CantidadCaracteres(cuil,11,"CUIL");
+
+        ValidacionHelper.Null(checked_in_on,"fecha de ingreso");
+        ValidacionHelper.Null(exposed_from_at,"fecha de inicio");
+
+        ValidacionHelper.FechaPosterior(checked_in_on, new Date(),"fecha de ingreso");
+        ValidacionHelper.FechaPosterior(checked_in_on,exposed_from_at, "fecha de ingreso");
+        ValidacionHelper.FechaPosterior(exposed_from_at, new Date(),"fecha de inicio");
+
+        if(exposed_until_at != null) {
+            ValidacionHelper.FechaPosterior(exposed_from_at, exposed_until_at, "fecha de inicio");
+            ValidacionHelper.FechaPosterior(exposed_until_at, new Date(),"fecha de fin");
+        }
     }
 }

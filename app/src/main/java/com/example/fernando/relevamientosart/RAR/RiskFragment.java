@@ -3,12 +3,16 @@ package com.example.fernando.relevamientosart.RAR;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.method.KeyListener;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,16 +27,12 @@ import com.example.fernando.relevamientosart.R;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
-
 import Excepciones.ValidationException;
 import Helpers.DBHelper;
 import Helpers.ValidacionHelper;
 import Modelo.Managers.WorkingManManager;
-import Modelo.Risk;
 import Modelo.WorkingMan;
 
 public class RiskFragment extends Fragment {
@@ -44,6 +44,20 @@ public class RiskFragment extends Fragment {
 
     private OnRiskFragmentInteractionListener mListener;
 
+    private View.OnKeyListener OnBackListener = new View.OnKeyListener() {
+        @Override
+        public boolean onKey(View v, int keyCode, KeyEvent event) {
+            if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK){
+                guardarWorkingMen(
+
+                );
+                return true;
+            }
+            return false;
+        }
+    };
+
+
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
@@ -53,11 +67,23 @@ public class RiskFragment extends Fragment {
 
     @SuppressWarnings("unused")
     public static RiskFragment newInstance(WorkingMan workingMan) {
-        RiskFragment fragment = new RiskFragment();
+        final RiskFragment fragment = new RiskFragment();
         Bundle args = new Bundle();
         args.putSerializable(RiskFragment.ARG_WORKING_MAN, workingMan);
         fragment.setArguments(args);
+
         return fragment;
+    }
+
+
+    @Override
+    public void onResume() {
+
+        super.onResume();
+
+        getView().setFocusableInTouchMode(true);
+        getView().requestFocus();
+        getView().setOnKeyListener(OnBackListener);
     }
 
     @Override
@@ -87,8 +113,11 @@ public class RiskFragment extends Fragment {
 
 
         tvNombre.setText(mWorkingMan.name);
+        tvNombre.setOnKeyListener(OnBackListener);
         tvApellido.setText(mWorkingMan.lastName);
+        tvApellido.setOnKeyListener(OnBackListener);
         tvCuil.setText(mWorkingMan.cuil);
+        tvCuil.setOnKeyListener(OnBackListener);
 
         if (mWorkingMan.checked_in_on != null)
             tvFechaIngreso.setText(formatearFecha(mWorkingMan.checked_in_on));
@@ -217,12 +246,10 @@ public class RiskFragment extends Fragment {
 
     public interface OnRiskFragmentInteractionListener {
         void onNewRiskFragmentInteraction(WorkingMan workingMan);
+        void onDescartar(WorkingMan workingMan);
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-
+    private void guardarWorkingMen() {
         mWorkingMan.name = ((EditText)getView().findViewById(R.id.tv_worker_name)).getText().toString();
         mWorkingMan.lastName = ((EditText)getView().findViewById(R.id.tv_worker_lastName)).getText().toString();
         mWorkingMan.cuil = ((EditText)getView().findViewById(R.id.tv_worker_cuil)).getText().toString();
@@ -245,29 +272,40 @@ public class RiskFragment extends Fragment {
 
         DBHelper dbHelper = ((MainActivity)getActivity()).getHelper();
         try {
-            //Valida campos vacíos
-            ValidacionHelper.NullOrEmpty(mWorkingMan.name,"nombre");
-            ValidacionHelper.NullOrEmpty(mWorkingMan.lastName,"apellido");
-            ValidacionHelper.CantidadCaracteres(mWorkingMan.cuil,11,"CUIL");
-            ValidacionHelper.Null(mWorkingMan.checked_in_on,"fecha de ingreso");
-            ValidacionHelper.Null(mWorkingMan.exposed_from_at,"fecha de inicio");
-
-            //Validar que las fechas no sean posteriores al día de hoy
-            ValidacionHelper.FechaPosterior(mWorkingMan.checked_in_on, new Date(),"fecha de ingreso");
-            ValidacionHelper.FechaPosterior(mWorkingMan.exposed_from_at, new Date(),"fecha de inicio");
-            ValidacionHelper.FechaPosterior(mWorkingMan.exposed_until_at, new Date(),"fecha de fin");
-
-            //Valida consistencia en las fechas
-            ValidacionHelper.FechaPosterior(mWorkingMan.checked_in_on,mWorkingMan.exposed_from_at, "fecha de ingreso");
-            ValidacionHelper.FechaPosterior(mWorkingMan.exposed_from_at,mWorkingMan.exposed_until_at, "fecha de inicio");
-
+            mWorkingMan.Validar();
             new WorkingManManager(dbHelper).persist(mWorkingMan);
+            this.getActivity().onBackPressed();
         }
         catch (ValidationException ex){
-            Toast.makeText(this.getContext(), ex.getMessage(), Toast.LENGTH_SHORT).show();
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(this.getContext());
+
+            builder.setMessage(ex.getMessage())
+                    .setTitle(R.string.Validacion)
+                    .setPositiveButton(R.string.descartar, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            mListener.onDescartar(mWorkingMan);
+                        }
+                    });
+            builder.setNegativeButton(R.string.editar, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    dialog.cancel();
+                }
+            });
+
+            AlertDialog dialog = builder.create();
+
+            dialog.show();
+
         }
         catch (SQLException ex){
             Toast.makeText(getActivity(), ex.getMessage(), Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
     }
 }
