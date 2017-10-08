@@ -28,7 +28,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import Excepciones.ValidationException;
 import Helpers.DBHelper;
+import Helpers.ValidacionHelper;
 import Modelo.Managers.WorkingManManager;
 import Modelo.Risk;
 import Modelo.WorkingMan;
@@ -39,7 +41,6 @@ public class RiskFragment extends Fragment {
     private WorkingMan mWorkingMan;
 
     private final Calendar myCalendar = Calendar.getInstance();
-    private final List<Risk> riesgos = new ArrayList<>();
 
     private OnRiskFragmentInteractionListener mListener;
 
@@ -243,13 +244,30 @@ public class RiskFragment extends Fragment {
         }
 
         DBHelper dbHelper = ((MainActivity)getActivity()).getHelper();
-
         try {
+            //Valida campos vacíos
+            ValidacionHelper.NullOrEmpty(mWorkingMan.name,"nombre");
+            ValidacionHelper.NullOrEmpty(mWorkingMan.lastName,"apellido");
+            ValidacionHelper.CantidadCaracteres(mWorkingMan.cuil,11,"CUIL");
+            ValidacionHelper.Null(mWorkingMan.checked_in_on,"fecha de ingreso");
+            ValidacionHelper.Null(mWorkingMan.exposed_from_at,"fecha de inicio");
+
+            //Validar que las fechas no sean posteriores al día de hoy
+            ValidacionHelper.FechaPosterior(mWorkingMan.checked_in_on, new Date(),"fecha de ingreso");
+            ValidacionHelper.FechaPosterior(mWorkingMan.exposed_from_at, new Date(),"fecha de inicio");
+            ValidacionHelper.FechaPosterior(mWorkingMan.exposed_until_at, new Date(),"fecha de fin");
+
+            //Valida consistencia en las fechas
+            ValidacionHelper.FechaPosterior(mWorkingMan.checked_in_on,mWorkingMan.exposed_from_at, "fecha de ingreso");
+            ValidacionHelper.FechaPosterior(mWorkingMan.exposed_from_at,mWorkingMan.exposed_until_at, "fecha de inicio");
+
             new WorkingManManager(dbHelper).persist(mWorkingMan);
+        }
+        catch (ValidationException ex){
+            Toast.makeText(this.getContext(), ex.getMessage(), Toast.LENGTH_SHORT).show();
         }
         catch (SQLException ex){
             Toast.makeText(getActivity(), ex.getMessage(), Toast.LENGTH_SHORT).show();
         }
-
     }
 }
