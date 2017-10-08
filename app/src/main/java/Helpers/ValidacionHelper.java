@@ -3,6 +3,7 @@ package Helpers;
 import java.util.Date;
 
 import Excepciones.EmptyException;
+import Excepciones.LengthException;
 import Excepciones.MaxDateException;
 import Excepciones.MinDateException;
 import Excepciones.ValidationException;
@@ -29,5 +30,20 @@ public class ValidacionHelper {
                 throw new MinDateException(nombreCampo,fechaMinima);
             }
         }
+
+        //Si el campo se encuentra vacío o tiene una cantidad incorrecta de caracteres arrojará una excepción
+        public static void CantidadCaracteres(String texto, int cantidad, String nombreCampo)throws ValidationException{
+            NullOrEmpty(texto,nombreCampo);
+
+            if(texto.length() != cantidad){
+                throw new LengthException(nombreCampo, cantidad);
+            }
+        }
+
+    public static void Null(Object object ,String nombreCampo) throws ValidationException{
+        if(object == null){
+            throw new EmptyException(nombreCampo);
+        }
+    }
 
 }
