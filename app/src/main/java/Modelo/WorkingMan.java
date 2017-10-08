@@ -54,7 +54,7 @@ public class WorkingMan extends Employee implements Serializable {
     }
 
     public void Validar() throws ValidationException{
-        
+
         ValidacionHelper.NullOrEmpty(name,"nombre");
         ValidacionHelper.NullOrEmpty(lastName,"apellido");
         ValidacionHelper.CantidadCaracteres(cuil,11,"CUIL");
