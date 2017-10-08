@@ -1,12 +1,9 @@
 package com.example.fernando.relevamientosart.RAR;
 
-import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -86,7 +83,7 @@ public class RiskFragment extends Fragment {
 
 
         tvNombre.setText(mWorkingMan.name);
-        tvApellido.setText(mWorkingMan.lastName);
+        tvApellido.setText(mWorkingMan.last_name);
         tvCuil.setText(mWorkingMan.cuil);
 
         if (mWorkingMan.checked_in_on != null)
@@ -98,7 +95,7 @@ public class RiskFragment extends Fragment {
         if (mWorkingMan.exposed_until_at != null)
             tvFechaFin.setText(formatearFecha(mWorkingMan.exposed_until_at));
 
-        recyclerView.setAdapter(new MyRiskRecyclerViewAdapter(mWorkingMan.riskList));
+        recyclerView.setAdapter(new MyRiskRecyclerViewAdapter(mWorkingMan.risk_list));
 
         cargarListenerFechaIngreso(view);
         cargarListenerFechaInicio(view);
@@ -223,7 +220,7 @@ public class RiskFragment extends Fragment {
         super.onDestroyView();
 
         mWorkingMan.name = ((EditText)getView().findViewById(R.id.tv_worker_name)).getText().toString();
-        mWorkingMan.lastName = ((EditText)getView().findViewById(R.id.tv_worker_lastName)).getText().toString();
+        mWorkingMan.last_name = ((EditText)getView().findViewById(R.id.tv_worker_lastName)).getText().toString();
         mWorkingMan.cuil = ((EditText)getView().findViewById(R.id.tv_worker_cuil)).getText().toString();
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");

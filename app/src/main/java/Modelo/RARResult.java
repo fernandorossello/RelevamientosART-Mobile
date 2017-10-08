@@ -1,11 +1,8 @@
 package Modelo;
 
-import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
 import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
-
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -17,16 +14,14 @@ public class RARResult extends Result implements Serializable {
 
     public RARResult(){
 
-        if(workingMen == null) {
-            workingMen = new ArrayList<>();
+        if(working_men == null) {
+            working_men = new ArrayList<>();
         }
 
         type = EnumTareas.RAR.id;
     }
 
-    public String topic;
-
     @Expose
     @ForeignCollectionField
-    public Collection<WorkingMan> workingMen;
+    public Collection<WorkingMan> working_men;
 }

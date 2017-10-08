@@ -35,7 +35,7 @@ public class MyAttendeeRecyclerViewAdapter extends RecyclerView.Adapter<MyAttend
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mAttendeeView.setText(mValues.get(position).name + " " + mValues.get(position).lastName);
+        holder.mAttendeeView.setText(mValues.get(position).name + " " + mValues.get(position).last_name);
         holder.mCuilView.setText(mValues.get(position).cuil);
 
         holder.mView.setOnClickListener(new View.OnClickListener() {

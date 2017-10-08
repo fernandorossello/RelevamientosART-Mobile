@@ -9,8 +9,6 @@ public class User implements Serializable{
 
     public String name;
 
-    public String lastName;
-
     public String email;
 
     public String encryptedPassword;

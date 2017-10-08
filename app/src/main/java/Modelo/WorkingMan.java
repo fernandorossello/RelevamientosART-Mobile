@@ -12,8 +12,8 @@ import java.util.Date;
 public class WorkingMan extends Employee implements Serializable {
 
     public WorkingMan(){
-        if(riskList == null) {
-            riskList = new ArrayList<>();
+        if(risk_list == null) {
+            risk_list = new ArrayList<>();
         }
     }
 
@@ -34,7 +34,7 @@ public class WorkingMan extends Employee implements Serializable {
 
     @Expose
     @ForeignCollectionField
-    public Collection<Risk> riskList;
+    public Collection<Risk> risk_list;
 
     @Override
     public boolean equals(Object other) {
@@ -48,7 +48,7 @@ public class WorkingMan extends Employee implements Serializable {
     public String obtenerCodigosDeRiesgos() {
         String codigos = "";
 
-        for (Risk riesgo: this.riskList) {
+        for (Risk riesgo: this.risk_list) {
             codigos += riesgo.code + "; ";
         }
 

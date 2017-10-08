@@ -35,7 +35,7 @@ public class MyRiskSelectorRecyclerViewAdapter extends RecyclerView.Adapter<MyRi
         holder.mItem = mValues.get(position);
         holder.mContentView.setText(mValues.get(position).toString());
 
-        if (mWorkingMan.riskList.contains(holder.mItem)){
+        if (mWorkingMan.risk_list.contains(holder.mItem)){
             holder.mImageView.setVisibility(View.VISIBLE);
         } else {
             holder.mImageView.setVisibility(View.INVISIBLE);
@@ -44,16 +44,16 @@ public class MyRiskSelectorRecyclerViewAdapter extends RecyclerView.Adapter<MyRi
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mWorkingMan.riskList.contains(holder.mItem))
+                if (mWorkingMan.risk_list.contains(holder.mItem))
                 {
-                    holder.mItem.workingMan = null;
-                    mWorkingMan.riskList.remove(holder.mItem);
+                    holder.mItem.working_man = null;
+                    mWorkingMan.risk_list.remove(holder.mItem);
                     holder.mImageView.setVisibility(View.INVISIBLE);
                 }
                 else
                 {
-                    holder.mItem.workingMan = mWorkingMan;
-                    mWorkingMan.riskList.add(holder.mItem);
+                    holder.mItem.working_man = mWorkingMan;
+                    mWorkingMan.risk_list.add(holder.mItem);
                     holder.mImageView.setVisibility(View.VISIBLE);
                 }
             }

@@ -30,7 +30,7 @@ public class CAPResult extends Result implements Serializable{
 
     @Expose
     @DatabaseField
-    public String courseName;
+    public String course_name;
 
     @Expose
     @DatabaseField

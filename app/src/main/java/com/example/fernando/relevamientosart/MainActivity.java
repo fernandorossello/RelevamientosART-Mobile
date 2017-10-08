@@ -35,7 +35,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.fernando.relevamientosart.ConstanciaCapacitacion.ConstanciaCapacitacionFragment;
 import com.example.fernando.relevamientosart.ConstanciaCapacitacion.NewAttendeeFragment;
@@ -375,7 +374,7 @@ public class MainActivity extends AppCompatActivity
             if (resultCode == RESULT_OK){
                 Image imagen = new Image(){{
                     visit = mVisitaEnCurso;
-                    URLImage = uriSavedImage.toString();
+                    url_image = uriSavedImage.toString();
                 }};
 
             mVisitaEnCurso.images.add(imagen);
@@ -417,7 +416,7 @@ public class MainActivity extends AppCompatActivity
         mVisitaEnCurso.images.remove(imagen);
 
         //TODO: Esto en realidad no lo está borrando, si nos queda tiempo revisarlo
-        new File(imagen.URLImage).delete();
+        new File(imagen.url_image).delete();
 
         if(mVisitaEnCurso.images.isEmpty()){
             getSupportFragmentManager().popBackStack();
@@ -629,7 +628,7 @@ public class MainActivity extends AppCompatActivity
             if (resultado != null) enviarResultado(resultado);
         }
 
-        enviarConstanciaDeVisita(visit.visitRecord);
+        enviarConstanciaDeVisita(visit.visit_record);
     }
 
     private void enviarResultado(final Result resultado) {

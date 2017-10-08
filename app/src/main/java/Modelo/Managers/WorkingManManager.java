@@ -3,8 +3,6 @@ package Modelo.Managers;
 import com.j256.ormlite.dao.Dao;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import Helpers.DBHelper;
@@ -27,8 +25,8 @@ public class WorkingManManager extends Manager<WorkingMan> {
             daowm.update(item);
         }
 
-        if(!item.riskList.isEmpty()) {
-            new RiskManager(dbHelper).persist(item.riskList);
+        if(!item.risk_list.isEmpty()) {
+            new RiskManager(dbHelper).persist(item.risk_list);
         }
     }
 

@@ -26,7 +26,7 @@ public class Risk implements Serializable{
     }
 
     @DatabaseField(foreign = true)
-    public WorkingMan workingMan;
+    public WorkingMan working_man;
 
     @Override
     public boolean equals(Object other) {

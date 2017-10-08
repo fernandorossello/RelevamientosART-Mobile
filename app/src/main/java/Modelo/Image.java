@@ -12,7 +12,7 @@ public class Image implements Serializable{
     public int id;
 
     @DatabaseField
-    public String URLImage;
+    public String url_image;
 
     @DatabaseField(foreign = true)
     public Visit visit;

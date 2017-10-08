@@ -71,7 +71,7 @@ public class NewAttendeeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_new_attendee, container, false);
 
         ((TextView) view.findViewById(R.id.tv_worker_name)).setText(mAttendee.name);
-        ((TextView) view.findViewById(R.id.tv_worker_lastName)).setText(mAttendee.lastName);
+        ((TextView) view.findViewById(R.id.tv_worker_lastName)).setText(mAttendee.last_name);
         ((TextView) view.findViewById(R.id.tv_worker_cuil)).setText(mAttendee.cuil);
 
         return view;
@@ -98,7 +98,7 @@ public class NewAttendeeFragment extends Fragment {
         super.onDestroyView();
 
         mAttendee.name = ((EditText)getView().findViewById(R.id.tv_worker_name)).getText().toString();
-        mAttendee.lastName = ((EditText)getView().findViewById(R.id.tv_worker_lastName)).getText().toString();
+        mAttendee.last_name = ((EditText)getView().findViewById(R.id.tv_worker_lastName)).getText().toString();
         mAttendee.cuil = ((EditText)getView().findViewById(R.id.tv_worker_cuil)).getText().toString();
 
         DBHelper dbHelper = ((MainActivity)getActivity()).getHelper();

@@ -49,7 +49,7 @@ public class AttendeeManager extends Manager<Attendee> {
         attendees.add(new Attendee(){
             {
                 name = "Fernando";
-                lastName = "Roselló";
+                last_name = "Roselló";
                 cuil = "34898398";
             }
         });
@@ -57,14 +57,14 @@ public class AttendeeManager extends Manager<Attendee> {
         attendees.add(new Attendee(){
             {
                 name = "Tomás";
-                lastName = "Ramos";
+                last_name = "Ramos";
                 cuil = "30989490";}
         });
 
         attendees.add(new Attendee(){
             {
                 name = "Julieta";
-                lastName = "Feld";
+                last_name = "Feld";
                 cuil = "31552899";}
         });
 

@@ -14,14 +14,10 @@ import com.example.fernando.relevamientosart.MainActivity;
 import com.example.fernando.relevamientosart.R;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
 import Helpers.DBHelper;
 import Modelo.Enums.EnumTareas;
 import Modelo.Managers.ResultManager;
-import Modelo.Managers.TaskManager;
 import Modelo.RARResult;
 import Modelo.Result;
 import Modelo.Task;
@@ -83,13 +79,13 @@ public class RARFragment extends Fragment {
         
         Context context = view.getContext();
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
-        recyclerView.setAdapter(new MyTrabajadorRecyclerViewAdapter(mResult.workingMen, mListener));
+        recyclerView.setAdapter(new MyTrabajadorRecyclerViewAdapter(mResult.working_men, mListener));
 
         view.findViewById(R.id.btn_agregarTrabajador).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 WorkingMan workingMan = new WorkingMan(){{result = mResult;}};
-                mResult.workingMen.add(workingMan);
+                mResult.working_men.add(workingMan);
                 mListener.onTrabajadorSeleccionado(workingMan);
             }
         });

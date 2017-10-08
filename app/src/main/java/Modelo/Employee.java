@@ -19,17 +19,14 @@ public class Employee implements Serializable{
 
     @Expose
     @DatabaseField
-    public String lastName;
-
-    @DatabaseField
-    public String sector;
+    public String last_name;
 
     @DatabaseField
     public String type;
 
     public String nombreCompleto(){
-        if(name != null && lastName != null)
-                return name + " " + lastName;
+        if(name != null && last_name != null)
+                return name + " " + last_name;
         else return "";
     }
 }

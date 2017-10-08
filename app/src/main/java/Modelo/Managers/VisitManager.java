@@ -1,8 +1,5 @@
 package Modelo.Managers;
 
-import android.provider.ContactsContract;
-import android.widget.Toast;
-
 import com.j256.ormlite.dao.Dao;
 
 import java.sql.SQLException;
@@ -155,8 +152,8 @@ public class VisitManager extends Manager<Visit> {
             daoVisitas.update(item);
         }
 
-        if(item.visitRecord != null){
-            new VisitRecordManager(dbHelper).persist(item.visitRecord);
+        if(item.visit_record != null){
+            new VisitRecordManager(dbHelper).persist(item.visit_record);
         }
     }
 

@@ -31,8 +31,8 @@ public class ResultManager extends Manager<Result> {
                 daoResult.update(item);
             }
 
-            if(!((RARResult)item).workingMen.isEmpty()){
-                new WorkingManManager(dbHelper).persist(((RARResult)item).workingMen);
+            if(!((RARResult)item).working_men.isEmpty()){
+                new WorkingManManager(dbHelper).persist(((RARResult)item).working_men);
             }
         }
 
