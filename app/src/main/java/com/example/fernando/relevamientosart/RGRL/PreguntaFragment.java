@@ -3,20 +3,29 @@ package com.example.fernando.relevamientosart.RGRL;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TextView;
 
+import com.example.fernando.relevamientosart.MainActivity;
 import com.example.fernando.relevamientosart.R;
 import com.example.fernando.relevamientosart.VisitDetalleFragment;
+
+import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
+import Helpers.DBHelper;
+import Modelo.Managers.QuestionManager;
+import Modelo.Question;
 import Modelo.RGRLResult;
 import Modelo.Task;
 import Modelo.Visit;
@@ -25,6 +34,9 @@ public class PreguntaFragment extends Fragment {
 
     private static final String ARG_TASK = "tarea";
     private Task mTarea;
+    private List<Question> mQuestions;
+    private int mIndexQuestion = 0;
+    private DBHelper dbHelper;
 
     private final Calendar myCalendar = Calendar.getInstance();
 
@@ -47,7 +59,8 @@ public class PreguntaFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mTarea = (Task) getArguments().getSerializable(ARG_TASK);
-
+            dbHelper = ((MainActivity)getActivity()).getHelper();
+            mQuestions = new QuestionManager().questionsEjemplo();
         }
     }
 
@@ -56,9 +69,65 @@ public class PreguntaFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_pregunta, container, false);
 
+        final TextView tv_pregunta = (TextView) view.findViewById(R.id.tv_pregunta);
+        refreshQuestion(tv_pregunta);
+
+        view.findViewById(R.id.tv_SI).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                limiteDeMaxima();
+                refreshQuestion(tv_pregunta);
+            }
+        });
+
+        view.findViewById(R.id.tv_NoAplica).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                limiteDeMaxima();
+                refreshQuestion(tv_pregunta);
+            }
+        });
+
+        view.findViewById(R.id.tv_NO).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                limiteDeMaxima();
+                refreshQuestion(tv_pregunta);
+            }
+        });
+
+        view.findViewById(R.id.tv_siguiente).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                limiteDeMaxima();
+                refreshQuestion(tv_pregunta);
+
+            }
+        });
+
+        view.findViewById(R.id.tv_anterior).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mIndexQuestion > 0)
+                    mIndexQuestion--;
+                refreshQuestion(tv_pregunta);
+
+            }
+        });
+
         cargarListenerFechaRegul(view);
 
         return view;
+    }
+
+    private void limiteDeMaxima() {
+        if (mIndexQuestion < mQuestions.size() - 1)
+            mIndexQuestion++;
+    }
+
+    private void refreshQuestion(TextView tv_pregunta) {
+        String q = mQuestions.get(mIndexQuestion).description;
+        tv_pregunta.setText(q);
     }
 
 

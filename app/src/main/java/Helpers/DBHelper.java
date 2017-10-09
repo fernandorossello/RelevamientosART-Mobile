@@ -16,6 +16,7 @@ import Modelo.CAPResult;
 import Modelo.Employee;
 import Modelo.Image;
 import Modelo.Institution;
+import Modelo.Question;
 import Modelo.RARResult;
 import Modelo.Risk;
 import Modelo.Noise;
@@ -39,6 +40,7 @@ public class DBHelper extends OrmLiteSqliteOpenHelper {
     private Dao<WorkingMan,Integer> workingManDao;
     private Dao<Risk,Integer> riskDao;
     private Dao<Attendee,Integer> attendeeDao;
+    private Dao<Question,Integer> questionDao;
     private Dao<CAPResult,Integer> CAPResultDao;
 
     public DBHelper(Context context) {
@@ -130,6 +132,13 @@ public class DBHelper extends OrmLiteSqliteOpenHelper {
             attendeeDao = getDao(Attendee.class);
         }
         return attendeeDao;
+    }
+
+    public Dao<Question,Integer> getQuestionDao() throws SQLException{
+        if (questionDao == null) {
+            questionDao = getDao(Question.class);
+        }
+        return questionDao;
     }
 
     public Dao<CAPResult,Integer> getCAPResultDao() throws SQLException{

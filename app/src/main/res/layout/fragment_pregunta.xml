@@ -31,18 +31,21 @@
         android:gravity="center">
 
         <Button
+            android:id="@+id/tv_SI"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Si"
             android:layout_weight="1"/>
 
         <Button
+            android:id="@+id/tv_NoAplica"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="N/A"
             android:layout_weight="1"/>
 
         <Button
+            android:id="@+id/tv_NO"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="No"
@@ -71,12 +74,14 @@
         android:layout_height="wrap_content">
 
         <Button
+            android:id="@+id/tv_anterior"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Ant."
             android:layout_weight="1"/>
 
         <Button
+            android:id="@+id/tv_siguiente"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Sig."
