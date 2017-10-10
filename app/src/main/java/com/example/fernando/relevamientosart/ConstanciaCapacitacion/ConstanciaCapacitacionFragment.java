@@ -123,6 +123,7 @@ public class ConstanciaCapacitacionFragment extends Fragment {
      */
     public interface OnNewAttendeeInteractionListener {
         void onNewAttendee(Attendee attendee);
+        void onBorrarTrabajador(Attendee mItem);
     }
 
     @Override

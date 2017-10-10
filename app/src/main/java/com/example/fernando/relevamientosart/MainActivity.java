@@ -76,6 +76,8 @@ public class MainActivity extends AppCompatActivity
     private static final String TAG_CONSTANCIA_VISITA = "ConstanciaVisitaTag";
     private static final String TAG_FRAGMENT_IMAGENES = "ListaImagensTag";
     private static final String TAG_WORKING_MAN = "WorkingManTag";
+    private static final String TAG_WORKING_MAN_LIST = "WorkingManListTag";
+    private static final String TAG_ATTENDEE_LIST = "AttendeeListTag";
     private final String TAG_FRAGMENT_MEDICION_RUIDO = "tag_frg_medicion_ruido";
 
 
@@ -155,7 +157,7 @@ public class MainActivity extends AppCompatActivity
 
                 getSupportFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.fragment_container, ConstanciaCapacitacionFragment.newInstance(selectedTask))
+                        .replace(R.id.fragment_container, ConstanciaCapacitacionFragment.newInstance(selectedTask),TAG_ATTENDEE_LIST)
                         .addToBackStack(null)
                         .commit();
                 return true;
@@ -164,7 +166,7 @@ public class MainActivity extends AppCompatActivity
 
                 getSupportFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.fragment_container, RARFragment.newInstance(mVisitaEnCurso))
+                        .replace(R.id.fragment_container, RARFragment.newInstance(mVisitaEnCurso),TAG_WORKING_MAN_LIST)
                         .addToBackStack(null)
                         .commit();
                 return true;
@@ -260,9 +262,30 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onTrabajadorSeleccionado(WorkingMan workingMan) {
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, new RiskFragment().newInstance(workingMan),TAG_WORKING_MAN)
+                .replace(R.id.fragment_container, RiskFragment.newInstance(workingMan),TAG_WORKING_MAN)
                 .addToBackStack(null)
                 .commit();
+    }
+
+    @Override
+    public void onBorrarTrabajador(WorkingMan workingMan) {
+
+        WorkingManManager manager = new WorkingManManager(getHelper());
+        try {
+            manager.delete(workingMan);
+
+            Toast.makeText(this, R.string.trabajador_borrado, Toast.LENGTH_SHORT).show();
+
+            Fragment frg = getSupportFragmentManager().findFragmentByTag(TAG_WORKING_MAN_LIST);
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .detach(frg)
+                    .attach(frg)
+                    .commit();
+
+        } catch (SQLException e) {
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
@@ -285,6 +308,26 @@ public class MainActivity extends AppCompatActivity
                 .replace(R.id.fragment_container, new NewAttendeeFragment().newInstance(attendee))
                 .addToBackStack(null)
                 .commit();
+    }
+
+    @Override
+    public void onBorrarTrabajador(Attendee attendee) {
+        AttendeeManager manager = new AttendeeManager(getHelper());
+        try {
+            manager.delete(attendee);
+
+            Toast.makeText(this, R.string.trabajador_borrado, Toast.LENGTH_SHORT).show();
+
+            Fragment frg = getSupportFragmentManager().findFragmentByTag(TAG_ATTENDEE_LIST);
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .detach(frg)
+                    .attach(frg)
+                    .commit();
+
+        } catch (SQLException e) {
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override

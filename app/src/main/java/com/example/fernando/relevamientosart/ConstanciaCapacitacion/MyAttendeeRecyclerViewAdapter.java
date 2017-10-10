@@ -1,18 +1,26 @@
 package com.example.fernando.relevamientosart.ConstanciaCapacitacion;
 
+import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.fernando.relevamientosart.MainActivity;
 import com.example.fernando.relevamientosart.R;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import Helpers.DBHelper;
 import Modelo.Attendee;
+import Modelo.Managers.AttendeeManager;
+import Modelo.Managers.WorkingManManager;
 
 public class MyAttendeeRecyclerViewAdapter extends RecyclerView.Adapter<MyAttendeeRecyclerViewAdapter.ViewHolder> {
 
@@ -46,6 +54,33 @@ public class MyAttendeeRecyclerViewAdapter extends RecyclerView.Adapter<MyAttend
                     // fragment is attached to one) that an item has been selected.
                     mListener.onNewAttendee(holder.mItem);
                 }
+            }
+        });
+
+        holder.mView.setOnLongClickListener(new View.OnLongClickListener(){
+            @Override
+            public boolean onLongClick(View view){
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+
+                builder.setMessage(R.string.borrarTrabajador)
+                        .setTitle(R.string.borrarTrabajador_Title)
+                        .setPositiveButton(R.string.aceptar, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                mListener.onBorrarTrabajador(holder.mItem);
+                            }
+                        });
+                builder.setNegativeButton(R.string.cancelar, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
+                AlertDialog dialog = builder.create();
+
+                dialog.show();
+
+                return true;
             }
         });
     }

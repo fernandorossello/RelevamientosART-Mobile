@@ -127,5 +127,6 @@ public class RARFragment extends Fragment {
 
     public interface OnTrabajadoresFragmentInteractionListener {
         void onTrabajadorSeleccionado(WorkingMan workingMan);
+        void onBorrarTrabajador(WorkingMan workingMan);
     }
 }
