@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.fernando.relevamientosart.R;
 import com.example.fernando.relevamientosart.RAR.RARFragment.OnTrabajadoresFragmentInteractionListener;
@@ -27,7 +28,7 @@ public class MyTrabajadorRecyclerViewAdapter extends RecyclerView.Adapter<MyTrab
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType){
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_trabajador, parent, false);
         return new ViewHolder(view);
@@ -39,6 +40,14 @@ public class MyTrabajadorRecyclerViewAdapter extends RecyclerView.Adapter<MyTrab
         holder.mNombreView.setText(mValues.get(position).nombreCompleto());
         holder.mCuilView.setText(mValues.get(position).cuil);
 
+        holder.mView.setOnLongClickListener(new View.OnLongClickListener(){
+            @Override
+            public boolean onLongClick(View view){
+                Toast.makeText(view.getContext(), "Long press", Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });
+        
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
