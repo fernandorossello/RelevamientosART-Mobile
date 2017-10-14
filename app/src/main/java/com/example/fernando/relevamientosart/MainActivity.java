@@ -268,6 +268,7 @@ public class MainActivity extends AppCompatActivity
 
         WorkingManManager manager = new WorkingManManager(getHelper());
         try {
+
             manager.delete(workingMan);
 
             Toast.makeText(this, R.string.trabajador_borrado, Toast.LENGTH_SHORT).show();

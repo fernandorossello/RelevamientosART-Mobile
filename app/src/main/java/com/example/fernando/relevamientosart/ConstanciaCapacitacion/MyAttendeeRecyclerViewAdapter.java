@@ -67,6 +67,7 @@ public class MyAttendeeRecyclerViewAdapter extends RecyclerView.Adapter<MyAttend
                         .setTitle(R.string.borrarTrabajador_Title)
                         .setPositiveButton(R.string.aceptar, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
+                                holder.mItem.result.attendees.remove(holder.mItem);
                                 mListener.onBorrarTrabajador(holder.mItem);
                             }
                         });

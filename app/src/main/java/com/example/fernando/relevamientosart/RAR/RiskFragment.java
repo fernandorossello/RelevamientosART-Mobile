@@ -39,9 +39,7 @@ import Modelo.WorkingMan;
 public class RiskFragment extends Fragment {
 
     private static final String ARG_WORKING_MAN = "working_Man";
-    private static final String ARG_RESULT = "result";
     private WorkingMan mWorkingMan;
-    private RARResult result;
 
     private final Calendar myCalendar = Calendar.getInstance();
 
@@ -76,16 +74,6 @@ public class RiskFragment extends Fragment {
 
         return fragment;
     }
-
-    public static RiskFragment newInstance(RARResult result) {
-        final RiskFragment fragment = new RiskFragment();
-        Bundle args = new Bundle();
-        args.putSerializable(RiskFragment.ARG_WORKING_MAN, result);
-        fragment.setArguments(args);
-
-        return fragment;
-    }
-
 
     @Override
     public void onResume() {

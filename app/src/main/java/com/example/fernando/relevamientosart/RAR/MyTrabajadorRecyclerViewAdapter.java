@@ -57,6 +57,7 @@ public class MyTrabajadorRecyclerViewAdapter extends RecyclerView.Adapter<MyTrab
                         .setTitle(R.string.borrarTrabajador_Title)
                         .setPositiveButton(R.string.aceptar, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
+                                holder.mItem.result.workingMen.remove(holder.mItem);
                                 mListener.onBorrarTrabajador(holder.mItem);
                             }
                         });
@@ -78,8 +79,6 @@ public class MyTrabajadorRecyclerViewAdapter extends RecyclerView.Adapter<MyTrab
             @Override
             public void onClick(View v) {
                 if (null != mListener) {
-                    // Notify the active callbacks interface (the activity, if the
-                    // fragment is attached to one) that an item has been selected.
                     mListener.onTrabajadorSeleccionado(holder.mItem);
                 }
             }
