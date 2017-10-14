@@ -17,7 +17,6 @@ import android.support.annotation.RequiresApi;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -46,10 +45,7 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-
-import Excepciones.ValidationException;
 import Helpers.DBHelper;
-import Helpers.ValidacionHelper;
 import Modelo.Attendee;
 import Modelo.Enums.EnumTareas;
 import Modelo.Image;
@@ -57,6 +53,7 @@ import Modelo.Managers.AttendeeManager;
 import Modelo.Managers.VisitManager;
 import Modelo.Managers.WorkingManManager;
 import Modelo.Noise;
+import Modelo.RARResult;
 import Modelo.Task;
 import Modelo.Visit;
 import Modelo.WorkingMan;
@@ -68,8 +65,7 @@ public class MainActivity extends AppCompatActivity
         ConstanciaVisitaFragment.OnEventoConstanciaListener,
         ImageFragment.OnImageListFragmentInteractionListener,
         RiskFragment.OnRiskFragmentInteractionListener,
-        MedidorDeRuidoFragment.OnNoiseListFragmentInteractionListener,
-        NewAttendeeFragment.OnNewAtendeeFragmentInteractionListener
+        MedidorDeRuidoFragment.OnNoiseListFragmentInteractionListener
 {
     private static final int REQUEST_TAKE_PHOTO = 1500;
     private static final int REQUEST_READ = 2000;
@@ -305,7 +301,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onNewAttendee(Attendee attendee) {
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, new NewAttendeeFragment().newInstance(attendee))
+                .replace(R.id.fragment_container, NewAttendeeFragment.newInstance(attendee))
                 .addToBackStack(null)
                 .commit();
     }
@@ -464,62 +460,6 @@ public class MainActivity extends AppCompatActivity
                 .replace(R.id.fragment_container, RiskSelectorFragment.newInstance(workingMan))
                 .addToBackStack(null)
                 .commit();
-    }
-
-    @Override
-    public void onDescartar(WorkingMan workingMan){
-
-        WorkingManManager manager = new WorkingManManager(getHelper());
-        WorkingMan wm = null;
-        boolean borrar = false;
-        try {
-            wm = manager.getById(workingMan.id);
-            wm.Validar();
-
-        }catch (SQLException ex){
-            Toast.makeText(this, ex.getMessage(), Toast.LENGTH_SHORT).show();
-        }catch (ValidationException ex){
-            borrar = true;
-        }
-        if(borrar) {
-            try {
-                manager.delete(wm);
-
-            } catch (SQLException ex) {
-                Toast.makeText(this, ex.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        }
-
-
-        super.onBackPressed();
-    }
-
-    @Override
-    public void onDescartar(Attendee atendee){
-
-        AttendeeManager manager = new AttendeeManager(getHelper());
-        Attendee att = null;
-        boolean borrar = false;
-        try {
-            att = manager.getById(atendee.id);
-            att.Validar();
-
-        }catch (SQLException ex){
-            Toast.makeText(this, ex.getMessage(), Toast.LENGTH_SHORT).show();
-        }catch (ValidationException ex){
-            borrar = true;
-        }
-        if(borrar) {
-            try {
-                manager.delete(att);
-
-            } catch (SQLException ex) {
-                Toast.makeText(this, ex.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        }
-
-
-        super.onBackPressed();
     }
 
     @Override

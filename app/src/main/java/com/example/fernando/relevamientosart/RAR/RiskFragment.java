@@ -33,12 +33,15 @@ import Excepciones.ValidationException;
 import Helpers.DBHelper;
 import Helpers.ValidacionHelper;
 import Modelo.Managers.WorkingManManager;
+import Modelo.RARResult;
 import Modelo.WorkingMan;
 
 public class RiskFragment extends Fragment {
 
     private static final String ARG_WORKING_MAN = "working_Man";
+    private static final String ARG_RESULT = "result";
     private WorkingMan mWorkingMan;
+    private RARResult result;
 
     private final Calendar myCalendar = Calendar.getInstance();
 
@@ -49,7 +52,6 @@ public class RiskFragment extends Fragment {
         public boolean onKey(View v, int keyCode, KeyEvent event) {
             if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK){
                 guardarWorkingMen(
-
                 );
                 return true;
             }
@@ -70,6 +72,15 @@ public class RiskFragment extends Fragment {
         final RiskFragment fragment = new RiskFragment();
         Bundle args = new Bundle();
         args.putSerializable(RiskFragment.ARG_WORKING_MAN, workingMan);
+        fragment.setArguments(args);
+
+        return fragment;
+    }
+
+    public static RiskFragment newInstance(RARResult result) {
+        final RiskFragment fragment = new RiskFragment();
+        Bundle args = new Bundle();
+        args.putSerializable(RiskFragment.ARG_WORKING_MAN, result);
         fragment.setArguments(args);
 
         return fragment;
@@ -246,7 +257,6 @@ public class RiskFragment extends Fragment {
 
     public interface OnRiskFragmentInteractionListener {
         void onNewRiskFragmentInteraction(WorkingMan workingMan);
-        void onDescartar(WorkingMan workingMan);
     }
 
     private void guardarWorkingMen() {
@@ -263,28 +273,29 @@ public class RiskFragment extends Fragment {
             String fechaFin = ((EditText)getView().findViewById(R.id.tv_worker_fechaFin)).getText().toString();
 
             if (!fechaIngreso.isEmpty()) mWorkingMan.checked_in_on = sdf.parse(fechaIngreso);
-            if(!fechaInicio.isEmpty()) mWorkingMan.exposed_from_at = sdf.parse(fechaInicio);
-            if(!fechaFin.isEmpty()) mWorkingMan.exposed_until_at = sdf.parse(fechaFin);
+            if (!fechaInicio.isEmpty()) mWorkingMan.exposed_from_at = sdf.parse(fechaInicio);
+            if (!fechaFin.isEmpty()) mWorkingMan.exposed_until_at = sdf.parse(fechaFin);
 
         } catch (ParseException ex){
             Toast.makeText(getActivity(), ex.getMessage(), Toast.LENGTH_SHORT).show();
         }
 
         DBHelper dbHelper = ((MainActivity)getActivity()).getHelper();
+        final WorkingManManager manager = new WorkingManManager(dbHelper);
         try {
             mWorkingMan.Validar();
-            new WorkingManManager(dbHelper).persist(mWorkingMan);
+            manager.persist(mWorkingMan);
             this.getActivity().onBackPressed();
         }
         catch (ValidationException ex){
 
-            AlertDialog.Builder builder = new AlertDialog.Builder(this.getContext());
+            final AlertDialog.Builder builder = new AlertDialog.Builder(this.getContext());
 
             builder.setMessage(ex.getMessage())
                     .setTitle(R.string.Validacion)
                     .setPositiveButton(R.string.descartar, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
-                            mListener.onDescartar(mWorkingMan);
+                           getActivity().onBackPressed();
                         }
                     });
             builder.setNegativeButton(R.string.editar, new DialogInterface.OnClickListener() {

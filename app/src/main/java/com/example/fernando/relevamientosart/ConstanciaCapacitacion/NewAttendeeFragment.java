@@ -23,6 +23,7 @@ import java.sql.SQLException;
 import Excepciones.ValidationException;
 import Helpers.DBHelper;
 import Modelo.Attendee;
+import Modelo.CAPResult;
 import Modelo.Managers.AttendeeManager;
 import Modelo.Managers.WorkingManManager;
 
@@ -40,10 +41,6 @@ public class NewAttendeeFragment extends Fragment {
             return false;
         }
     };
-
-
-
-    private OnNewAtendeeFragmentInteractionListener mListener;
 
     public NewAttendeeFragment() {
         // Required empty public constructor
@@ -101,18 +98,10 @@ public class NewAttendeeFragment extends Fragment {
     public void onAttach(Context context)
     {
         super.onAttach(context);
-
-        if (context instanceof RiskFragment.OnRiskFragmentInteractionListener) {
-            mListener = (OnNewAtendeeFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnNewAtendeeFragmentInteractionListener");
-        }
     }
 
     @Override
-    public void onDetach() { super.onDetach();
-    mListener = null;}
+    public void onDetach() { super.onDetach();}
 
     private void guardarAttendee() {
         mAttendee.name = ((EditText)getView().findViewById(R.id.tv_worker_name)).getText().toString();
@@ -133,7 +122,7 @@ public class NewAttendeeFragment extends Fragment {
                     .setTitle(R.string.Validacion)
                     .setPositiveButton(R.string.descartar, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
-                            mListener.onDescartar(mAttendee);
+                            getActivity().onBackPressed();
                         }
                     });
             builder.setNegativeButton(R.string.editar, new DialogInterface.OnClickListener() {
@@ -157,10 +146,5 @@ public class NewAttendeeFragment extends Fragment {
         super.onDestroyView();
 
 
-    }
-
-    public interface OnNewAtendeeFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onDescartar(Attendee attendee);
     }
 }

@@ -22,9 +22,6 @@ public class CAPResult extends Result implements Serializable{
         type = EnumTareas.CAPACITACION.id;
     }
 
-    @DatabaseField
-    public int attendees_count;
-
     @ForeignCollectionField
     public Collection<Attendee> attendees;
 

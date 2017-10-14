@@ -2,6 +2,7 @@ package Modelo;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.field.ForeignCollectionField;
+import com.j256.ormlite.table.DatabaseTable;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -11,6 +12,7 @@ import java.util.Date;
 import Excepciones.ValidationException;
 import Helpers.ValidacionHelper;
 
+@DatabaseTable
 public class WorkingMan extends Employee implements Serializable {
 
     public WorkingMan(){
@@ -69,6 +71,10 @@ public class WorkingMan extends Employee implements Serializable {
         if(exposed_until_at != null) {
             ValidacionHelper.FechaPosterior(exposed_from_at, exposed_until_at, "fecha de inicio");
             ValidacionHelper.FechaPosterior(exposed_until_at, new Date(),"fecha de fin");
+        }
+
+        if(riskList.isEmpty()){
+            throw new ValidationException("Debe seleccionar al menos un riesgo");
         }
     }
 }
