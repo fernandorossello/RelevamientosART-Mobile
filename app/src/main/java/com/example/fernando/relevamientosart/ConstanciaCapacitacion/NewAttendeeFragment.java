@@ -104,13 +104,17 @@ public class NewAttendeeFragment extends Fragment {
     public void onDetach() { super.onDetach();}
 
     private void guardarAttendee() {
-        mAttendee.name = ((EditText)getView().findViewById(R.id.tv_worker_name)).getText().toString();
-        mAttendee.lastName = ((EditText)getView().findViewById(R.id.tv_worker_lastName)).getText().toString();
-        mAttendee.cuil = ((EditText)getView().findViewById(R.id.tv_worker_cuil)).getText().toString();
+
+        Attendee attendee = new Attendee();
+
+        attendee.name = ((EditText)getView().findViewById(R.id.tv_worker_name)).getText().toString();
+        attendee.lastName = ((EditText)getView().findViewById(R.id.tv_worker_lastName)).getText().toString();
+        attendee.cuil = ((EditText)getView().findViewById(R.id.tv_worker_cuil)).getText().toString();
 
         DBHelper dbHelper = ((MainActivity)getActivity()).getHelper();
         try {
-            mAttendee.Validar();
+            attendee.Validar();
+            mAttendee.fill(attendee);
             new AttendeeManager(dbHelper).persist(mAttendee);
             this.getActivity().onBackPressed();
         }

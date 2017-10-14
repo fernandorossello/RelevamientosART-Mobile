@@ -77,4 +77,19 @@ public class WorkingMan extends Employee implements Serializable {
             throw new ValidationException("Debe seleccionar al menos un riesgo");
         }
     }
+
+    public void fill(WorkingMan wm) {
+        this.cuil = wm.cuil;
+        this.name = wm.name;
+        this.lastName = wm.lastName;
+        this.exposed_from_at = wm.exposed_from_at;
+        this.exposed_until_at = wm.exposed_until_at;
+        this.checked_in_on = wm.checked_in_on;
+        for (Risk riesgo :
+                wm.riskList) {
+         riesgo.workingMan = this;
+        }
+        this.riskList = wm.riskList;
+    }
+
 }

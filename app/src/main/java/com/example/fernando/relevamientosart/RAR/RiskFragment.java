@@ -40,6 +40,7 @@ public class RiskFragment extends Fragment {
 
     private static final String ARG_WORKING_MAN = "working_Man";
     private WorkingMan mWorkingMan;
+    private WorkingMan mWorkingManMock;
 
     private final Calendar myCalendar = Calendar.getInstance();
 
@@ -91,6 +92,8 @@ public class RiskFragment extends Fragment {
 
         if (getArguments() != null) {
             mWorkingMan = (WorkingMan) getArguments().getSerializable(ARG_WORKING_MAN);
+            mWorkingManMock = new WorkingMan();
+            mWorkingManMock.fill(mWorkingMan);
         }
     }
 
@@ -111,23 +114,23 @@ public class RiskFragment extends Fragment {
         TextView tvFechaFin = view.findViewById(R.id.tv_worker_fechaFin);
 
 
-        tvNombre.setText(mWorkingMan.name);
+        tvNombre.setText(mWorkingManMock.name);
         tvNombre.setOnKeyListener(OnBackListener);
-        tvApellido.setText(mWorkingMan.lastName);
+        tvApellido.setText(mWorkingManMock.lastName);
         tvApellido.setOnKeyListener(OnBackListener);
-        tvCuil.setText(mWorkingMan.cuil);
+        tvCuil.setText(mWorkingManMock.cuil);
         tvCuil.setOnKeyListener(OnBackListener);
 
-        if (mWorkingMan.checked_in_on != null)
-            tvFechaIngreso.setText(formatearFecha(mWorkingMan.checked_in_on));
+        if (mWorkingManMock.checked_in_on != null)
+            tvFechaIngreso.setText(formatearFecha(mWorkingManMock.checked_in_on));
 
-        if (mWorkingMan.exposed_from_at != null)
-            tvFechaInicio.setText(formatearFecha(mWorkingMan.exposed_from_at));
+        if (mWorkingManMock.exposed_from_at != null)
+            tvFechaInicio.setText(formatearFecha(mWorkingManMock.exposed_from_at));
 
-        if (mWorkingMan.exposed_until_at != null)
-            tvFechaFin.setText(formatearFecha(mWorkingMan.exposed_until_at));
+        if (mWorkingManMock.exposed_until_at != null)
+            tvFechaFin.setText(formatearFecha(mWorkingManMock.exposed_until_at));
 
-        recyclerView.setAdapter(new MyRiskRecyclerViewAdapter(mWorkingMan.riskList));
+        recyclerView.setAdapter(new MyRiskRecyclerViewAdapter(mWorkingManMock.riskList));
 
         cargarListenerFechaIngreso(view);
         cargarListenerFechaInicio(view);
@@ -137,7 +140,7 @@ public class RiskFragment extends Fragment {
             .setOnClickListener(new View.OnClickListener() {
                  @Override
                  public void onClick(View view) {
-                     mListener.onNewRiskFragmentInteraction(mWorkingMan);
+                     mListener.onNewRiskFragmentInteraction(mWorkingManMock);
                  }
              }
         );
@@ -248,9 +251,10 @@ public class RiskFragment extends Fragment {
     }
 
     private void guardarWorkingMen() {
-        mWorkingMan.name = ((EditText)getView().findViewById(R.id.tv_worker_name)).getText().toString();
-        mWorkingMan.lastName = ((EditText)getView().findViewById(R.id.tv_worker_lastName)).getText().toString();
-        mWorkingMan.cuil = ((EditText)getView().findViewById(R.id.tv_worker_cuil)).getText().toString();
+
+        mWorkingManMock.name = ((EditText)getView().findViewById(R.id.tv_worker_name)).getText().toString();
+        mWorkingManMock.lastName = ((EditText)getView().findViewById(R.id.tv_worker_lastName)).getText().toString();
+        mWorkingManMock.cuil = ((EditText)getView().findViewById(R.id.tv_worker_cuil)).getText().toString();
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
 
@@ -260,9 +264,9 @@ public class RiskFragment extends Fragment {
             String fechaInicio = ((EditText)getView().findViewById(R.id.tv_worker_fechaInicio)).getText().toString();
             String fechaFin = ((EditText)getView().findViewById(R.id.tv_worker_fechaFin)).getText().toString();
 
-            if (!fechaIngreso.isEmpty()) mWorkingMan.checked_in_on = sdf.parse(fechaIngreso);
-            if (!fechaInicio.isEmpty()) mWorkingMan.exposed_from_at = sdf.parse(fechaInicio);
-            if (!fechaFin.isEmpty()) mWorkingMan.exposed_until_at = sdf.parse(fechaFin);
+            if (!fechaIngreso.isEmpty()) mWorkingManMock.checked_in_on = sdf.parse(fechaIngreso);
+            if (!fechaInicio.isEmpty()) mWorkingManMock.exposed_from_at = sdf.parse(fechaInicio);
+            if (!fechaFin.isEmpty()) mWorkingManMock.exposed_until_at = sdf.parse(fechaFin);
 
         } catch (ParseException ex){
             Toast.makeText(getActivity(), ex.getMessage(), Toast.LENGTH_SHORT).show();
@@ -271,7 +275,8 @@ public class RiskFragment extends Fragment {
         DBHelper dbHelper = ((MainActivity)getActivity()).getHelper();
         final WorkingManManager manager = new WorkingManManager(dbHelper);
         try {
-            mWorkingMan.Validar();
+            mWorkingManMock.Validar();
+            mWorkingMan.fill(mWorkingManMock);
             manager.persist(mWorkingMan);
             this.getActivity().onBackPressed();
         }

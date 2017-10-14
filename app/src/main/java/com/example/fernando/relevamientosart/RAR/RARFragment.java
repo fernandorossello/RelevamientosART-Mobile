@@ -121,8 +121,7 @@ public class RARFragment extends Fragment {
                     + " must implement OnTrabajadoresFragmentInteractionListener");
         }
     }
-
-
+    
     @Override
     public void onDetach() {
         super.onDetach();

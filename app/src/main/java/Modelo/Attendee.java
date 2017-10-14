@@ -21,4 +21,10 @@ public class Attendee extends Employee implements Serializable {
         ValidacionHelper.CantidadCaracteres(this.cuil,11,"cuil");
 
     }
+
+    public void fill(Attendee attendee) {
+        this.cuil = attendee.cuil;
+        this.name = attendee.name;
+        this.lastName = attendee.lastName;
+    }
 }
