@@ -279,7 +279,7 @@ public class PDFHelper {
             tabla.addCell(trabajador.cuil);
             tabla.addCell(formatearFecha(trabajador.checked_in_on));
             tabla.addCell(formatearFecha(trabajador.exposed_from_at));
-            tabla.addCell(formatearFecha(trabajador.exposed_until_at));
+            tabla.addCell(trabajador.exposed_until_at != null ? formatearFecha(trabajador.exposed_until_at) : "");
             tabla.addCell(trabajador.obtenerCodigosDeRiesgos());
         }
 
