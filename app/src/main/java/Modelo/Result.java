@@ -13,7 +13,6 @@ public class Result implements Serializable {
     @DatabaseField(generatedId = true)
     public int id;
 
-    @Expose
     @DatabaseField
     public int type;
 

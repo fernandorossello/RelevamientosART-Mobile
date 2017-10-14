@@ -13,6 +13,7 @@ public class Task implements Serializable {
     @DatabaseField(id = true)
     public int id;
 
+    @Expose
     @DatabaseField
     public int type;
 
