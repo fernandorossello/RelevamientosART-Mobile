@@ -25,6 +25,7 @@ import Modelo.Visit;
 import Modelo.VisitRecord;
 import Modelo.WorkingMan;
 import Modelo.Zone;
+import Modelo.RGRLResult;
 
 public class DBHelper extends OrmLiteSqliteOpenHelper {
 
@@ -42,6 +43,7 @@ public class DBHelper extends OrmLiteSqliteOpenHelper {
     private Dao<Attendee,Integer> attendeeDao;
     private Dao<Question,Integer> questionDao;
     private Dao<CAPResult,Integer> CAPResultDao;
+    private Dao<RGRLResult,Integer> RGLRResultDao;
 
     public DBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -59,6 +61,7 @@ public class DBHelper extends OrmLiteSqliteOpenHelper {
             TableUtils.createTable(connectionSource, WorkingMan.class);
             TableUtils.createTable(connectionSource, RARResult.class);
             TableUtils.createTable(connectionSource, CAPResult.class);
+            TableUtils.createTable(connectionSource, RGRLResult.class);
             TableUtils.createTable(connectionSource, Risk.class);
             TableUtils.createTable(connectionSource, Noise.class);
             TableUtils.createTable(connectionSource, Attendee.class);
@@ -147,6 +150,15 @@ public class DBHelper extends OrmLiteSqliteOpenHelper {
         }
         return CAPResultDao;
     }
+
+    public Dao<RGRLResult,Integer> getRGLRResultDao() throws SQLException{
+        if(RGLRResultDao == null){
+            RGLRResultDao = getDao(RGRLResult.class);
+        }
+        return RGLRResultDao;
+    }
+
+
 
     @Override
     public void close() {

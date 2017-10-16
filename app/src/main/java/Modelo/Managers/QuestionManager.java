@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import Helpers.DBHelper;
 import Modelo.Enums.EnumAnswer;
 import Modelo.Question;
 
@@ -14,6 +15,11 @@ import Modelo.Question;
  */
 
 public class QuestionManager extends Manager<Question> {
+    public QuestionManager(){}
+
+    public QuestionManager(DBHelper helper){
+        this.dbHelper = helper;
+    }
 
     @Override
     public void persist(Question item) throws SQLException {

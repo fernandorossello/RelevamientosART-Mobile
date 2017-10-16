@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.fernando.relevamientosart.MainActivity;
 import com.example.fernando.relevamientosart.R;
@@ -18,6 +19,7 @@ import com.example.fernando.relevamientosart.VisitDetalleFragment;
 
 import org.w3c.dom.Text;
 
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -25,8 +27,10 @@ import java.util.List;
 
 import Helpers.DBHelper;
 import Modelo.Managers.QuestionManager;
+import Modelo.Managers.ResultManager;
 import Modelo.Question;
 import Modelo.RGRLResult;
+import Modelo.Result;
 import Modelo.Task;
 import Modelo.Visit;
 
@@ -37,10 +41,9 @@ public class PreguntaFragment extends Fragment {
     private List<Question> mQuestions;
     private int mIndexQuestion = 0;
     private DBHelper dbHelper;
+    private RGRLResult mResult;
 
     private final Calendar myCalendar = Calendar.getInstance();
-
-
 
     public PreguntaFragment() {
         // Required empty public constructor
@@ -61,6 +64,14 @@ public class PreguntaFragment extends Fragment {
             mTarea = (Task) getArguments().getSerializable(ARG_TASK);
             dbHelper = ((MainActivity)getActivity()).getHelper();
             mQuestions = new QuestionManager().questionsEjemplo();
+            Result result = new ResultManager(dbHelper).getResult(mTarea);
+
+            if (result == null) {
+                mResult = new RGRLResult();
+                mResult.task = mTarea;
+            } else {
+                mResult = (RGRLResult) result;
+            }
         }
     }
 
@@ -77,6 +88,11 @@ public class PreguntaFragment extends Fragment {
             public void onClick(View view) {
                 limiteDeMaxima();
                 refreshQuestion(tv_pregunta);
+                try {
+                    new ResultManager(dbHelper).persist(mResult);
+                } catch (SQLException ex) {
+                    Toast.makeText(getActivity(), ex.getMessage(), Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -101,7 +117,6 @@ public class PreguntaFragment extends Fragment {
             public void onClick(View view) {
                 limiteDeMaxima();
                 refreshQuestion(tv_pregunta);
-
             }
         });
 
@@ -111,7 +126,6 @@ public class PreguntaFragment extends Fragment {
                 if (mIndexQuestion > 0)
                     mIndexQuestion--;
                 refreshQuestion(tv_pregunta);
-
             }
         });
 

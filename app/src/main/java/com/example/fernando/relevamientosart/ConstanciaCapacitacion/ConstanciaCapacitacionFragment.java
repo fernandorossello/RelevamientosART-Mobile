@@ -131,16 +131,11 @@ public class ConstanciaCapacitacionFragment extends Fragment {
 
         DBHelper dbHelper = ((MainActivity)getActivity()).getHelper();
 
-
-
         //Result result = new ResultManager(dbHelper).getResult(mTarea);
 
         mResult.courseName = ((EditText)getView().findViewById(R.id.tv_capr_course)).getText().toString();
         mResult.contents = ((EditText)getView().findViewById(R.id.tv_capr_content)).getText().toString();
         mResult.methodology = ((EditText)getView().findViewById(R.id.tv_capr_methodology)).getText().toString();
-
-
-
 
         try {
             new ResultManager(dbHelper).persist(mResult);
