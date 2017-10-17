@@ -18,9 +18,6 @@ public class Employee implements Serializable{
     public String lastName;
 
     @DatabaseField
-    public String sector;
-
-    @DatabaseField
     public String type;
 
     public String nombreCompleto(){
