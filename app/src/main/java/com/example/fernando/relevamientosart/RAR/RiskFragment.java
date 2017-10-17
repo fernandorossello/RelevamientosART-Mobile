@@ -16,6 +16,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -53,6 +54,13 @@ public class RiskFragment extends Fragment {
                 guardarWorkingMen(
                 );
                 return true;
+            } else {
+                if(event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_ENTER) {
+                    InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
+                    getView().requestFocus();
+                    return true;
+                }
             }
             return false;
         }
