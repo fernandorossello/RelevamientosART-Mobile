@@ -5,6 +5,7 @@ import com.j256.ormlite.table.DatabaseTable;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import Modelo.Enums.EnumTareas;
@@ -20,6 +21,6 @@ public class RGRLResult extends Result implements Serializable{
         type = EnumTareas.RGRL.id;
     }
 
-    @ForeignCollectionField
-    public List<Question> questions;
+
+    public Collection<Question> questions;
 }

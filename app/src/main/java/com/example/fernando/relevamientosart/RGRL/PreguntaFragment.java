@@ -101,6 +101,11 @@ public class PreguntaFragment extends Fragment {
             public void onClick(View view) {
                 limiteDeMaxima();
                 refreshQuestion(tv_pregunta);
+                try {
+                    new ResultManager(dbHelper).persist(mResult);
+                } catch (SQLException ex) {
+                    Toast.makeText(getActivity(), ex.getMessage(), Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -109,6 +114,11 @@ public class PreguntaFragment extends Fragment {
             public void onClick(View view) {
                 limiteDeMaxima();
                 refreshQuestion(tv_pregunta);
+                try {
+                    new ResultManager(dbHelper).persist(mResult);
+                } catch (SQLException ex) {
+                    Toast.makeText(getActivity(), ex.getMessage(), Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -186,5 +196,18 @@ public class PreguntaFragment extends Fragment {
         String myFormat = "dd/MM/yy";
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat);
         return sdf.format(date);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        DBHelper dbHelper = ((MainActivity)getActivity()).getHelper();
+
+        try {
+            new ResultManager(dbHelper).persist(mResult);
+        } catch (SQLException ex) {
+            Toast.makeText(getActivity(), ex.getMessage(), Toast.LENGTH_SHORT).show();
+        }
     }
 }
