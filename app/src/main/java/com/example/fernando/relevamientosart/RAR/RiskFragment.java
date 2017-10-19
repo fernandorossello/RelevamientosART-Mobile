@@ -3,15 +3,20 @@ package com.example.fernando.relevamientosart.RAR;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.method.KeyListener;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -23,25 +28,44 @@ import com.example.fernando.relevamientosart.R;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
-
+import Excepciones.ValidationException;
 import Helpers.DBHelper;
+import Helpers.ValidacionHelper;
 import Modelo.Managers.WorkingManManager;
-import Modelo.Risk;
+import Modelo.RARResult;
 import Modelo.WorkingMan;
 
 public class RiskFragment extends Fragment {
 
     private static final String ARG_WORKING_MAN = "working_Man";
     private WorkingMan mWorkingMan;
+    private WorkingMan mWorkingManMock;
 
     private final Calendar myCalendar = Calendar.getInstance();
-    private final List<Risk> riesgos = new ArrayList<>();
 
     private OnRiskFragmentInteractionListener mListener;
+
+    private View.OnKeyListener OnBackListener = new View.OnKeyListener() {
+        @Override
+        public boolean onKey(View v, int keyCode, KeyEvent event) {
+            if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK){
+                guardarWorkingMen(
+                );
+                return true;
+            } else {
+                if(event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_ENTER) {
+                    InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
+                    getView().requestFocus();
+                    return true;
+                }
+            }
+            return false;
+        }
+    };
+
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -52,11 +76,22 @@ public class RiskFragment extends Fragment {
 
     @SuppressWarnings("unused")
     public static RiskFragment newInstance(WorkingMan workingMan) {
-        RiskFragment fragment = new RiskFragment();
+        final RiskFragment fragment = new RiskFragment();
         Bundle args = new Bundle();
         args.putSerializable(RiskFragment.ARG_WORKING_MAN, workingMan);
         fragment.setArguments(args);
+
         return fragment;
+    }
+
+    @Override
+    public void onResume() {
+
+        super.onResume();
+
+        getView().setFocusableInTouchMode(true);
+        getView().requestFocus();
+        getView().setOnKeyListener(OnBackListener);
     }
 
     @Override
@@ -65,6 +100,8 @@ public class RiskFragment extends Fragment {
 
         if (getArguments() != null) {
             mWorkingMan = (WorkingMan) getArguments().getSerializable(ARG_WORKING_MAN);
+            mWorkingManMock = new WorkingMan();
+            mWorkingManMock.fill(mWorkingMan);
         }
     }
 
@@ -85,20 +122,23 @@ public class RiskFragment extends Fragment {
         TextView tvFechaFin = view.findViewById(R.id.tv_worker_fechaFin);
 
 
-        tvNombre.setText(mWorkingMan.name);
-        tvApellido.setText(mWorkingMan.lastName);
-        tvCuil.setText(mWorkingMan.cuil);
+        tvNombre.setText(mWorkingManMock.name);
+        tvNombre.setOnKeyListener(OnBackListener);
+        tvApellido.setText(mWorkingManMock.lastName);
+        tvApellido.setOnKeyListener(OnBackListener);
+        tvCuil.setText(mWorkingManMock.cuil);
+        tvCuil.setOnKeyListener(OnBackListener);
 
-        if (mWorkingMan.checked_in_on != null)
-            tvFechaIngreso.setText(formatearFecha(mWorkingMan.checked_in_on));
+        if (mWorkingManMock.checked_in_on != null)
+            tvFechaIngreso.setText(formatearFecha(mWorkingManMock.checked_in_on));
 
-        if (mWorkingMan.exposed_from_at != null)
-            tvFechaInicio.setText(formatearFecha(mWorkingMan.exposed_from_at));
+        if (mWorkingManMock.exposed_from_at != null)
+            tvFechaInicio.setText(formatearFecha(mWorkingManMock.exposed_from_at));
 
-        if (mWorkingMan.exposed_until_at != null)
-            tvFechaFin.setText(formatearFecha(mWorkingMan.exposed_until_at));
+        if (mWorkingManMock.exposed_until_at != null)
+            tvFechaFin.setText(formatearFecha(mWorkingManMock.exposed_until_at));
 
-        recyclerView.setAdapter(new MyRiskRecyclerViewAdapter(mWorkingMan.riskList));
+        recyclerView.setAdapter(new MyRiskRecyclerViewAdapter(mWorkingManMock.riskList));
 
         cargarListenerFechaIngreso(view);
         cargarListenerFechaInicio(view);
@@ -108,7 +148,7 @@ public class RiskFragment extends Fragment {
             .setOnClickListener(new View.OnClickListener() {
                  @Override
                  public void onClick(View view) {
-                     mListener.onNewRiskFragmentInteraction(mWorkingMan);
+                     mListener.onNewRiskFragmentInteraction(mWorkingManMock);
                  }
              }
         );
@@ -218,13 +258,11 @@ public class RiskFragment extends Fragment {
         void onNewRiskFragmentInteraction(WorkingMan workingMan);
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
+    private void guardarWorkingMen() {
 
-        mWorkingMan.name = ((EditText)getView().findViewById(R.id.tv_worker_name)).getText().toString();
-        mWorkingMan.lastName = ((EditText)getView().findViewById(R.id.tv_worker_lastName)).getText().toString();
-        mWorkingMan.cuil = ((EditText)getView().findViewById(R.id.tv_worker_cuil)).getText().toString();
+        mWorkingManMock.name = ((EditText)getView().findViewById(R.id.tv_worker_name)).getText().toString();
+        mWorkingManMock.lastName = ((EditText)getView().findViewById(R.id.tv_worker_lastName)).getText().toString();
+        mWorkingManMock.cuil = ((EditText)getView().findViewById(R.id.tv_worker_cuil)).getText().toString();
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
 
@@ -234,22 +272,52 @@ public class RiskFragment extends Fragment {
             String fechaInicio = ((EditText)getView().findViewById(R.id.tv_worker_fechaInicio)).getText().toString();
             String fechaFin = ((EditText)getView().findViewById(R.id.tv_worker_fechaFin)).getText().toString();
 
-            if (!fechaIngreso.isEmpty()) mWorkingMan.checked_in_on = sdf.parse(fechaIngreso);
-            if(!fechaInicio.isEmpty()) mWorkingMan.exposed_from_at = sdf.parse(fechaInicio);
-            if(!fechaFin.isEmpty()) mWorkingMan.exposed_until_at = sdf.parse(fechaFin);
+            if (!fechaIngreso.isEmpty()) mWorkingManMock.checked_in_on = sdf.parse(fechaIngreso);
+            if (!fechaInicio.isEmpty()) mWorkingManMock.exposed_from_at = sdf.parse(fechaInicio);
+            if (!fechaFin.isEmpty()) mWorkingManMock.exposed_until_at = sdf.parse(fechaFin);
 
         } catch (ParseException ex){
             Toast.makeText(getActivity(), ex.getMessage(), Toast.LENGTH_SHORT).show();
         }
 
         DBHelper dbHelper = ((MainActivity)getActivity()).getHelper();
-
+        final WorkingManManager manager = new WorkingManManager(dbHelper);
         try {
-            new WorkingManManager(dbHelper).persist(mWorkingMan);
+            mWorkingManMock.Validar();
+            mWorkingMan.fill(mWorkingManMock);
+            manager.persist(mWorkingMan);
+            this.getActivity().onBackPressed();
+        }
+        catch (ValidationException ex){
+
+            final AlertDialog.Builder builder = new AlertDialog.Builder(this.getContext());
+
+            builder.setMessage(ex.getMessage())
+                    .setTitle(R.string.Validacion)
+                    .setPositiveButton(R.string.descartar, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                           getActivity().onBackPressed();
+                        }
+                    });
+            builder.setNegativeButton(R.string.editar, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    dialog.cancel();
+                }
+            });
+
+            AlertDialog dialog = builder.create();
+
+            dialog.show();
+
         }
         catch (SQLException ex){
             Toast.makeText(getActivity(), ex.getMessage(), Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
 
     }
 }

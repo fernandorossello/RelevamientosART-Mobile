@@ -21,6 +21,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import Excepciones.ValidationException;
 import Helpers.DBHelper;
 import Modelo.Attendee;
 import Modelo.CAPResult;
@@ -31,6 +32,7 @@ import Modelo.Managers.TaskManager;
 import Modelo.Result;
 import Modelo.Task;
 import Modelo.Visit;
+import Modelo.WorkingMan;
 
 public class ConstanciaCapacitacionFragment extends Fragment {
     private static final String ARG_TASK = "tarea";
@@ -82,6 +84,19 @@ public class ConstanciaCapacitacionFragment extends Fragment {
         RecyclerView recyclerView  = view.findViewById(R.id.attendeeList);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
 
+
+        List<Attendee> attendees = new ArrayList<>();
+        for (Attendee attendee : mResult.attendees) {
+            try{
+                attendee.Validar();
+                attendees.add(attendee);
+            }catch (ValidationException ex){
+                //NO lo agrega
+            }
+        }
+
+        mResult.attendees = attendees;
+
         recyclerView.setAdapter(new MyAttendeeRecyclerViewAdapter(mResult.attendees, mListener));
 
         FloatingActionButton btnAgregarAttendee = view.findViewById(R.id.btn_agregarAttendee);
@@ -123,6 +138,7 @@ public class ConstanciaCapacitacionFragment extends Fragment {
      */
     public interface OnNewAttendeeInteractionListener {
         void onNewAttendee(Attendee attendee);
+        void onBorrarTrabajador(Attendee mItem);
     }
 
     @Override
@@ -130,8 +146,6 @@ public class ConstanciaCapacitacionFragment extends Fragment {
         super.onDestroyView();
 
         DBHelper dbHelper = ((MainActivity)getActivity()).getHelper();
-
-        //Result result = new ResultManager(dbHelper).getResult(mTarea);
 
         mResult.courseName = ((EditText)getView().findViewById(R.id.tv_capr_course)).getText().toString();
         mResult.contents = ((EditText)getView().findViewById(R.id.tv_capr_content)).getText().toString();

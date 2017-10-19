@@ -43,4 +43,13 @@ public class WorkingManManager extends Manager<WorkingMan> {
 
         return trabajadores;
     }
+
+    public WorkingMan getById(int id) throws SQLException {
+        return dbHelper.getworkingManDao().queryForId(id);
+    }
+
+    public void delete(WorkingMan workingMan) throws SQLException {
+        dbHelper.getworkingManDao().delete(workingMan);
+    }
+
 }
