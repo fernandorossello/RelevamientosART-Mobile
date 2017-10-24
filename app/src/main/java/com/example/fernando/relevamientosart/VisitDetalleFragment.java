@@ -144,7 +144,7 @@ public class VisitDetalleFragment extends Fragment {
         menuItem.setVisible(true);
 
         }
-    
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
