@@ -88,11 +88,9 @@ public class VisitManager extends Manager<Visit> {
             priority = 2;
             to_visit_on = new Date(1,1,2017);
             tasks.add(tareaRGRL);
-            tasks.add(tareaCAP);
             tasks.add(tareaRAR);
             }};
         tareaRGRL.visit = visita1;
-        tareaCAP.visit = visita1;
         tareaRAR.visit = visita1;
 
         Visit visita2 = new Visit(){

@@ -13,7 +13,12 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import Modelo.Enums.EnumTareas;
 import Modelo.Institution;
+import Modelo.Task;
 import Modelo.Visit;
 
 public class VisitDetalleFragment extends Fragment {
@@ -126,22 +131,20 @@ public class VisitDetalleFragment extends Fragment {
      public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
                 super.onCreateOptionsMenu(menu, inflater);
 
-
         MenuItem menuItem = menu.findItem(R.id.action_rar);
-        menuItem.setVisible(true);
+        menuItem.setVisible(mVisit.tieneTarea(EnumTareas.RAR));
 
         menuItem = menu.findItem(R.id.action_rgrl);
-        menuItem.setVisible(true);
+        menuItem.setVisible(mVisit.tieneTarea(EnumTareas.RGRL));
 
         menuItem = menu.findItem(R.id.action_capacitacion);
-        menuItem.setVisible(true);
+        menuItem.setVisible(mVisit.tieneTarea(EnumTareas.CAPACITACION));
 
         menuItem = menu.findItem(R.id.action_constancia);
         menuItem.setVisible(true);
 
         }
-
-
+    
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
