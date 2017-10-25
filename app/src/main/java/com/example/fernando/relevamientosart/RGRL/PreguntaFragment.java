@@ -19,13 +19,16 @@ import com.example.fernando.relevamientosart.VisitDetalleFragment;
 
 import org.w3c.dom.Text;
 
+
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 import Helpers.DBHelper;
+import Modelo.Enums.EnumAnswer;
 import Modelo.Managers.QuestionManager;
 import Modelo.Managers.ResultManager;
 import Modelo.Question;
@@ -68,6 +71,7 @@ public class PreguntaFragment extends Fragment {
 
             if (result == null) {
                 mResult = new RGRLResult();
+                mResult.questions = new ArrayList<>(mQuestions);
                 mResult.task = mTarea;
             } else {
                 mResult = (RGRLResult) result;
@@ -86,39 +90,45 @@ public class PreguntaFragment extends Fragment {
         view.findViewById(R.id.tv_SI).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                limiteDeMaxima();
-                refreshQuestion(tv_pregunta);
+
+                ((List<Question>)mResult.questions).get(mIndexQuestion).answer = EnumAnswer.SI.id;
+
                 try {
                     new ResultManager(dbHelper).persist(mResult);
                 } catch (SQLException ex) {
                     Toast.makeText(getActivity(), ex.getMessage(), Toast.LENGTH_SHORT).show();
                 }
+                limiteDeMaxima();
+                refreshQuestion(tv_pregunta);
             }
         });
 
         view.findViewById(R.id.tv_NoAplica).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                limiteDeMaxima();
-                refreshQuestion(tv_pregunta);
+                ((List<Question>)mResult.questions).get(mIndexQuestion).answer = EnumAnswer.NOAPLICA.id;
                 try {
                     new ResultManager(dbHelper).persist(mResult);
                 } catch (SQLException ex) {
                     Toast.makeText(getActivity(), ex.getMessage(), Toast.LENGTH_SHORT).show();
                 }
+                limiteDeMaxima();
+                refreshQuestion(tv_pregunta);
             }
         });
 
         view.findViewById(R.id.tv_NO).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                limiteDeMaxima();
-                refreshQuestion(tv_pregunta);
+
+                ((List<Question>)mResult.questions).get(mIndexQuestion).answer = EnumAnswer.NO.id;
                 try {
                     new ResultManager(dbHelper).persist(mResult);
                 } catch (SQLException ex) {
                     Toast.makeText(getActivity(), ex.getMessage(), Toast.LENGTH_SHORT).show();
                 }
+                limiteDeMaxima();
+                refreshQuestion(tv_pregunta);
             }
         });
 

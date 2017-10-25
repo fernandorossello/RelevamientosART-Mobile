@@ -7,7 +7,8 @@ package Modelo.Enums;
 public enum EnumAnswer {
     SI(1,"Sí"),
     NO(2, "No"),
-    NOAPLICA(3, "No Aplica");
+    NOAPLICA(3, "No Aplica"),
+    NULL(-1, "NULL");
 
     public String name;
     public int id;

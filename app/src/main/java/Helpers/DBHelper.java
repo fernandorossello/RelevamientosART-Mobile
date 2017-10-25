@@ -65,6 +65,7 @@ public class DBHelper extends OrmLiteSqliteOpenHelper {
             TableUtils.createTable(connectionSource, Risk.class);
             TableUtils.createTable(connectionSource, Noise.class);
             TableUtils.createTable(connectionSource, Attendee.class);
+            TableUtils.createTable(connectionSource, Question.class);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
