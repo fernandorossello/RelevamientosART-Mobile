@@ -10,10 +10,11 @@ import Modelo.Enums.EnumAnswer;
 
 @DatabaseTable
 public class Question implements Serializable{
+
     @DatabaseField(foreign = true)
     public RGRLResult result;
 
-    @DatabaseField
+    @DatabaseField(id = true)
     public int id;
 
     @DatabaseField

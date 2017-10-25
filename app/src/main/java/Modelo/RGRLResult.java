@@ -21,6 +21,6 @@ public class RGRLResult extends Result implements Serializable{
         type = EnumTareas.RGRL.id;
     }
 
-
+    @ForeignCollectionField
     public Collection<Question> questions;
 }

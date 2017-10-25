@@ -84,7 +84,7 @@ public class PreguntaFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_pregunta, container, false);
 
-        final TextView tv_pregunta = (TextView) view.findViewById(R.id.tv_pregunta);
+        final TextView tv_pregunta = view.findViewById(R.id.tv_pregunta);
         refreshQuestion(tv_pregunta);
 
         view.findViewById(R.id.tv_SI).setOnClickListener(new View.OnClickListener() {
@@ -94,7 +94,7 @@ public class PreguntaFragment extends Fragment {
                 ((List<Question>)mResult.questions).get(mIndexQuestion).answer = EnumAnswer.SI.id;
 
                 try {
-                    new ResultManager(dbHelper).persist(mResult);
+                    new ResultManager(((MainActivity)getActivity()).getHelper()).persist(mResult);
                 } catch (SQLException ex) {
                     Toast.makeText(getActivity(), ex.getMessage(), Toast.LENGTH_SHORT).show();
                 }
