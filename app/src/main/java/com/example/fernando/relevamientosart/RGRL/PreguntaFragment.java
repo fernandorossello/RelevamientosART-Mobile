@@ -2,6 +2,7 @@ package com.example.fernando.relevamientosart.RGRL;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -12,6 +13,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.graphics.Color;
 
 import com.example.fernando.relevamientosart.MainActivity;
 import com.example.fernando.relevamientosart.R;
@@ -76,6 +78,7 @@ public class PreguntaFragment extends Fragment {
             } else {
                 mResult = (RGRLResult) result;
             }
+
         }
     }
 
@@ -137,6 +140,7 @@ public class PreguntaFragment extends Fragment {
             public void onClick(View view) {
                 limiteDeMaxima();
                 refreshQuestion(tv_pregunta);
+                refreshSelectedOption();
             }
         });
 
@@ -146,12 +150,27 @@ public class PreguntaFragment extends Fragment {
                 if (mIndexQuestion > 0)
                     mIndexQuestion--;
                 refreshQuestion(tv_pregunta);
+                refreshSelectedOption();
             }
         });
 
         cargarListenerFechaRegul(view);
 
         return view;
+    }
+
+    private void refreshSelectedOption() {
+        int color = Color.parseColor("#dadada");
+        getView().findViewById(R.id.tv_SI).setBackgroundColor(color);
+        getView().findViewById(R.id.tv_NoAplica).setBackgroundColor(color);
+        getView().findViewById(R.id.tv_NO).setBackgroundColor(color);
+        color = Color.parseColor("#0ae187");
+        if (((List<Question>)mResult.questions).get(mIndexQuestion).answer == EnumAnswer.SI.id)
+            getView().findViewById(R.id.tv_SI).setBackgroundColor(color);
+        if (((List<Question>)mResult.questions).get(mIndexQuestion).answer == EnumAnswer.NO.id)
+            getView().findViewById(R.id.tv_NO).setBackgroundColor(color);
+        if (((List<Question>)mResult.questions).get(mIndexQuestion).answer == EnumAnswer.NOAPLICA.id)
+            getView().findViewById(R.id.tv_NoAplica).setBackgroundColor(color);
     }
 
     private void limiteDeMaxima() {

@@ -14,7 +14,10 @@ public class Question implements Serializable{
     @DatabaseField(foreign = true)
     public RGRLResult result;
 
-    @DatabaseField(id = true)
+    @DatabaseField(generatedId = true)
+    public int idDB;
+
+    @DatabaseField//(id = true)
     public int id;
 
     @DatabaseField
