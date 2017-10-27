@@ -159,13 +159,10 @@ public class PreguntaFragment extends Fragment {
                     }
                 }
 
-
-
                 refreshQuestion(getView());
             }
         });
 
-        cargarListenerFechaRegul(view);
         refreshSelectedOption(view);
 
         return view;
@@ -206,6 +203,10 @@ public class PreguntaFragment extends Fragment {
         if(view != null) {
             TextView tv_pregunta = view.findViewById(R.id.tv_pregunta);
             tv_pregunta.setText(preguntaEnCurso.description);
+
+            TextView tv_categoria = view.findViewById(R.id.tv_categoria);
+            tv_categoria.setText(preguntaEnCurso.category);
+
             refreshSelectedOption(view);
         }
     }
@@ -219,38 +220,4 @@ public class PreguntaFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
     }
-
-    private void cargarListenerFechaRegul(View view) {
-        final EditText tvFechaRegul = view.findViewById(R.id.fechaRegul);
-        final DatePickerDialog.OnDateSetListener dateSetRegulListener = new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear,
-                                  int dayOfMonth) {
-                myCalendar.set(Calendar.YEAR, year);
-                myCalendar.set(Calendar.MONTH, monthOfYear);
-                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                updateLabel(tvFechaRegul);
-            }
-        };
-
-        tvFechaRegul.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new DatePickerDialog(v.getContext(), dateSetRegulListener , myCalendar
-                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
-            }
-        });
-    }
-
-    private void updateLabel(EditText editText) {
-        editText.setText(formatearFecha(myCalendar.getTime()));
-    }
-
-    private String formatearFecha(Date date){
-        String myFormat = "dd/MM/yy";
-        SimpleDateFormat sdf = new SimpleDateFormat(myFormat);
-        return sdf.format(date);
-    }
-
 }

@@ -6,8 +6,6 @@ import com.j256.ormlite.table.DatabaseTable;
 
 import java.io.Serializable;
 
-import Modelo.Enums.EnumAnswer;
-
 @DatabaseTable
 public class Question implements Serializable{
 
@@ -19,6 +17,9 @@ public class Question implements Serializable{
 
     @DatabaseField
     public int id;
+
+    @DatabaseField
+    public String category;
 
     @DatabaseField
     public String description;
