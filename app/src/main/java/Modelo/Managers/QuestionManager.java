@@ -9,6 +9,7 @@ import java.util.List;
 import Helpers.DBHelper;
 import Modelo.Enums.EnumAnswer;
 import Modelo.Question;
+import Modelo.RGRLResult;
 
 /**
  * Created by Tomás on 8/10/2017.
@@ -25,14 +26,14 @@ public class QuestionManager extends Manager<Question> {
     public void persist(Question item) throws SQLException {
         Dao daoque = dbHelper.getQuestionDao();
 
-        if (!daoque.idExists(item.id)) {
+        if (!daoque.idExists(item.idDB)) {
             daoque.create(item);
         } else {
             daoque.update(item);
         }
     }
 
-    public List<Question> questionsEjemplo() {
+    public List<Question> generarPreguntasParaResult(final RGRLResult rgrlResult) {
         List<Question> questions = new ArrayList<>();
 
         questions.add(new Question(){
@@ -40,6 +41,7 @@ public class QuestionManager extends Manager<Question> {
                 id = 1;
                 description = "¿Dispone del Servicio de Higiene y Seguridad?";
                 answer = EnumAnswer.NULL.id;
+                result = rgrlResult;
             }
         });
 
@@ -48,6 +50,7 @@ public class QuestionManager extends Manager<Question> {
                 id = 2;
                 description = "¿Posee documentación actualizada con registración de todas las acciones tendientes a cumplir la misión fundamental y los objetivos de prevención de riesgos, establecidos en la legislación vigente?";
                 answer = EnumAnswer.NULL.id;
+                result = rgrlResult;
             }
         });
 
@@ -56,6 +59,7 @@ public class QuestionManager extends Manager<Question> {
                 id = 3;
                 description = "¿Dispone del Servicio de Medicina del trabajo?";
                 answer = EnumAnswer.NULL.id;
+                result = rgrlResult;
             }
         });
 
@@ -64,6 +68,7 @@ public class QuestionManager extends Manager<Question> {
                 id = 4;
                 description = "¿Posee documentación actualizada con registración de todas las acciones tendientes a cumplir la misión fundamental, ejecutando acciones de educación sanitaria, socorro, vacunación y estudios de ausentismo por morbilidad?";
                 answer = EnumAnswer.NULL.id;
+                result = rgrlResult;
             }
         });
 
@@ -72,6 +77,7 @@ public class QuestionManager extends Manager<Question> {
                 id = 5;
                 description = "¿Se realizan los exámenes médicos periódicos?";
                 answer = EnumAnswer.NULL.id;
+                result = rgrlResult;
             }
         });
 

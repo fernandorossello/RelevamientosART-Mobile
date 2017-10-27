@@ -4,7 +4,6 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,13 +12,9 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.graphics.Color;
 
 import com.example.fernando.relevamientosart.MainActivity;
 import com.example.fernando.relevamientosart.R;
-import com.example.fernando.relevamientosart.VisitDetalleFragment;
-
-import org.w3c.dom.Text;
 
 
 import java.sql.SQLException;
@@ -27,7 +22,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
+import java.util.ListIterator;
 
 import Helpers.DBHelper;
 import Modelo.Enums.EnumAnswer;
@@ -37,16 +32,19 @@ import Modelo.Question;
 import Modelo.RGRLResult;
 import Modelo.Result;
 import Modelo.Task;
-import Modelo.Visit;
 
 public class PreguntaFragment extends Fragment {
 
     private static final String ARG_TASK = "tarea";
     private Task mTarea;
-    private List<Question> mQuestions;
-    private int mIndexQuestion = 0;
+
     private DBHelper dbHelper;
     private RGRLResult mResult;
+    private ResultManager mResultManager;
+    private QuestionManager mQuestionManager;
+
+    private ListIterator<Question> iterador;
+    private Question preguntaEnCurso;
 
     private final Calendar myCalendar = Calendar.getInstance();
 
@@ -68,17 +66,26 @@ public class PreguntaFragment extends Fragment {
         if (getArguments() != null) {
             mTarea = (Task) getArguments().getSerializable(ARG_TASK);
             dbHelper = ((MainActivity)getActivity()).getHelper();
-            mQuestions = new QuestionManager().questionsEjemplo();
-            Result result = new ResultManager(dbHelper).getResult(mTarea);
+
+            mResultManager = new ResultManager(dbHelper);
+            mQuestionManager = new QuestionManager(dbHelper);
+            Result result = mResultManager.getResult(mTarea);
 
             if (result == null) {
                 mResult = new RGRLResult();
-                mResult.questions = new ArrayList<>(mQuestions);
+                mResult.questions.addAll(mQuestionManager.generarPreguntasParaResult(mResult));
                 mResult.task = mTarea;
+                try {
+                    mResultManager.persist(mResult);
+                } catch (SQLException e) {
+                    Toast.makeText(getContext(), "Error al guardar el resultado", Toast.LENGTH_SHORT).show();
+                }
             } else {
                 mResult = (RGRLResult) result;
             }
 
+            iterador = (new ArrayList<>(mResult.questions)).listIterator();
+            preguntaEnCurso = iterador.next();
         }
     }
 
@@ -87,36 +94,35 @@ public class PreguntaFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_pregunta, container, false);
 
-        final TextView tv_pregunta = view.findViewById(R.id.tv_pregunta);
-        refreshQuestion(tv_pregunta);
+        refreshQuestion(view);
 
         view.findViewById(R.id.tv_SI).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                ((List<Question>)mResult.questions).get(mIndexQuestion).answer = EnumAnswer.SI.id;
+                preguntaEnCurso.answer = EnumAnswer.SI.id;
 
                 try {
-                    new ResultManager(((MainActivity)getActivity()).getHelper()).persist(mResult);
+                    mQuestionManager.persist(preguntaEnCurso);
                 } catch (SQLException ex) {
                     Toast.makeText(getActivity(), ex.getMessage(), Toast.LENGTH_SHORT).show();
                 }
-                limiteDeMaxima();
-                refreshQuestion(tv_pregunta);
+                avanzarASiguientePregunta();
             }
         });
 
         view.findViewById(R.id.tv_NoAplica).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((List<Question>)mResult.questions).get(mIndexQuestion).answer = EnumAnswer.NOAPLICA.id;
+
+                preguntaEnCurso.answer = EnumAnswer.NOAPLICA.id;
+
                 try {
-                    new ResultManager(dbHelper).persist(mResult);
+                    mQuestionManager.persist(preguntaEnCurso);
                 } catch (SQLException ex) {
                     Toast.makeText(getActivity(), ex.getMessage(), Toast.LENGTH_SHORT).show();
                 }
-                limiteDeMaxima();
-                refreshQuestion(tv_pregunta);
+                avanzarASiguientePregunta();
             }
         });
 
@@ -124,65 +130,85 @@ public class PreguntaFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
-                ((List<Question>)mResult.questions).get(mIndexQuestion).answer = EnumAnswer.NO.id;
+                preguntaEnCurso.answer = EnumAnswer.NO.id;
                 try {
-                    new ResultManager(dbHelper).persist(mResult);
+                    mQuestionManager.persist(preguntaEnCurso);
                 } catch (SQLException ex) {
                     Toast.makeText(getActivity(), ex.getMessage(), Toast.LENGTH_SHORT).show();
                 }
-                limiteDeMaxima();
-                refreshQuestion(tv_pregunta);
+                avanzarASiguientePregunta();
             }
         });
 
         view.findViewById(R.id.tv_siguiente).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                limiteDeMaxima();
-                refreshQuestion(tv_pregunta);
-                refreshSelectedOption();
+                avanzarASiguientePregunta();
             }
         });
 
         view.findViewById(R.id.tv_anterior).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mIndexQuestion > 0)
-                    mIndexQuestion--;
-                refreshQuestion(tv_pregunta);
-                refreshSelectedOption();
+                if (iterador.hasPrevious()) {
+                    Question pregunta = iterador.previous();
+                    if( pregunta == preguntaEnCurso) {
+                        preguntaEnCurso = iterador.previous();
+                    } else  {
+                        preguntaEnCurso = pregunta;
+                    }
+                }
+
+
+
+                refreshQuestion(getView());
             }
         });
 
         cargarListenerFechaRegul(view);
+        refreshSelectedOption(view);
 
         return view;
     }
 
-    private void refreshSelectedOption() {
+    private void refreshSelectedOption(View view) {
         int color = Color.parseColor("#dadada");
-        getView().findViewById(R.id.tv_SI).setBackgroundColor(color);
-        getView().findViewById(R.id.tv_NoAplica).setBackgroundColor(color);
-        getView().findViewById(R.id.tv_NO).setBackgroundColor(color);
+        view.findViewById(R.id.tv_SI).setBackgroundColor(color);
+        view.findViewById(R.id.tv_NoAplica).setBackgroundColor(color);
+        view.findViewById(R.id.tv_NO).setBackgroundColor(color);
         color = Color.parseColor("#0ae187");
-        if (((List<Question>)mResult.questions).get(mIndexQuestion).answer == EnumAnswer.SI.id)
-            getView().findViewById(R.id.tv_SI).setBackgroundColor(color);
-        if (((List<Question>)mResult.questions).get(mIndexQuestion).answer == EnumAnswer.NO.id)
-            getView().findViewById(R.id.tv_NO).setBackgroundColor(color);
-        if (((List<Question>)mResult.questions).get(mIndexQuestion).answer == EnumAnswer.NOAPLICA.id)
-            getView().findViewById(R.id.tv_NoAplica).setBackgroundColor(color);
+
+        int answer = preguntaEnCurso.answer;
+
+        if ( answer == EnumAnswer.SI.id)
+            view.findViewById(R.id.tv_SI).setBackgroundColor(color);
+        if ( answer == EnumAnswer.NO.id)
+            view.findViewById(R.id.tv_NO).setBackgroundColor(color);
+        if ( answer == EnumAnswer.NOAPLICA.id)
+            view.findViewById(R.id.tv_NoAplica).setBackgroundColor(color);
     }
 
-    private void limiteDeMaxima() {
-        if (mIndexQuestion < mQuestions.size() - 1)
-            mIndexQuestion++;
+    private void avanzarASiguientePregunta() {
+        if (iterador.hasNext()) {
+            Question pregunta = iterador.next();
+
+            if( pregunta == preguntaEnCurso) {
+                preguntaEnCurso = iterador.next();
+            } else  {
+                preguntaEnCurso = pregunta;
+            }
+
+        }
+        refreshQuestion(getView());
     }
 
-    private void refreshQuestion(TextView tv_pregunta) {
-        String q = mQuestions.get(mIndexQuestion).description;
-        tv_pregunta.setText(q);
+    private void refreshQuestion(View view) {
+        if(view != null) {
+            TextView tv_pregunta = view.findViewById(R.id.tv_pregunta);
+            tv_pregunta.setText(preguntaEnCurso.description);
+            refreshSelectedOption(view);
+        }
     }
-
 
     @Override
     public void onAttach(Context context) {
@@ -227,16 +253,4 @@ public class PreguntaFragment extends Fragment {
         return sdf.format(date);
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-
-        DBHelper dbHelper = ((MainActivity)getActivity()).getHelper();
-
-        try {
-            new ResultManager(dbHelper).persist(mResult);
-        } catch (SQLException ex) {
-            Toast.makeText(getActivity(), ex.getMessage(), Toast.LENGTH_SHORT).show();
-        }
-    }
 }

@@ -17,7 +17,7 @@ public class Question implements Serializable{
     @DatabaseField(generatedId = true)
     public int idDB;
 
-    @DatabaseField//(id = true)
+    @DatabaseField
     public int id;
 
     @DatabaseField
@@ -25,4 +25,9 @@ public class Question implements Serializable{
 
     @DatabaseField
     public int answer;
+
+    @Override
+    public boolean equals(Object obj) {
+        return this.id == ((Question)obj).id;
+    }
 }
