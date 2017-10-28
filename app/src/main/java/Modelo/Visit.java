@@ -74,4 +74,14 @@ public class Visit implements Serializable {
         return ret;
     }
 
+    public Boolean tieneTarea(EnumTareas tipo){
+
+        for (Task tarea : tasks) {
+            if (tarea.type == tipo.id){
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

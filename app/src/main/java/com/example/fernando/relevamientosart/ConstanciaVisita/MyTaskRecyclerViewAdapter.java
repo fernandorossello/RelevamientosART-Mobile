@@ -22,7 +22,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import Helpers.PDFHelper;
+import Modelo.Enums.EnumStatus;
 import Modelo.Managers.ResultManager;
+import Modelo.Result;
 import Modelo.Task;
 
 public class MyTaskRecyclerViewAdapter extends RecyclerView.Adapter<MyTaskRecyclerViewAdapter.ViewHolder> {
@@ -59,8 +61,14 @@ public class MyTaskRecyclerViewAdapter extends RecyclerView.Adapter<MyTaskRecycl
                      try{
                         if(garantizarPermisosDeEscritura()) {
                             ResultManager resultManager = new ResultManager(((MainActivity) view.getContext()).getHelper());
-                            new PDFHelper().crearPDF(resultManager.getResult(holder.mItem), holder.mItem);
-                            Toast.makeText(view.getContext(), R.string.pdfGenerado, Toast.LENGTH_SHORT).show();
+                            Result result = resultManager.getResult(holder.mItem);
+                            if(result != null && result.getStatus() == EnumStatus.FINALIZADA){
+                                new PDFHelper().crearPDF(result, holder.mItem);
+                                Toast.makeText(view.getContext(), R.string.pdfGenerado, Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(view.getContext(), R.string.tareaNoFinalizada, Toast.LENGTH_SHORT).show();
+                            }
+
                         }
                     }catch (Exception ex){
                         Toast.makeText(view.getContext(), ex.getMessage(), Toast.LENGTH_SHORT).show();

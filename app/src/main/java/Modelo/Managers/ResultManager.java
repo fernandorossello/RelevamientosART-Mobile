@@ -61,7 +61,6 @@ public class ResultManager extends Manager<Result> {
             if (!((RGRLResult)item).questions.isEmpty()) {
                 new QuestionManager(dbHelper).persist(((RGRLResult)item).questions);
             }
-
         }
     }
 
