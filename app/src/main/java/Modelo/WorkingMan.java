@@ -78,6 +78,8 @@ public class WorkingMan extends Employee implements Serializable {
             ValidacionHelper.FechaPosterior(exposed_until_at, new Date(),"fecha de fin");
         }
 
+        ValidacionHelper.NullOrEmpty(sector,"sector");
+
         if(risk_list.isEmpty()){
             throw new ValidationException("Debe seleccionar al menos un riesgo");
         }
@@ -95,6 +97,7 @@ public class WorkingMan extends Employee implements Serializable {
          riesgo.working_man = this;
         }
         this.risk_list = wm.risk_list;
+        this.sector = wm.sector;
     }
 
 }

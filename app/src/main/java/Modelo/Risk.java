@@ -17,6 +17,7 @@ public class Risk implements Serializable{
     @DatabaseField
     public String code;
 
+    @Expose
     @DatabaseField
     public String description;
 

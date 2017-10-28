@@ -20,6 +20,7 @@ public abstract class Result implements Serializable {
     @DatabaseField
     public int type;
 
+    @Expose
     @DatabaseField
     public Date completed_at;
 

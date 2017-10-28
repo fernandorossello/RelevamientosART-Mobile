@@ -20,15 +20,20 @@ public class Question implements Serializable{
     @DatabaseField
     public int id;
 
+    @Expose
     @DatabaseField
     public String category;
 
+    @Expose
     @DatabaseField
     public String description;
 
     @Expose
     @DatabaseField
-    public int answer;
+    public String answer;
+
+    @DatabaseField
+    public int answer_code;
 
     @Override
     public boolean equals(Object obj) {

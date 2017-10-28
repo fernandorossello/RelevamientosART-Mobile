@@ -15,10 +15,12 @@ import com.example.fernando.relevamientosart.R;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import Excepciones.ValidationException;
 import Helpers.DBHelper;
+import Modelo.Enums.EnumStatus;
 import Modelo.Enums.EnumTareas;
 import Modelo.Managers.ResultManager;
 import Modelo.RARResult;
@@ -132,6 +134,9 @@ public class RARFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         try {
+            if(mResult.getStatus() == EnumStatus.FINALIZADA){
+                mResult.completed_at = new Date();
+            }
             new ResultManager(dbHelper).persist(mResult);
         } catch (SQLException ex){
             Toast.makeText(getActivity(), ex.getMessage(), Toast.LENGTH_SHORT).show();

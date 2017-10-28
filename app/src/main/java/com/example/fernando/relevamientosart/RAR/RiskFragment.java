@@ -118,8 +118,10 @@ public class RiskFragment extends Fragment {
         TextView tvFechaIngreso = view.findViewById(R.id.tv_worker_fechaIngreso);
         TextView tvFechaInicio = view.findViewById(R.id.tv_worker_fechaInicio);
         TextView tvFechaFin = view.findViewById(R.id.tv_worker_fechaFin);
+        TextView tvSector = view.findViewById(R.id.tv_sector);
 
-
+        tvSector.setText(mWorkingManMock.sector);
+        tvSector.setOnKeyListener(OnBackListener);
         tvNombre.setText(mWorkingManMock.name);
         tvNombre.setOnKeyListener(OnBackListener);
         tvApellido.setText(mWorkingManMock.last_name);
@@ -263,6 +265,7 @@ public class RiskFragment extends Fragment {
         mWorkingManMock.name = ((EditText)getView().findViewById(R.id.tv_worker_name)).getText().toString();
         mWorkingManMock.last_name = ((EditText)getView().findViewById(R.id.tv_worker_lastName)).getText().toString();
         mWorkingManMock.cuil = ((EditText)getView().findViewById(R.id.tv_worker_cuil)).getText().toString();
+        mWorkingManMock.sector = ((EditText)getView().findViewById(R.id.tv_sector)).getText().toString();
 
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
@@ -287,6 +290,7 @@ public class RiskFragment extends Fragment {
             mWorkingManMock.Validar();
             mWorkingMan.fill(mWorkingManMock);
             manager.persist(mWorkingMan);
+
             this.getActivity().onBackPressed();
         }
         catch (ValidationException ex){

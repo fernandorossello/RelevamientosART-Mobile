@@ -21,6 +21,10 @@ public class Employee implements Serializable{
     @DatabaseField
     public String last_name;
 
+    @Expose
+    @DatabaseField
+    public String sector;
+
     @DatabaseField
     public String type;
 

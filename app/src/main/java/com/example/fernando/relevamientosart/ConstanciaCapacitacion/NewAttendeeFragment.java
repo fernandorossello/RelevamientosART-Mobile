@@ -91,6 +91,11 @@ public class NewAttendeeFragment extends Fragment {
         tv_cuil.setText(mAttendee.cuil);
         tv_cuil.setOnKeyListener(OnBackListener);
 
+
+        TextView tv_sector = (view.findViewById(R.id.tv_sector));
+        tv_sector.setText(mAttendee.sector);
+        tv_sector.setOnKeyListener(OnBackListener);
+
         return view;
     }
 
@@ -108,6 +113,7 @@ public class NewAttendeeFragment extends Fragment {
 
         Attendee attendee = new Attendee();
 
+        attendee.sector = ((EditText)getView().findViewById(R.id.tv_sector)).getText().toString();
         attendee.name = ((EditText)getView().findViewById(R.id.tv_worker_name)).getText().toString();
         attendee.last_name = ((EditText)getView().findViewById(R.id.tv_worker_lastName)).getText().toString();
         attendee.cuil = ((EditText)getView().findViewById(R.id.tv_worker_cuil)).getText().toString();

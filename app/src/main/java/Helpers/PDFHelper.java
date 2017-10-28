@@ -263,7 +263,7 @@ public class PDFHelper {
         titulo.setSpacingAfter(10f);
         document.add(titulo);
 
-        float[] columnWidths = {2, 2, 2, 2, 2, 2, 5};
+        float[] columnWidths = {2, 2, 2, 2, 2, 2, 2, 5};
         PdfPTable tabla = new PdfPTable(columnWidths);
         tabla.setWidthPercentage(100);
         tabla.addCell("Nombre");
@@ -272,6 +272,7 @@ public class PDFHelper {
         tabla.addCell("Fecha de ingreso");
         tabla.addCell("Fecha inicio exposición");
         tabla.addCell("Fecha fin exposición");
+        tabla.addCell("Sector");
         tabla.addCell("Códigos de agentes de riesgos");
 
         for (WorkingMan trabajador: result.working_men) {
@@ -281,6 +282,7 @@ public class PDFHelper {
             tabla.addCell(formatearFecha(trabajador.checked_in_on));
             tabla.addCell(formatearFecha(trabajador.exposed_from_at));
             tabla.addCell(trabajador.exposed_until_at != null ? formatearFecha(trabajador.exposed_until_at) : "");
+            tabla.addCell(trabajador.sector);
             tabla.addCell(trabajador.obtenerCodigosDeRiesgos());
         }
 
@@ -327,7 +329,6 @@ public class PDFHelper {
         curso.add(result.course_name);
         document.add(curso);
 
-
         Paragraph contenidos = new Paragraph();
         contenidos.add(new Chunk("Contenidos:",fontLabel));
         contenidos.add(result.contents);
@@ -342,15 +343,17 @@ public class PDFHelper {
         titulo.setSpacingAfter(10f);
         document.add(titulo);
 
-        PdfPTable tabla = new PdfPTable(3);
+        PdfPTable tabla = new PdfPTable(4);
         tabla.setWidthPercentage(100);
         tabla.addCell("Apellido y nombre");
-        tabla.addCell("N° Documento");
+        tabla.addCell("C.U.I.L.");
+        tabla.addCell("Sector");
         tabla.addCell("Firma");
 
         for (Attendee asistente :result.attendees) {
             tabla.addCell(asistente.nombreCompleto());
             tabla.addCell(asistente.cuil);
+            tabla.addCell(asistente.sector);
             tabla.addCell("");
         }
 
@@ -408,19 +411,19 @@ public class PDFHelper {
             tabla.addCell(String.valueOf(pregunta.id));
             tabla.addCell(pregunta.description);
 
-            if(pregunta.answer == EnumAnswer.SI.id) {
+            if(pregunta.answer_code == EnumAnswer.SI.id) {
                 tabla.addCell("X");
             } else {
                 tabla.addCell("");
             }
 
-            if(pregunta.answer == EnumAnswer.NO.id) {
+            if(pregunta.answer_code == EnumAnswer.NO.id) {
                 tabla.addCell("X");
             } else {
                 tabla.addCell("");
             }
 
-            if(pregunta.answer == EnumAnswer.NOAPLICA.id) {
+            if(pregunta.answer_code == EnumAnswer.NOAPLICA.id) {
                 tabla.addCell("X");
             } else {
                 tabla.addCell("");

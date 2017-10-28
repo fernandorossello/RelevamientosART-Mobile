@@ -39,7 +39,7 @@ public class RGRLResult extends Result implements Serializable{
 
         for (Question pregunta : questions) {
 
-            if(pregunta.answer == EnumAnswer.NULL.id){
+            if(pregunta.answer_code == EnumAnswer.NULL.id){
                 tieneSinContestar = true;
             } else {
                 tieneContestadas = true;

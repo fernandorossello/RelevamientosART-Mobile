@@ -104,5 +104,6 @@
     <string name="borrarTrabajador_Title">Borrar trabajador</string>
     <string name="trabajador_borrado">Se ha borrado el trabajador</string>
     <string name="tareaNoFinalizada">La tarea aún no se encuentra finalizada</string>
+    <string name="hint_sector_trabajador">Sector</string>
 
 </resources>

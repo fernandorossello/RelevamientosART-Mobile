@@ -26,6 +26,7 @@ import java.util.ListIterator;
 
 import Helpers.DBHelper;
 import Modelo.Enums.EnumAnswer;
+import Modelo.Enums.EnumStatus;
 import Modelo.Managers.QuestionManager;
 import Modelo.Managers.ResultManager;
 import Modelo.Question;
@@ -100,7 +101,8 @@ public class PreguntaFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
-                preguntaEnCurso.answer = EnumAnswer.SI.id;
+                preguntaEnCurso.answer_code = EnumAnswer.SI.id;
+                preguntaEnCurso.answer = EnumAnswer.SI.name;
 
                 try {
                     mQuestionManager.persist(preguntaEnCurso);
@@ -115,7 +117,8 @@ public class PreguntaFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
-                preguntaEnCurso.answer = EnumAnswer.NOAPLICA.id;
+                preguntaEnCurso.answer = EnumAnswer.NOAPLICA.name;
+                preguntaEnCurso.answer_code = EnumAnswer.NOAPLICA.id;
 
                 try {
                     mQuestionManager.persist(preguntaEnCurso);
@@ -130,7 +133,8 @@ public class PreguntaFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
-                preguntaEnCurso.answer = EnumAnswer.NO.id;
+                preguntaEnCurso.answer = EnumAnswer.NO.name;
+                preguntaEnCurso.answer_code = EnumAnswer.NO.id;
                 try {
                     mQuestionManager.persist(preguntaEnCurso);
                 } catch (SQLException ex) {
@@ -175,7 +179,7 @@ public class PreguntaFragment extends Fragment {
         view.findViewById(R.id.tv_NO).setBackgroundColor(color);
         color = Color.parseColor("#0ae187");
 
-        int answer = preguntaEnCurso.answer;
+        int answer = preguntaEnCurso.answer_code;
 
         if ( answer == EnumAnswer.SI.id)
             view.findViewById(R.id.tv_SI).setBackgroundColor(color);
@@ -219,5 +223,19 @@ public class PreguntaFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
+    }
+
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        try {
+            if(mResult.getStatus() == EnumStatus.FINALIZADA){
+                mResult.completed_at = new Date();
+            }
+            new ResultManager(dbHelper).persist(mResult);
+        } catch (SQLException ex){
+            Toast.makeText(getActivity(), ex.getMessage(), Toast.LENGTH_SHORT).show();
+        }
     }
 }
