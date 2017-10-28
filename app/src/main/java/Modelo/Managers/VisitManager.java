@@ -198,8 +198,15 @@ public class VisitManager extends Manager<Visit> {
     }
 
     public List<Visit> obtenerVisitasCompletadas() throws SQLException{
-        Dao visitDao = dbHelper.getVisitDao();
-        return visitDao.queryBuilder().where().eq("status", EnumStatus.FINALIZADA.id).query();
+
+        List<Visit> visitas = new ArrayList<>();
+        for (Visit visita : obtenerVisitasSincronizadas()) {
+            if (visita.status == EnumStatus.FINALIZADA.id) {
+                visitas.add(visita);
+            }
+        }
+
+        return visitas;
     }
 
     public void borrarVisita(Visit visit) throws SQLException {

@@ -63,7 +63,7 @@ public class WorkingMan extends Employee implements Serializable {
     public void Validar() throws ValidationException{
 
         ValidacionHelper.NullOrEmpty(name,"nombre");
-        ValidacionHelper.NullOrEmpty(lastName,"apellido");
+        ValidacionHelper.NullOrEmpty(last_name,"apellido");
         ValidacionHelper.CantidadCaracteres(cuil,11,"CUIL");
 
         ValidacionHelper.Null(checked_in_on,"fecha de ingreso");
@@ -78,7 +78,7 @@ public class WorkingMan extends Employee implements Serializable {
             ValidacionHelper.FechaPosterior(exposed_until_at, new Date(),"fecha de fin");
         }
 
-        if(riskList.isEmpty()){
+        if(risk_list.isEmpty()){
             throw new ValidationException("Debe seleccionar al menos un riesgo");
         }
     }
@@ -86,15 +86,15 @@ public class WorkingMan extends Employee implements Serializable {
     public void fill(WorkingMan wm) {
         this.cuil = wm.cuil;
         this.name = wm.name;
-        this.lastName = wm.lastName;
+        this.last_name = wm.last_name;
         this.exposed_from_at = wm.exposed_from_at;
         this.exposed_until_at = wm.exposed_until_at;
         this.checked_in_on = wm.checked_in_on;
         for (Risk riesgo :
-                wm.riskList) {
-         riesgo.workingMan = this;
+                wm.risk_list) {
+         riesgo.working_man = this;
         }
-        this.riskList = wm.riskList;
+        this.risk_list = wm.risk_list;
     }
 
 }

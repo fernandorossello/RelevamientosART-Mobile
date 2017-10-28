@@ -1,6 +1,7 @@
 package Modelo;
 
 
+import com.google.gson.annotations.Expose;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
@@ -15,6 +16,7 @@ public class Question implements Serializable{
     @DatabaseField(generatedId = true)
     public int idDB;
 
+    @Expose
     @DatabaseField
     public int id;
 
@@ -24,6 +26,7 @@ public class Question implements Serializable{
     @DatabaseField
     public String description;
 
+    @Expose
     @DatabaseField
     public int answer;
 

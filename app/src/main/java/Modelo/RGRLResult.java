@@ -6,6 +6,7 @@ import com.google.gson.GsonBuilder;
 import org.json.JSONObject;
 
 
+import com.google.gson.annotations.Expose;
 import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
 
@@ -27,6 +28,7 @@ public class RGRLResult extends Result implements Serializable{
         type = EnumTareas.RGRL.id;
     }
 
+    @Expose
     @ForeignCollectionField
     public Collection<Question> questions;
 
