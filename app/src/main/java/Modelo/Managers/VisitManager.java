@@ -12,7 +12,9 @@ import java.util.List;
 
 
 import Helpers.DBHelper;
+import Modelo.Enums.EnumStatus;
 import Modelo.Institution;
+import Modelo.Result;
 import Modelo.Task;
 import Modelo.Visit;
 
@@ -135,7 +137,48 @@ public class VisitManager extends Manager<Visit> {
     public List<Visit> obtenerVisitasSincronizadas() throws SQLException{
         Dao visitDao = dbHelper.getVisitDao();
         List<Visit> visitas = visitDao.queryForAll();
+
+        for (Visit visita : visitas) {
+            CompletarEstadoVisita(visita);
+        }
+        
         return visitas;
+    }
+
+    public void CompletarEstadoVisita(Visit visita) {
+
+        List<EnumStatus> estadosTareas = new ArrayList<>();
+        ResultManager resultManager =  new ResultManager(dbHelper);
+        for (Task tarea: visita.tasks) {
+            Result result = resultManager.getResult(tarea);
+            if(result == null){
+                estadosTareas.add(EnumStatus.PENDIENTE);
+            }else {
+                estadosTareas.add(result.getStatus());
+            }
+        }
+
+        Boolean tieneEnCurso = false;
+        Boolean tieneFinalizadas = false;
+        Boolean tienePendientes = false;
+
+        for (EnumStatus estado: estadosTareas) {
+            if(estado == EnumStatus.ENPROCESO){
+                tieneEnCurso = true;
+            } else if(estado == EnumStatus.FINALIZADA) {
+                tieneFinalizadas = true;
+            } else {
+                tienePendientes = true;
+            }
+        }
+
+        if(tieneEnCurso){
+            visita.status = EnumStatus.ENPROCESO.id;
+        } else if(tieneFinalizadas && !tienePendientes){
+            visita.status = EnumStatus.FINALIZADA.id;
+        } else {
+            visita.status = EnumStatus.PENDIENTE.id;
+        }
     }
 
 

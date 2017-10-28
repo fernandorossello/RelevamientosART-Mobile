@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.example.fernando.relevamientosart.VisitFragment.OnVisitSelectedListener;
 
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import Modelo.Enums.EnumStatus;
@@ -37,12 +38,10 @@ public class MyVisitRecyclerViewAdapter extends RecyclerView.Adapter<MyVisitRecy
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mListaVisitas.get(position);
         holder.mInstitutionNameView.setText(holder.mItem.institution.name);
-        holder.mFechaVisita.setText("17/08/2017");
 
-        if(holder.mItem.status != 0) {
-            EnumStatus status = EnumStatus.getById(holder.mItem.status);
-            Context context = holder.mInstitutionNameView.getContext();
-        }
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
+        holder.mFechaVisita.setText(sdf.format(holder.mItem.to_visit_on));
+        holder.mEstadoVisita.setText(EnumStatus.getById(holder.mItem.status).name);
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,6 +63,7 @@ public class MyVisitRecyclerViewAdapter extends RecyclerView.Adapter<MyVisitRecy
         public final TextView mInstitutionNameView;
         public final ImageView mBadge;
         public final TextView mFechaVisita;
+        public final TextView mEstadoVisita;
         public Visit mItem;
 
         public ViewHolder(View view) {
@@ -72,6 +72,7 @@ public class MyVisitRecyclerViewAdapter extends RecyclerView.Adapter<MyVisitRecy
             mInstitutionNameView = view.findViewById(R.id.nombreInstitucionVisita);
             mBadge = view.findViewById(R.id.iconoVisita);
             mFechaVisita = view.findViewById(R.id.fechaVisita);
+            mEstadoVisita = view.findViewById(R.id.tv_estadoVisita);
         }
 
         @Override

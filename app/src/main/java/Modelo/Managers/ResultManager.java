@@ -8,6 +8,7 @@ import Helpers.DBHelper;
 import Modelo.CAPResult;
 import Modelo.Enums.EnumTareas;
 import Modelo.RARResult;
+import Modelo.RGRLResult;
 import Modelo.Result;
 import Modelo.Task;
 
@@ -48,6 +49,19 @@ public class ResultManager extends Manager<Result> {
                 new AttendeeManager(dbHelper).persist(((CAPResult)item).attendees);
             }
         }
+
+        if(item.type == EnumTareas.RGRL.id) {
+            daoResult = dbHelper.getRGLRResultDao();
+            if (!daoResult.idExists(item.id)) {
+                daoResult.create(item);
+            }else{
+                daoResult.update(item);
+            }
+
+            if (!((RGRLResult)item).questions.isEmpty()) {
+                new QuestionManager(dbHelper).persist(((RGRLResult)item).questions);
+            }
+        }
     }
 
     public RARResult getRARResult(Task task) throws SQLException {
@@ -55,9 +69,14 @@ public class ResultManager extends Manager<Result> {
         return (RARResult)daoRARResult.queryBuilder().where().eq("task_id",task.id).queryForFirst();
     }
 
-    public CAPResult getCAPResult(Task task) throws  SQLException {
+    public CAPResult getCAPResult(Task task) throws SQLException {
         Dao daoCAPResult = dbHelper.getCAPResultDao();
         return (CAPResult)daoCAPResult.queryBuilder().where().eq("task_id",task.id).queryForFirst();
+    }
+
+    public RGRLResult getRGRLResult(Task task) throws SQLException {
+        Dao daoRGLRResult = dbHelper.getRGLRResultDao();
+        return (RGRLResult)daoRGLRResult.queryBuilder().where().eq("task_id",task.id).queryForFirst();
     }
 
     public Result getResult(Task task){
@@ -66,7 +85,10 @@ public class ResultManager extends Manager<Result> {
                 return getRARResult(task);
             }
             if (task.type == EnumTareas.CAPACITACION.id) {
-                return  getCAPResult(task);
+                return getCAPResult(task);
+            }
+            if (task.type == EnumTareas.RGRL.id) {
+                return getRGRLResult(task);
             }
         } catch (SQLException ex){}
 
