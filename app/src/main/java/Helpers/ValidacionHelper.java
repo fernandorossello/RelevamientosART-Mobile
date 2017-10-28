@@ -12,7 +12,7 @@ public class ValidacionHelper {
 
         //Si el campo está vacío arrojará una excepción.
         public static void NullOrEmpty(String texto,String nombreCampo) throws ValidationException{
-            if(texto == null || texto.isEmpty() || texto == " "){
+            if(texto == null || texto.trim().isEmpty()){
                 throw new EmptyException(nombreCampo);
             }
         }
