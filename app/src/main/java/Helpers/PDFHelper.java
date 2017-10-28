@@ -2,7 +2,10 @@ package Helpers;
 
 import android.os.Environment;
 import android.support.annotation.NonNull;
+import android.telephony.CellIdentityCdma;
 import android.util.Log;
+
+import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
@@ -24,14 +27,17 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Formatter;
 
 import Modelo.Attendee;
 import Modelo.CAPResult;
+import Modelo.Enums.EnumAnswer;
 import Modelo.Enums.EnumTareas;
 import Modelo.Institution;
 import Modelo.Noise;
+import Modelo.Question;
 import Modelo.RARResult;
 import Modelo.RGRLResult;
 import Modelo.Result;
@@ -377,6 +383,59 @@ public class PDFHelper {
     }
 
     private void contenidoRGRL(Document document, RGRLResult result) throws DocumentException {
+        Paragraph datosGenerales = new Paragraph("Cuestionario",fontSubtitulo);
+        datosGenerales.setSpacingAfter(10f);
+        document.add(datosGenerales);
+
+        float[] columnWidths = {0.5f,5,0.5f,0.5f,0.5f};
+        PdfPTable tabla = new PdfPTable(columnWidths);
+        tabla.setWidthPercentage(100);
+        tabla.addCell("N°");
+        tabla.addCell("Condiciones a cumplir");
+        tabla.addCell("SI");
+        tabla.addCell("NO");
+        tabla.addCell("N/A");
+
+        String categoria = "";
+
+        for (Question pregunta: result.questions)
+        {
+            if(!pregunta.category.equals(categoria)){
+                categoria = pregunta.category;
+                insertarLineaCategoria(tabla,categoria);
+            }
+
+            tabla.addCell(String.valueOf(pregunta.id));
+            tabla.addCell(pregunta.description);
+
+            if(pregunta.answer == EnumAnswer.SI.id) {
+                tabla.addCell("X");
+            } else {
+                tabla.addCell("");
+            }
+
+            if(pregunta.answer == EnumAnswer.NO.id) {
+                tabla.addCell("X");
+            } else {
+                tabla.addCell("");
+            }
+
+            if(pregunta.answer == EnumAnswer.NOAPLICA.id) {
+                tabla.addCell("X");
+            } else {
+                tabla.addCell("");
+            }
+        }
+
+        document.add(tabla);
+
     }
 
+    private void insertarLineaCategoria(PdfPTable tabla,String categoria) {
+        Phrase phrase = new Phrase(categoria);
+        PdfPCell cell = new PdfPCell(phrase);
+        cell.setColspan(5);
+        cell.setBackgroundColor(BaseColor.GRAY);
+        tabla.addCell(cell);
+    }
 }

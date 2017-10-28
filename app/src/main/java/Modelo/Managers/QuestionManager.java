@@ -42,7 +42,7 @@ public class QuestionManager extends Manager<Question> {
                 description = "¿Dispone del Servicio de Higiene y Seguridad?";
                 answer = EnumAnswer.NULL.id;
                 result = rgrlResult;
-                category = "Obligaciones del empleador";
+                category = "Servicio de Higiente y Seguridad en el trabajo";
             }
         });
 
@@ -52,7 +52,7 @@ public class QuestionManager extends Manager<Question> {
                 description = "¿Posee documentación actualizada con registración de todas las acciones tendientes a cumplir la misión fundamental y los objetivos de prevención de riesgos, establecidos en la legislación vigente?";
                 answer = EnumAnswer.NULL.id;
                 result = rgrlResult;
-                category = "Obligaciones del empleador";
+                category = "Servicio de Higiente y Seguridad en el trabajo";
             }
         });
 
@@ -62,7 +62,7 @@ public class QuestionManager extends Manager<Question> {
                 description = "¿Dispone del Servicio de Medicina del trabajo?";
                 answer = EnumAnswer.NULL.id;
                 result = rgrlResult;
-                category = "Obligaciones del empleador";
+                category = "Servicio de Medicina del trabajo";
             }
         });
 
@@ -72,7 +72,7 @@ public class QuestionManager extends Manager<Question> {
                 description = "¿Posee documentación actualizada con registración de todas las acciones tendientes a cumplir la misión fundamental, ejecutando acciones de educación sanitaria, socorro, vacunación y estudios de ausentismo por morbilidad?";
                 answer = EnumAnswer.NULL.id;
                 result = rgrlResult;
-                category = "Obligaciones del empleador";
+                category = "Servicio de Medicina del trabajo";
             }
         });
 
@@ -82,7 +82,7 @@ public class QuestionManager extends Manager<Question> {
                 description = "¿Se realizan los exámenes médicos periódicos?";
                 answer = EnumAnswer.NULL.id;
                 result = rgrlResult;
-                category = "Obligaciones del empleador";
+                category = "Servicio de Medicina del trabajo";
             }
         });
 
