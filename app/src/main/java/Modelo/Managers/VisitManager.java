@@ -169,7 +169,7 @@ public class VisitManager extends Manager<Visit> {
             }
         }
 
-        if(tieneEnCurso){
+        if(tieneEnCurso || (tieneFinalizadas && tienePendientes)){
             visita.status = EnumStatus.ENPROCESO.id;
         } else if(tieneFinalizadas && !tienePendientes){
             visita.status = EnumStatus.FINALIZADA.id;
