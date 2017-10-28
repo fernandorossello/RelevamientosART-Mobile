@@ -260,9 +260,9 @@ public class RiskFragment extends Fragment {
     private void guardarWorkingMen() {
 
 
-        mWorkingMan.name = ((EditText)getView().findViewById(R.id.tv_worker_name)).getText().toString();
-        mWorkingMan.last_name = ((EditText)getView().findViewById(R.id.tv_worker_lastName)).getText().toString();
-        mWorkingMan.cuil = ((EditText)getView().findViewById(R.id.tv_worker_cuil)).getText().toString();
+        mWorkingManMock.name = ((EditText)getView().findViewById(R.id.tv_worker_name)).getText().toString();
+        mWorkingManMock.last_name = ((EditText)getView().findViewById(R.id.tv_worker_lastName)).getText().toString();
+        mWorkingManMock.cuil = ((EditText)getView().findViewById(R.id.tv_worker_cuil)).getText().toString();
 
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
