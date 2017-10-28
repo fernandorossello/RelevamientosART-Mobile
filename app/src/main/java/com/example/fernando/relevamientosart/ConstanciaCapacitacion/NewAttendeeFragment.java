@@ -84,7 +84,7 @@ public class NewAttendeeFragment extends Fragment {
         tv_name.setOnKeyListener(OnBackListener);
 
         TextView tv_lastName = (view.findViewById(R.id.tv_worker_lastName));
-        tv_lastName.setText(mAttendee.lastName);
+        tv_lastName.setText(mAttendee.last_name);
         tv_lastName.setOnKeyListener(OnBackListener);
 
         TextView tv_cuil = (view.findViewById(R.id.tv_worker_cuil));
@@ -105,10 +105,11 @@ public class NewAttendeeFragment extends Fragment {
 
     private void guardarAttendee() {
 
+
         Attendee attendee = new Attendee();
 
         attendee.name = ((EditText)getView().findViewById(R.id.tv_worker_name)).getText().toString();
-        attendee.lastName = ((EditText)getView().findViewById(R.id.tv_worker_lastName)).getText().toString();
+        attendee.last_name = ((EditText)getView().findViewById(R.id.tv_worker_lastName)).getText().toString();
         attendee.cuil = ((EditText)getView().findViewById(R.id.tv_worker_cuil)).getText().toString();
 
         DBHelper dbHelper = ((MainActivity)getActivity()).getHelper();

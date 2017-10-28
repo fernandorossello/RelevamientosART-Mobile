@@ -1,5 +1,6 @@
 package Modelo;
 
+import com.google.gson.annotations.Expose;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
@@ -16,25 +17,29 @@ import Helpers.ValidacionHelper;
 public class WorkingMan extends Employee implements Serializable {
 
     public WorkingMan(){
-        if(riskList == null) {
-            riskList = new ArrayList<>();
+        if(risk_list == null) {
+            risk_list = new ArrayList<>();
         }
     }
 
+    @Expose
     @DatabaseField
     public Date checked_in_on;
 
+    @Expose
     @DatabaseField
     public Date exposed_from_at;
 
+    @Expose
     @DatabaseField
     public Date exposed_until_at;
 
     @DatabaseField(foreign = true)
     public RARResult result;
 
+    @Expose
     @ForeignCollectionField
-    public Collection<Risk> riskList;
+    public Collection<Risk> risk_list;
 
     @Override
     public boolean equals(Object other) {
@@ -48,7 +53,7 @@ public class WorkingMan extends Employee implements Serializable {
     public String obtenerCodigosDeRiesgos() {
         String codigos = "";
 
-        for (Risk riesgo: this.riskList) {
+        for (Risk riesgo: this.risk_list) {
             codigos += riesgo.code + "; ";
         }
 
@@ -58,7 +63,7 @@ public class WorkingMan extends Employee implements Serializable {
     public void Validar() throws ValidationException{
 
         ValidacionHelper.NullOrEmpty(name,"nombre");
-        ValidacionHelper.NullOrEmpty(lastName,"apellido");
+        ValidacionHelper.NullOrEmpty(last_name,"apellido");
         ValidacionHelper.CantidadCaracteres(cuil,11,"CUIL");
 
         ValidacionHelper.Null(checked_in_on,"fecha de ingreso");
@@ -73,7 +78,7 @@ public class WorkingMan extends Employee implements Serializable {
             ValidacionHelper.FechaPosterior(exposed_until_at, new Date(),"fecha de fin");
         }
 
-        if(riskList.isEmpty()){
+        if(risk_list.isEmpty()){
             throw new ValidationException("Debe seleccionar al menos un riesgo");
         }
     }
@@ -81,15 +86,15 @@ public class WorkingMan extends Employee implements Serializable {
     public void fill(WorkingMan wm) {
         this.cuil = wm.cuil;
         this.name = wm.name;
-        this.lastName = wm.lastName;
+        this.last_name = wm.last_name;
         this.exposed_from_at = wm.exposed_from_at;
         this.exposed_until_at = wm.exposed_until_at;
         this.checked_in_on = wm.checked_in_on;
         for (Risk riesgo :
-                wm.riskList) {
-         riesgo.workingMan = this;
+                wm.risk_list) {
+         riesgo.working_man = this;
         }
-        this.riskList = wm.riskList;
+        this.risk_list = wm.risk_list;
     }
 
 }

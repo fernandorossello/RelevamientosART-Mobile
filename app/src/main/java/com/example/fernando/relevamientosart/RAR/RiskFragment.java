@@ -6,8 +6,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -124,7 +122,7 @@ public class RiskFragment extends Fragment {
 
         tvNombre.setText(mWorkingManMock.name);
         tvNombre.setOnKeyListener(OnBackListener);
-        tvApellido.setText(mWorkingManMock.lastName);
+        tvApellido.setText(mWorkingManMock.last_name);
         tvApellido.setOnKeyListener(OnBackListener);
         tvCuil.setText(mWorkingManMock.cuil);
         tvCuil.setOnKeyListener(OnBackListener);
@@ -138,7 +136,8 @@ public class RiskFragment extends Fragment {
         if (mWorkingManMock.exposed_until_at != null)
             tvFechaFin.setText(formatearFecha(mWorkingManMock.exposed_until_at));
 
-        recyclerView.setAdapter(new MyRiskRecyclerViewAdapter(mWorkingManMock.riskList));
+
+        recyclerView.setAdapter(new MyRiskRecyclerViewAdapter(mWorkingMan.risk_list));
 
         cargarListenerFechaIngreso(view);
         cargarListenerFechaInicio(view);
@@ -260,9 +259,11 @@ public class RiskFragment extends Fragment {
 
     private void guardarWorkingMen() {
 
+
         mWorkingManMock.name = ((EditText)getView().findViewById(R.id.tv_worker_name)).getText().toString();
-        mWorkingManMock.lastName = ((EditText)getView().findViewById(R.id.tv_worker_lastName)).getText().toString();
+        mWorkingManMock.last_name = ((EditText)getView().findViewById(R.id.tv_worker_lastName)).getText().toString();
         mWorkingManMock.cuil = ((EditText)getView().findViewById(R.id.tv_worker_cuil)).getText().toString();
+
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
 

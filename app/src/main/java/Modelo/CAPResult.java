@@ -1,13 +1,12 @@
 package Modelo;
 
+import com.google.gson.annotations.Expose;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import Modelo.Enums.EnumStatus;
 import Modelo.Enums.EnumTareas;
@@ -23,26 +22,33 @@ public class CAPResult extends Result implements Serializable{
         type = EnumTareas.CAPACITACION.id;
     }
 
+
+    @Expose
     @ForeignCollectionField
     public Collection<Attendee> attendees;
 
+    @Expose
     @DatabaseField
-    public String courseName;
+    public String course_name;
 
+    @Expose
     @DatabaseField
     public String contents;
 
+    @Expose
     @DatabaseField
     public String methodology;
+
 
     @Override
     public EnumStatus getStatus() {
 
-        if(attendees.isEmpty() && methodology.trim().isEmpty() && courseName.trim().isEmpty() && contents.trim().isEmpty()){
+        if(attendees.isEmpty() && methodology.trim().isEmpty() && course_name.trim().isEmpty() && contents.trim().isEmpty()){
             return EnumStatus.PENDIENTE;
-        } else if(!attendees.isEmpty() && !methodology.trim().isEmpty() && !courseName.trim().isEmpty() && !contents.trim().isEmpty()){
+        } else if(!attendees.isEmpty() && !methodology.trim().isEmpty() && !course_name.trim().isEmpty() && !contents.trim().isEmpty()){
             return EnumStatus.FINALIZADA;
         }
         return EnumStatus.ENPROCESO;
     }
+
 }

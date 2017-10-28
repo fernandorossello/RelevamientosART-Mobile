@@ -28,6 +28,14 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.fernando.relevamientosart.ConstanciaCapacitacion.ConstanciaCapacitacionFragment;
 import com.example.fernando.relevamientosart.ConstanciaCapacitacion.NewAttendeeFragment;
 import com.example.fernando.relevamientosart.ConstanciaVisita.ImageFragment;
@@ -38,24 +46,41 @@ import com.example.fernando.relevamientosart.RAR.RiskFragment;
 import com.example.fernando.relevamientosart.ConstanciaVisita.ConstanciaVisitaFragment;
 import com.example.fernando.relevamientosart.RAR.RiskSelectorFragment;
 import com.example.fernando.relevamientosart.RGRL.PreguntaFragment;
+import com.google.gson.GsonBuilder;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import Helpers.DBHelper;
 import Modelo.Attendee;
 import Modelo.Enums.EnumTareas;
 import Modelo.Image;
+
+import Modelo.Managers.ResultManager;
+
 import Modelo.Managers.AttendeeManager;
+
 import Modelo.Managers.VisitManager;
 import Modelo.Managers.WorkingManManager;
 import Modelo.Noise;
+
+import Modelo.Result;
+
 import Modelo.RARResult;
+
 import Modelo.Task;
 import Modelo.Visit;
+import Modelo.VisitRecord;
 import Modelo.WorkingMan;
 
 public class MainActivity extends AppCompatActivity
@@ -76,6 +101,9 @@ public class MainActivity extends AppCompatActivity
     private static final String TAG_ATTENDEE_LIST = "AttendeeListTag";
     private final String TAG_FRAGMENT_MEDICION_RUIDO = "tag_frg_medicion_ruido";
 
+    private final String URL_ENDPOINT_VISITAS_LIST = "https://relevamientos-art.herokuapp.com/visits";
+    private final String URL_ENDPOINT_VISITAS_DETALLE = "https://relevamientos-art.herokuapp.com/visits";
+    private final String URL_ENDPOINT_RESULTADOS = "https://relevamientos-art.herokuapp.com/results";
 
     private DBHelper mDBHelper;
 
@@ -182,9 +210,14 @@ public class MainActivity extends AppCompatActivity
             return true;
         } else if (id == R.id.nav_sincronizar)
         {
-            //TODO: No lo pongo en un asynTask porque manejaremos asincronismo cuando agreguemos conexión con el endpoint
-            Toast.makeText(this, getString(R.string.msj_sincronizandoVisitas), Toast.LENGTH_SHORT).show();
-            sincronizarVisitas();
+            try {
+                Toast.makeText(this, getString(R.string.msj_sincronizandoVisitas), Toast.LENGTH_SHORT).show();
+                obtenerVisitasDesdeEnpoint();
+                sincronizarVisitas();
+                enviarVisitasCompletadas();
+            }catch (Exception e){
+                Toast.makeText(this, R.string.error_carga_visitas, Toast.LENGTH_SHORT).show();
+            }
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -227,6 +260,17 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mDBHelper != null) {
+            OpenHelperManager.releaseHelper();
+            mDBHelper = null;
+        }
+    }
+
+    //************************************************Interacción fragments************************************************
+
+    @Override
     public void OnVisitSelected(Visit visit) {
 
         mVisitaEnCurso = visit;
@@ -236,23 +280,6 @@ public class MainActivity extends AppCompatActivity
                 .replace(R.id.fragment_container, VisitDetalleFragment.newInstance(visit))
                 .addToBackStack(null)
                 .commit();
-        }
-
-    //************************************************DB HELPER************************************************
-    public DBHelper getHelper() {
-        if (mDBHelper == null) {
-            mDBHelper = OpenHelperManager.getHelper(this, DBHelper.class);
-        }
-        return mDBHelper;
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (mDBHelper != null) {
-            OpenHelperManager.releaseHelper();
-            mDBHelper = null;
-        }
     }
 
     @Override
@@ -400,7 +427,7 @@ public class MainActivity extends AppCompatActivity
             if (resultCode == RESULT_OK){
                 Image imagen = new Image(){{
                     visit = mVisitaEnCurso;
-                    URLImage = uriSavedImage.toString();
+                    url_image = uriSavedImage.toString();
                 }};
 
             mVisitaEnCurso.images.add(imagen);
@@ -442,7 +469,7 @@ public class MainActivity extends AppCompatActivity
         mVisitaEnCurso.images.remove(imagen);
 
         //TODO: Esto en realidad no lo está borrando, si nos queda tiempo revisarlo
-        new File(imagen.URLImage).delete();
+        new File(imagen.url_image).delete();
 
         if(mVisitaEnCurso.images.isEmpty()){
             getSupportFragmentManager().popBackStack();
@@ -505,5 +532,206 @@ public class MainActivity extends AppCompatActivity
                 .attach(frg)
                 .commit();
     }
+    //************************************************DB HELPER************************************************
 
+    public DBHelper getHelper() {
+        if (mDBHelper == null) {
+            mDBHelper = OpenHelperManager.getHelper(this, DBHelper.class);
+        }
+        return mDBHelper;
+    }
+
+    //************************************************ Endpoints ************************************************
+    private void obtenerVisitasDesdeEnpoint() {
+        try {
+            RequestQueue requestQueue = Volley.newRequestQueue(this);
+
+            Integer idUsuario = PreferenceManager.getDefaultSharedPreferences(this).getInt("idUsuario",-1);
+            String estadoVisita = "pending";
+
+            String URL = URL_ENDPOINT_VISITAS_LIST + "?user_id=" + idUsuario + "&status=" + estadoVisita;
+
+            final List<Integer>  idVisitas = new ArrayList<>();
+
+            JsonArrayRequest jsonRequest = new JsonArrayRequest
+                    (Request.Method.GET, URL, null, new Response.Listener<JSONArray>() {
+                        @Override
+                        public void onResponse(JSONArray response) {
+                            try {
+                                for(int i = 0; i < response.length(); i++){
+                                    JSONObject visitaJson= response.getJSONObject(i);
+                                    idVisitas.add(visitaJson.getInt("id"));
+                                }
+                                obtenerDetalleDeVisitas(idVisitas);
+
+                            } catch (JSONException e) {
+                                Toast.makeText(MainActivity.this, R.string.error_carga_visitas, Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }, new Response.ErrorListener() {
+
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            if (error.networkResponse.statusCode == 401) {
+                                Toast.makeText(MainActivity.this, R.string.error_carga_visitas, Toast.LENGTH_SHORT).show();
+                            }
+                            VolleyError err = error;
+                        }
+                    }){
+                @Override
+                public String getBodyContentType() {
+                    return "application/json; charset=utf-8";
+                }
+
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    Map<String,String> headers =  new HashMap<>();
+                    headers.put("Content-Type","application/json");
+                    headers.put("Accept","application/json");
+
+                    return headers;
+                }
+
+                @Override
+                public byte[] getBody(){
+                    return null;
+                }
+            };
+
+            requestQueue.add(jsonRequest);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void obtenerDetalleDeVisitas(List<Integer> idVisitas) {
+        for(int i = 0; i < idVisitas.size(); i++){
+
+            RequestQueue requestQueue = Volley.newRequestQueue(this);
+            final VisitManager managerVisitas = new VisitManager(this.getHelper());
+
+            String idBuscado = idVisitas.get(i).toString();
+
+            String URL = URL_ENDPOINT_VISITAS_DETALLE + "/" + idBuscado;
+
+            JsonObjectRequest jsonRequest = new JsonObjectRequest
+                    (Request.Method.GET,URL, null, new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            Visit visit = new GsonBuilder().create().fromJson(response.toString(), Visit.class);
+                            try {
+                                managerVisitas.persist(visit);
+                            } catch (SQLException e) {
+                                Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+
+                        }
+                    }, new Response.ErrorListener() {
+
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            if (error.networkResponse.statusCode == 401) {
+                                Toast.makeText(MainActivity.this, R.string.error_carga_visitas, Toast.LENGTH_SHORT).show();
+                            }
+                            VolleyError err = error;
+                        }
+                    }){
+                @Override
+                public String getBodyContentType() {
+                    return "application/json; charset=utf-8";
+                }
+
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    Map<String,String> headers =  new HashMap<>();
+                    headers.put("Content-Type","application/json");
+                    headers.put("Accept","application/json");
+
+                    return headers;
+                }
+
+                @Override
+                public byte[] getBody(){
+                    return null;
+                }
+            };
+            requestQueue.add(jsonRequest);
+        }
+    }
+
+    private void enviarVisitasCompletadas() throws SQLException {
+        VisitManager managerVisitas = new VisitManager(getHelper());
+        List<Visit> visitasCompletadas = managerVisitas.obtenerVisitasCompletadas();
+        for(int i = 0; i < visitasCompletadas.size(); i++){
+            enviarVisitaAEndpoint(visitasCompletadas.get(i));
+            //managerVisitas.borrarVisita(visitasCompletadas.get(i));
+        }
+    }
+
+    private void enviarVisitaAEndpoint(Visit visit) {
+        //Debe mandar todos los resultados y las imágenes
+        ResultManager resultManager =  new ResultManager(getHelper());
+        ArrayList<Task> tareas = new ArrayList<>(visit.tasks);
+
+        for(int i = 0; i < tareas.size() ; i++){
+            Result resultado = resultManager.getResult(tareas.get(i));
+            if (resultado != null) enviarResultado(resultado);
+        }
+
+        enviarConstanciaDeVisita(visit.visit_record);
+    }
+
+    private void enviarResultado(final Result resultado) {
+        try {
+            RequestQueue requestQueue = Volley.newRequestQueue(this);
+            String URL = URL_ENDPOINT_RESULTADOS;
+            JsonObjectRequest jsonRequest = new JsonObjectRequest
+                    (Request.Method.POST, URL, null, new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {}
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            if (error.networkResponse.statusCode == 401) {
+                                Toast.makeText(MainActivity.this, R.string.error_carga_visitas, Toast.LENGTH_SHORT).show();
+                            }
+                            VolleyError err = error;
+                        }
+                    }){
+                @Override
+                public String getBodyContentType() {
+                    return "application/json; charset=utf-8";
+                }
+
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    Map<String,String> headers =  new HashMap<>();
+                    headers.put("Content-Type","application/json");
+                    headers.put("Accept","application/json");
+
+                    return headers;
+                }
+
+                @Override
+                public byte[] getBody(){
+                    try {
+                        String prueba = resultado.toJson();
+                        return prueba.getBytes("utf-8");
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                        return null;
+                    }
+                }
+            };
+
+            requestQueue.add(jsonRequest);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void enviarConstanciaDeVisita(VisitRecord visitRecord) {
+    }
 }

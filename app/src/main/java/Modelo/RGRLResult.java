@@ -1,7 +1,15 @@
 package Modelo;
 
+
+import com.google.gson.GsonBuilder;
+
+import org.json.JSONObject;
+
+
+import com.google.gson.annotations.Expose;
 import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -20,6 +28,7 @@ public class RGRLResult extends Result implements Serializable{
         type = EnumTareas.RGRL.id;
     }
 
+    @Expose
     @ForeignCollectionField
     public Collection<Question> questions;
 

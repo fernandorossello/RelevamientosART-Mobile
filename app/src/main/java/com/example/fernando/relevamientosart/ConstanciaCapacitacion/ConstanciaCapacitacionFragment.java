@@ -1,7 +1,6 @@
 package com.example.fernando.relevamientosart.ConstanciaCapacitacion;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -25,10 +24,7 @@ import Excepciones.ValidationException;
 import Helpers.DBHelper;
 import Modelo.Attendee;
 import Modelo.CAPResult;
-import Modelo.Enums.EnumTareas;
-import Modelo.Managers.AttendeeManager;
 import Modelo.Managers.ResultManager;
-import Modelo.Managers.TaskManager;
 import Modelo.Result;
 import Modelo.Task;
 import Modelo.Visit;
@@ -77,7 +73,7 @@ public class ConstanciaCapacitacionFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_constancia_capacitacion, container, false);
 
-        ((TextView) view.findViewById(R.id.tv_capr_course)).setText(mResult.courseName);
+        ((TextView) view.findViewById(R.id.tv_capr_course)).setText(mResult.course_name);
         ((TextView) view.findViewById(R.id.tv_capr_content)).setText(mResult.contents);
         ((TextView) view.findViewById(R.id.tv_capr_methodology)).setText(mResult.methodology);
 
@@ -147,7 +143,7 @@ public class ConstanciaCapacitacionFragment extends Fragment {
 
         DBHelper dbHelper = ((MainActivity)getActivity()).getHelper();
 
-        mResult.courseName = ((EditText)getView().findViewById(R.id.tv_capr_course)).getText().toString();
+        mResult.course_name = ((EditText)getView().findViewById(R.id.tv_capr_course)).getText().toString();
         mResult.contents = ((EditText)getView().findViewById(R.id.tv_capr_content)).getText().toString();
         mResult.methodology = ((EditText)getView().findViewById(R.id.tv_capr_methodology)).getText().toString();
 

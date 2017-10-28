@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.example.fernando.relevamientosart.R;
 
@@ -38,7 +37,7 @@ public class MyImageRecyclerViewAdapter extends RecyclerView.Adapter<MyImageRecy
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
 
-        Uri uri = Uri.parse(mValues.get(position).URLImage);
+        Uri uri = Uri.parse(mValues.get(position).url_image);
 
 
         holder.mImageView.setImageURI(uri);

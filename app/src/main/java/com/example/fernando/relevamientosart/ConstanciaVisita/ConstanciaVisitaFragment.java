@@ -60,8 +60,8 @@ public class ConstanciaVisitaFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mVisit = (Visit)getArguments().getSerializable(ARG_visita);
-            if(mVisit.visitRecord == null){
-                mVisit.visitRecord = new VisitRecord();
+            if(mVisit.visit_record == null){
+                mVisit.visit_record = new VisitRecord();
             }
         }
     }
@@ -76,7 +76,7 @@ public class ConstanciaVisitaFragment extends Fragment {
         recyclerView.setAdapter(new MyTaskRecyclerViewAdapter(mVisit.tasks));
 
         EditText etObservaciones = view.findViewById(R.id.et_observaciones);
-        etObservaciones.setText(mVisit.visitRecord.observations);
+        etObservaciones.setText(mVisit.visit_record.observations);
 
 
         TextView tvVerFotos = view.findViewById(R.id.tv_ver_fotos);
@@ -143,9 +143,9 @@ public class ConstanciaVisitaFragment extends Fragment {
 
     private void guardarConstanciaDeVisita(View view) {
         EditText etObservaciones = ((View)view.getParent()).findViewById(R.id.et_observaciones);
-        mVisit.visitRecord.observations = etObservaciones.getText().toString();
+        mVisit.visit_record.observations = etObservaciones.getText().toString();
 
-        mVisit.visitRecord.completed_at = new Date();
+        mVisit.visit_record.completed_at = new Date();
 
 
         DBHelper dbHelper = ((MainActivity)view.getContext()).getHelper();

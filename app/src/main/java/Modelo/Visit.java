@@ -43,13 +43,10 @@ public class Visit implements Serializable {
     public Collection<Image> images;
 
     @DatabaseField(foreign = true,foreignAutoRefresh = true)
-    public VisitRecord visitRecord;
+    public VisitRecord visit_record;
 
     @DatabaseField
     public int status;
-
-    @DatabaseField
-    public Date postponed_at;
 
     @DatabaseField
     public Date to_visit_on;

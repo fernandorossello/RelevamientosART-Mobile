@@ -15,14 +15,10 @@ import com.itextpdf.text.ListItem;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
-import com.itextpdf.text.pdf.ColumnText;
-import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfPageEventHelper;
 import com.itextpdf.text.pdf.PdfWriter;
-
-import org.w3c.dom.DOMException;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -35,7 +31,6 @@ import Modelo.Attendee;
 import Modelo.CAPResult;
 import Modelo.Enums.EnumTareas;
 import Modelo.Institution;
-import Modelo.Managers.ResultManager;
 import Modelo.Noise;
 import Modelo.RARResult;
 import Modelo.RGRLResult;
@@ -106,7 +101,7 @@ public class PDFHelper {
         document.add(new Paragraph("Detalle anexo de observaciones",fontSubtitulo));
         document.add(new Paragraph("En la fecha se visita la empresa de referencia para brindar asistencia y asesoramiento técnico sobre legislación vigente en Higiene y Seguridad en el Trabajo, Ley de Riesgos del Trabajo - Ley 24557 -, como así también respecto de agentes de riesgo y la confección del Relevamiento de Agentes de Riesgos según el DEC PEN N°: 658/96 - Dispo. G P y C SRT N° 05/05.",fontTexto));
         document.add(new Paragraph("Se asesora en materia de capacitación y se hace entrega del material",fontTexto));
-        document.add(new Paragraph(visit.visitRecord.observations,fontTexto));
+        document.add(new Paragraph(visit.visit_record.observations,fontTexto));
         document.add(new Paragraph("Actividades realizadas:",fontSubtitulo));
 
 
@@ -273,9 +268,9 @@ public class PDFHelper {
         tabla.addCell("Fecha fin exposición");
         tabla.addCell("Códigos de agentes de riesgos");
 
-        for (WorkingMan trabajador: result.workingMen) {
+        for (WorkingMan trabajador: result.working_men) {
             tabla.addCell(trabajador.name);
-            tabla.addCell(trabajador.lastName);
+            tabla.addCell(trabajador.last_name);
             tabla.addCell(trabajador.cuil);
             tabla.addCell(formatearFecha(trabajador.checked_in_on));
             tabla.addCell(formatearFecha(trabajador.exposed_from_at));
@@ -323,8 +318,9 @@ public class PDFHelper {
 
         Paragraph curso = new Paragraph();
         curso.add(new Chunk("Curso:",fontLabel));
-        curso.add(result.courseName);
+        curso.add(result.course_name);
         document.add(curso);
+
 
         Paragraph contenidos = new Paragraph();
         contenidos.add(new Chunk("Contenidos:",fontLabel));

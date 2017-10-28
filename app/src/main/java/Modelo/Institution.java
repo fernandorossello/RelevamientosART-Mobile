@@ -45,15 +45,6 @@ public class Institution implements Serializable{
     public int workers_count;
 
     @DatabaseField
-    public int institutions_count;
-
-    @DatabaseField
-    public float latitude;
-
-    @DatabaseField
-    public float longitud;
-
-    @DatabaseField
     public String phone;
 
     @DatabaseField
@@ -67,7 +58,6 @@ public class Institution implements Serializable{
 
     @DatabaseField
     public String afip_cod;
-
 
     @DatabaseField(foreign = true)
     public Zone zone;

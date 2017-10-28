@@ -32,8 +32,8 @@ public class ResultManager extends Manager<Result> {
                 daoResult.update(item);
             }
 
-            if(!((RARResult)item).workingMen.isEmpty()){
-                new WorkingManManager(dbHelper).persist(((RARResult)item).workingMen);
+            if(!((RARResult)item).working_men.isEmpty()){
+                new WorkingManManager(dbHelper).persist(((RARResult)item).working_men);
             }
         }
 
@@ -80,18 +80,23 @@ public class ResultManager extends Manager<Result> {
     }
 
     public Result getResult(Task task){
+        Result result = null;
         try {
             if (task.type == EnumTareas.RAR.id) {
-                return getRARResult(task);
+                result = getRARResult(task);
             }
             if (task.type == EnumTareas.CAPACITACION.id) {
-                return getCAPResult(task);
+                result = getCAPResult(task);
             }
             if (task.type == EnumTareas.RGRL.id) {
-                return getRGRLResult(task);
+                result = getRGRLResult(task);
             }
         } catch (SQLException ex){}
 
-        return null;
+        if(result != null){
+            result.task = task;
+        }
+
+        return result;
     }
 }

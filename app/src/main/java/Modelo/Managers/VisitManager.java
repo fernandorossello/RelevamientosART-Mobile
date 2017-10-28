@@ -1,8 +1,5 @@
 package Modelo.Managers;
 
-import android.provider.ContactsContract;
-import android.widget.Toast;
-
 import com.j256.ormlite.dao.Dao;
 
 import java.sql.SQLException;
@@ -98,7 +95,7 @@ public class VisitManager extends Manager<Visit> {
         Visit visita2 = new Visit(){
             {this.id = 2;
             this.institution = institucion2;
-            this.status = 2;
+            this.status = EnumStatus.FINALIZADA.id;
             this.priority = 1;
             to_visit_on = new Date(1,2,2017);
             tasks.add(tareaRGRL1);
@@ -195,9 +192,25 @@ public class VisitManager extends Manager<Visit> {
             daoVisitas.update(item);
         }
 
-        if(item.visitRecord != null){
-            new VisitRecordManager(dbHelper).persist(item.visitRecord);
+        if(item.visit_record != null){
+            new VisitRecordManager(dbHelper).persist(item.visit_record);
         }
     }
 
+    public List<Visit> obtenerVisitasCompletadas() throws SQLException{
+
+        List<Visit> visitas = new ArrayList<>();
+        for (Visit visita : obtenerVisitasSincronizadas()) {
+            if (visita.status == EnumStatus.FINALIZADA.id) {
+                visitas.add(visita);
+            }
+        }
+
+        return visitas;
+    }
+
+    public void borrarVisita(Visit visit) throws SQLException {
+        Dao visitDao = dbHelper.getVisitDao();
+        visitDao.delete(visit);
+    }
 }

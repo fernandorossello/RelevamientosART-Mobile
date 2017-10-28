@@ -1,7 +1,9 @@
 package Modelo;
 
+import com.google.gson.annotations.Expose;
 import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
+
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -14,22 +16,21 @@ public class RARResult extends Result implements Serializable {
 
     public RARResult(){
 
-        if(workingMen == null) {
-            workingMen = new ArrayList<>();
+        if(working_men == null) {
+            working_men = new ArrayList<>();
         }
 
         type = EnumTareas.RAR.id;
     }
 
-    public String topic;
-
+    @Expose
     @ForeignCollectionField
-    public Collection<WorkingMan> workingMen;
+    public Collection<WorkingMan> working_men;
 
     @Override
     public EnumStatus getStatus() {
 
-        if(this.workingMen.isEmpty()){
+        if(this.working_men.isEmpty()){
             return EnumStatus.PENDIENTE;
         }
         return EnumStatus.FINALIZADA;

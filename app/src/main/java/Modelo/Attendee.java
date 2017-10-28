@@ -17,7 +17,7 @@ public class Attendee extends Employee implements Serializable {
     public void Validar() throws ValidationException {
 
         ValidacionHelper.NullOrEmpty(this.name,"nombre");
-        ValidacionHelper.NullOrEmpty(this.lastName,"apellido");
+        ValidacionHelper.NullOrEmpty(this.last_name,"apellido");
         ValidacionHelper.CantidadCaracteres(this.cuil,11,"cuil");
 
     }
@@ -25,6 +25,6 @@ public class Attendee extends Employee implements Serializable {
     public void fill(Attendee attendee) {
         this.cuil = attendee.cuil;
         this.name = attendee.name;
-        this.lastName = attendee.lastName;
+        this.last_name = attendee.last_name;
     }
 }

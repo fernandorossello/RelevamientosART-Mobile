@@ -4,13 +4,10 @@ import java.io.Serializable;
 
 public enum EnumStatus  implements Serializable{
 
-    PENDIENTE(1,"Pendiente"),
-    ASIGNADA(2, "Asignada"),
-    ENPROCESO(3, "En proceso"),
-    POSTERGADA(4, "Postergada"),
-    FINALIZADA(5,"Finalizada"),
-    ENVIADA(6,"Enviada"),
-    CANCELADA(7,"Cancelada");
+    PENDIENTE(0,"Pendiente"),
+    ASIGNADA(1, "Asignada"),
+    ENPROCESO(2, "En proceso"),
+    FINALIZADA(3,"Finalizada");
 
 
     public java.lang.String name;
