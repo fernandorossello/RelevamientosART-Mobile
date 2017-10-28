@@ -8,6 +8,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import Modelo.Enums.EnumStatus;
 import Modelo.Enums.EnumTareas;
 
 @DatabaseTable
@@ -21,8 +22,6 @@ public class CAPResult extends Result implements Serializable{
         type = EnumTareas.CAPACITACION.id;
     }
 
-    @DatabaseField
-    public int attendees_count;
 
     @Expose
     @ForeignCollectionField
@@ -39,5 +38,17 @@ public class CAPResult extends Result implements Serializable{
     @Expose
     @DatabaseField
     public String methodology;
+
+
+    @Override
+    public EnumStatus getStatus() {
+
+        if(attendees.isEmpty() && methodology.trim().isEmpty() && course_name.trim().isEmpty() && contents.trim().isEmpty()){
+            return EnumStatus.PENDIENTE;
+        } else if(!attendees.isEmpty() && !methodology.trim().isEmpty() && !course_name.trim().isEmpty() && !contents.trim().isEmpty()){
+            return EnumStatus.FINALIZADA;
+        }
+        return EnumStatus.ENPROCESO;
+    }
 
 }

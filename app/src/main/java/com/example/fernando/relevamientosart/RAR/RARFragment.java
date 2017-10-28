@@ -14,7 +14,10 @@ import com.example.fernando.relevamientosart.MainActivity;
 import com.example.fernando.relevamientosart.R;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
+import Excepciones.ValidationException;
 import Helpers.DBHelper;
 import Modelo.Enums.EnumTareas;
 import Modelo.Managers.ResultManager;
@@ -79,7 +82,22 @@ public class RARFragment extends Fragment {
         
         Context context = view.getContext();
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
+
+
+        List<WorkingMan> workingMen = new ArrayList<>();
+        for (WorkingMan wm : mResult.working_men) {
+            try{
+                wm.Validar();
+                workingMen.add(wm);
+            }catch (ValidationException ex){
+                //NO los agrega
+            }
+        }
+
+        mResult.working_men = workingMen;
+
         recyclerView.setAdapter(new MyTrabajadorRecyclerViewAdapter(mResult.working_men, mListener));
+
 
         view.findViewById(R.id.btn_agregarTrabajador).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,8 +121,7 @@ public class RARFragment extends Fragment {
                     + " must implement OnTrabajadoresFragmentInteractionListener");
         }
     }
-
-
+    
     @Override
     public void onDetach() {
         super.onDetach();
@@ -123,5 +140,6 @@ public class RARFragment extends Fragment {
 
     public interface OnTrabajadoresFragmentInteractionListener {
         void onTrabajadorSeleccionado(WorkingMan workingMan);
+        void onBorrarTrabajador(WorkingMan workingMan);
     }
 }

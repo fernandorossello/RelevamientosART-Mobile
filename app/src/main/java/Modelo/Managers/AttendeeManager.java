@@ -43,33 +43,11 @@ public class AttendeeManager extends Manager<Attendee> {
         return attendees;
     }
 
-    public List<Attendee> attendeesEjemplo(){
-        List<Attendee> attendees = new ArrayList<>();
-
-        attendees.add(new Attendee(){
-            {
-                name = "Fernando";
-                last_name = "Roselló";
-                cuil = "34898398";
-            }
-        });
-
-        attendees.add(new Attendee(){
-            {
-                name = "Tomás";
-                last_name = "Ramos";
-                cuil = "30989490";}
-        });
-
-        attendees.add(new Attendee(){
-            {
-                name = "Julieta";
-                last_name = "Feld";
-                cuil = "31552899";}
-        });
-
-        return attendees;
+    public Attendee getById(int id) throws SQLException {
+        return dbHelper.getAttendeeDao().queryForId(id);
     }
 
-
+    public void delete(Attendee attendee) throws SQLException {
+        dbHelper.getAttendeeDao().delete(attendee);
+    }
 }

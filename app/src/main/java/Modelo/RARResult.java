@@ -6,6 +6,8 @@ import com.j256.ormlite.table.DatabaseTable;
 
 import java.util.ArrayList;
 import java.util.Collection;
+
+import Modelo.Enums.EnumStatus;
 import Modelo.Enums.EnumTareas;
 import java.io.Serializable;
 
@@ -24,4 +26,14 @@ public class RARResult extends Result implements Serializable {
     @Expose
     @ForeignCollectionField
     public Collection<WorkingMan> working_men;
+
+    @Override
+    public EnumStatus getStatus() {
+
+        if(this.working_men.isEmpty()){
+            return EnumStatus.PENDIENTE;
+        }
+        return EnumStatus.FINALIZADA;
+
+    }
 }

@@ -95,4 +95,14 @@
     <string name="hint_nombre_contenidos">Contenidos</string>
     <string name="hint_nombre_metodologia">Metodologia Empleada</string>
 
+
+
+    <string name="descartar">Descartar</string>
+    <string name="editar">Editar</string>
+    <string name="Validacion">Validación</string>
+    <string name="borrarTrabajador">¿Desea borrar el trabajador seleccionado?</string>
+    <string name="borrarTrabajador_Title">Borrar trabajador</string>
+    <string name="trabajador_borrado">Se ha borrado el trabajador</string>
+    <string name="tareaNoFinalizada">La tarea aún no se encuentra finalizada</string>
+
 </resources>
