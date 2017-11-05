@@ -46,6 +46,10 @@ import com.example.fernando.relevamientosart.RAR.RiskFragment;
 import com.example.fernando.relevamientosart.ConstanciaVisita.ConstanciaVisitaFragment;
 import com.example.fernando.relevamientosart.RAR.RiskSelectorFragment;
 import com.example.fernando.relevamientosart.RGRL.PreguntaFragment;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.google.gson.GsonBuilder;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import org.json.JSONArray;
@@ -64,8 +68,11 @@ import java.util.Map;
 import Helpers.DBHelper;
 import Modelo.Attendee;
 import Modelo.Enums.EnumTareas;
+import Modelo.FirebaseFile;
 import Modelo.Image;
 
+import Modelo.Institution;
+import Modelo.Managers.ImageManager;
 import Modelo.Managers.ResultManager;
 
 import Modelo.Managers.AttendeeManager;
@@ -76,11 +83,8 @@ import Modelo.Noise;
 
 import Modelo.Result;
 
-import Modelo.RARResult;
-
 import Modelo.Task;
 import Modelo.Visit;
-import Modelo.VisitRecord;
 import Modelo.WorkingMan;
 
 public class MainActivity extends AppCompatActivity
@@ -104,6 +108,11 @@ public class MainActivity extends AppCompatActivity
     private final String URL_ENDPOINT_VISITAS_LIST = "https://relevamientos-art.herokuapp.com/visits";
     private final String URL_ENDPOINT_VISITAS_DETALLE = "https://relevamientos-art.herokuapp.com/visits";
     private final String URL_ENDPOINT_RESULTADOS = "https://relevamientos-art.herokuapp.com/results";
+    private final String URL_ENDPOINT_INSTITUCIONES = "https://relevamientos-art.herokuapp.com/institutions";
+    private final String URL_ENDPOINT_VISITA_ENVIO = "https://relevamientos-art.herokuapp.com/visits";
+
+    private StorageReference mStorageRef;
+
 
     private DBHelper mDBHelper;
 
@@ -129,6 +138,8 @@ public class MainActivity extends AppCompatActivity
         //Allow camera works in SDK targets above v24
         mBuilder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(mBuilder.build());
+
+        mStorageRef = FirebaseStorage.getInstance().getReference();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -388,6 +399,7 @@ public class MainActivity extends AppCompatActivity
 
                 String name = mVisitaEnCurso.institution.name +"_"  + timeStamp + "_";
                 photoFile = crearArchivoDeImagen(name);
+
             } catch (IOException ex) {
                 Toast.makeText(this, "Error al guardar la imagen", Toast.LENGTH_SHORT).show();
             }
@@ -427,10 +439,11 @@ public class MainActivity extends AppCompatActivity
             if (resultCode == RESULT_OK){
                 Image imagen = new Image(){{
                     visit = mVisitaEnCurso;
-                    url_image = uriSavedImage.toString();
+                    url_file = uriSavedImage.toString();
                 }};
-
             mVisitaEnCurso.images.add(imagen);
+
+            subirImagenAFirebase(imagen);
             }
 
             Fragment frg = getSupportFragmentManager().findFragmentByTag(TAG_CONSTANCIA_VISITA);
@@ -469,7 +482,7 @@ public class MainActivity extends AppCompatActivity
         mVisitaEnCurso.images.remove(imagen);
 
         //TODO: Esto en realidad no lo está borrando, si nos queda tiempo revisarlo
-        new File(imagen.url_image).delete();
+        new File(imagen.url_file).delete();
 
         if(mVisitaEnCurso.images.isEmpty()){
             getSupportFragmentManager().popBackStack();
@@ -619,7 +632,18 @@ public class MainActivity extends AppCompatActivity
                     (Request.Method.GET,URL, null, new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
+                            Institution institucion = null;
+                            try {
+                                int idInstitucion = response.getInt("id_institution");
+                                institucion = obtenerInstitucion(idInstitucion);
+                            } catch (JSONException e) {
+                                Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+
                             Visit visit = new GsonBuilder().create().fromJson(response.toString(), Visit.class);
+                            visit.institution = institucion;
+
+
                             try {
                                 managerVisitas.persist(visit);
                             } catch (SQLException e) {
@@ -660,6 +684,55 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    private Institution obtenerInstitucion(int idInstitucion) {
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+
+        String URL = URL_ENDPOINT_INSTITUCIONES + "/" + idInstitucion;
+
+        final Institution[] institution = new Institution[1];
+
+        JsonObjectRequest jsonRequest = new JsonObjectRequest
+                (Request.Method.GET,URL, null, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        institution[0] = new GsonBuilder().create().fromJson(response.toString(), Institution.class);
+
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        if (error.networkResponse.statusCode == 401) {
+                            Toast.makeText(MainActivity.this, R.string.error_carga_institucion, Toast.LENGTH_SHORT).show();
+                        }
+                        VolleyError err = error;
+                    }
+                }){
+            @Override
+            public String getBodyContentType() {
+                return "application/json; charset=utf-8";
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String,String> headers =  new HashMap<>();
+                headers.put("Content-Type","application/json");
+                headers.put("Accept","application/json");
+
+                return headers;
+            }
+
+            @Override
+            public byte[] getBody(){
+                return null;
+            }
+        };
+        requestQueue.add(jsonRequest);
+
+        return institution[0];
+    }
+
     private void enviarVisitasCompletadas() throws SQLException {
         VisitManager managerVisitas = new VisitManager(getHelper());
         List<Visit> visitasCompletadas = managerVisitas.obtenerVisitasCompletadas();
@@ -679,7 +752,7 @@ public class MainActivity extends AppCompatActivity
             if (resultado != null) enviarResultado(resultado);
         }
 
-        enviarConstanciaDeVisita(visit.visit_record);
+        enviarConstanciaDeVisita(visit);
     }
 
     private void enviarResultado(final Result resultado) {
@@ -732,6 +805,74 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    private void enviarConstanciaDeVisita(VisitRecord visitRecord) {
+    private void enviarConstanciaDeVisita(final Visit visit) {
+        try {
+            RequestQueue requestQueue = Volley.newRequestQueue(this);
+            String URL = URL_ENDPOINT_VISITA_ENVIO;
+            JsonObjectRequest jsonRequest = new JsonObjectRequest
+                    (Request.Method.POST, URL, null, new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {}
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            if (error.networkResponse.statusCode == 401) {
+                                Toast.makeText(MainActivity.this, R.string.error_carga_visitas, Toast.LENGTH_SHORT).show();
+                            }
+                            VolleyError err = error;
+                        }
+                    }){
+                @Override
+                public String getBodyContentType() {
+                    return "application/json; charset=utf-8";
+                }
+
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    Map<String,String> headers =  new HashMap<>();
+                    headers.put("Content-Type","application/json");
+                    headers.put("Accept","application/json");
+
+                    return headers;
+                }
+
+                @Override
+                public byte[] getBody(){
+                    try {
+                        String prueba = visit.toJson();
+                        return prueba.getBytes("utf-8");
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                        return null;
+                    }
+                }
+            };
+
+            requestQueue.add(jsonRequest);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
+
+    @SuppressWarnings("VisibleForTests")
+    public void subirImagenAFirebase(final FirebaseFile archivo) {
+        Uri uri = Uri.parse(archivo.url_file);
+        StorageReference imgRef = mStorageRef.child("images/" + archivo.obtenerNombreArchivo());
+        imgRef.putFile(uri)
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        // Get a URL to the uploaded content
+                        archivo.url_cloud = taskSnapshot.getDownloadUrl().toString();
+                        try {
+                            new ImageManager(getHelper()).persist((Image)archivo);
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+    }
+
+
 }

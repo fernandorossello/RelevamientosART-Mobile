@@ -29,7 +29,12 @@ public abstract class Result implements Serializable {
     public Task task;
 
     public String toJson() {
-        return new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create().toJson(this);
+        return new GsonBuilder()
+                .setPrettyPrinting()
+                .disableHtmlEscaping()
+                .excludeFieldsWithoutExposeAnnotation()
+                .create()
+                .toJson(this);
     }
 
     public abstract EnumStatus getStatus();

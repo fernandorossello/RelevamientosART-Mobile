@@ -37,7 +37,7 @@ public class MyImageRecyclerViewAdapter extends RecyclerView.Adapter<MyImageRecy
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
 
-        Uri uri = Uri.parse(mValues.get(position).url_image);
+        Uri uri = Uri.parse(mValues.get(position).url_file);
 
 
         holder.mImageView.setImageURI(uri);

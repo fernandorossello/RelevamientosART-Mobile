@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "967216467930",
+    "firebase_url": "https://artmobile-8886e.firebaseio.com",
+    "project_id": "artmobile-8886e",
+    "storage_bucket": "artmobile-8886e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:967216467930:android:b67ecb6c21b115e3",
+        "android_client_info": {
+          "package_name": "com.example.fernando.relevamientosart"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "967216467930-eci7g8bv90ive52btr20pcvimcc285s2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.fernando.relevamientosart",
+            "certificate_hash": "6691271918b5e51986c41bf225526b1bc48b3299"
+          }
+        },
+        {
+          "client_id": "967216467930-92sa861uv68ssk0s6qhq1j37i1pc9h18.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDq3LliOMP03Puftp7WZA0vnXj9UVX0sfs"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "967216467930-92sa861uv68ssk0s6qhq1j37i1pc9h18.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

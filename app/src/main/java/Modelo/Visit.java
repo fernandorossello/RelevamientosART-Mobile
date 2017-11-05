@@ -1,5 +1,7 @@
 package Modelo;
 
+import com.google.gson.GsonBuilder;
+import com.google.gson.annotations.Expose;
 import com.j256.ormlite.dao.EagerForeignCollection;
 import com.j256.ormlite.dao.ForeignCollection;
 import com.j256.ormlite.dao.LazyForeignCollection;
@@ -24,6 +26,7 @@ public class Visit implements Serializable {
         noises = new ArrayList<>();
     }
 
+    @Expose
     @DatabaseField(id = true)
     public int id;
 
@@ -39,9 +42,11 @@ public class Visit implements Serializable {
     @ForeignCollectionField
     public Collection<Task> tasks;
 
+    @Expose
     @ForeignCollectionField
     public Collection<Image> images;
 
+    @Expose
     @DatabaseField(foreign = true,foreignAutoRefresh = true)
     public VisitRecord visit_record;
 
@@ -51,6 +56,7 @@ public class Visit implements Serializable {
     @DatabaseField
     public Date to_visit_on;
 
+    @Expose
     @ForeignCollectionField
     public Collection<Noise> noises;
 
@@ -81,4 +87,12 @@ public class Visit implements Serializable {
         return false;
     }
 
+    public String toJson() {
+        return new GsonBuilder()
+                    .setPrettyPrinting()
+                    .disableHtmlEscaping()
+                    .excludeFieldsWithoutExposeAnnotation()
+                    .create()
+                    .toJson(this);
+    }
 }

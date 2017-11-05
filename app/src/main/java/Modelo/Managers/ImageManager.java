@@ -20,6 +20,8 @@ public class ImageManager extends Manager<Image> {
 
         if (!daoImagenes.idExists(item.id)) {
             daoImagenes.create(item);
+        } else {
+            daoImagenes.update(item);
         }
     }
 }
