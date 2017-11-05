@@ -26,13 +26,13 @@ public class VisitManager extends Manager<Visit> {
 
         List<Visit> lista = new ArrayList<>();
 
-        final Task tareaRAR = new Task(){{id = 1; type = 1;}};
-        final Task tareaRGRL = new Task(){{id = 2; type = 2;}};
-        final Task tareaCAP = new Task(){{id = 3; type = 3;}};
+        final Task tareaRAR = new Task(){{id = 1; task_type = 1;}};
+        final Task tareaRGRL = new Task(){{id = 2; task_type = 2;}};
+        final Task tareaCAP = new Task(){{id = 3; task_type = 3;}};
 
-        final Task tareaRAR1 = new Task(){{id = 4; type = 1;}};
-        final Task tareaRGRL1 = new Task(){{id = 5; type = 2;}};
-        final Task tareaCAP1 = new Task(){{id = 6; type = 3;}};
+        final Task tareaRAR1 = new Task(){{id = 4; task_type = 1;}};
+        final Task tareaRGRL1 = new Task(){{id = 5; task_type = 2;}};
+        final Task tareaCAP1 = new Task(){{id = 6; task_type = 3;}};
 
         final Institution institucion = new Institution()
         {{  id = 1;
@@ -184,6 +184,11 @@ public class VisitManager extends Manager<Visit> {
         Dao daoVisitas = dbHelper.getVisitDao();
 
         new InstitutionManager(dbHelper).persist(item.institution);
+
+        for (Task tarea: item.tasks) {
+            tarea.visit = item;
+        }
+
         new TaskManager(dbHelper).persist(item.tasks);
 
         if (!daoVisitas.idExists(item.id)) {

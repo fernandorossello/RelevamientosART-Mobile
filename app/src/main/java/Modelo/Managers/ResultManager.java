@@ -82,13 +82,13 @@ public class ResultManager extends Manager<Result> {
     public Result getResult(Task task){
         Result result = null;
         try {
-            if (task.type == EnumTareas.RAR.id) {
+            if (task.task_type == EnumTareas.RAR.id) {
                 result = getRARResult(task);
             }
-            if (task.type == EnumTareas.CAPACITACION.id) {
+            if (task.task_type == EnumTareas.CAPACITACION.id) {
                 result = getCAPResult(task);
             }
-            if (task.type == EnumTareas.RGRL.id) {
+            if (task.task_type == EnumTareas.RGRL.id) {
                 result = getRGRLResult(task);
             }
         } catch (SQLException ex){}

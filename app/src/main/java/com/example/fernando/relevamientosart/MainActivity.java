@@ -224,11 +224,12 @@ public class MainActivity extends AppCompatActivity
             try {
                 Toast.makeText(this, getString(R.string.msj_sincronizandoVisitas), Toast.LENGTH_SHORT).show();
                 obtenerVisitasDesdeEnpoint();
-                sincronizarVisitas();
+                //generarVisitasDePrueba();
                 enviarVisitasCompletadas();
             }catch (Exception e){
                 Toast.makeText(this, R.string.error_carga_visitas, Toast.LENGTH_SHORT).show();
             }
+
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -236,19 +237,23 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    private void sincronizarVisitas() {
+    private void generarVisitasDePrueba() {
+
         VisitManager managerVisitas = new VisitManager(this.getHelper());
         List<Visit> visitas = managerVisitas.simuladorParaTraerVisitasDelEndpoint();
         try {
             managerVisitas.persist(visitas);
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.fragment_container,new VisitFragment())
-                    .commit();
         }
         catch (SQLException e){
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void RecargarListaDeVisitas(){
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container,new VisitFragment())
+                .commit();
     }
 
     private void borrarDatos(){
@@ -560,7 +565,7 @@ public class MainActivity extends AppCompatActivity
             RequestQueue requestQueue = Volley.newRequestQueue(this);
 
             Integer idUsuario = PreferenceManager.getDefaultSharedPreferences(this).getInt("idUsuario",-1);
-            String estadoVisita = "pending";
+            String estadoVisita = "assigned";
 
             String URL = URL_ENDPOINT_VISITAS_LIST + "?user_id=" + idUsuario + "&status=" + estadoVisita;
 
@@ -622,8 +627,6 @@ public class MainActivity extends AppCompatActivity
         for(int i = 0; i < idVisitas.size(); i++){
 
             RequestQueue requestQueue = Volley.newRequestQueue(this);
-            final VisitManager managerVisitas = new VisitManager(this.getHelper());
-
             String idBuscado = idVisitas.get(i).toString();
 
             String URL = URL_ENDPOINT_VISITAS_DETALLE + "/" + idBuscado;
@@ -634,22 +637,12 @@ public class MainActivity extends AppCompatActivity
                         public void onResponse(JSONObject response) {
                             Institution institucion = null;
                             try {
-                                int idInstitucion = response.getInt("id_institution");
-                                institucion = obtenerInstitucion(idInstitucion);
+                                int idInstitucion = response.getInt("institution_id");
+                                Visit visit = new GsonBuilder().create().fromJson(response.toString(), Visit.class);
+                                completarInstitucion(visit, idInstitucion);
                             } catch (JSONException e) {
                                 Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                             }
-
-                            Visit visit = new GsonBuilder().create().fromJson(response.toString(), Visit.class);
-                            visit.institution = institucion;
-
-
-                            try {
-                                managerVisitas.persist(visit);
-                            } catch (SQLException e) {
-                                Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                            }
-
                         }
                     }, new Response.ErrorListener() {
 
@@ -684,19 +677,24 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    private Institution obtenerInstitucion(int idInstitucion) {
+    private void completarInstitucion(final Visit visit, int idInstitucion) {
         RequestQueue requestQueue = Volley.newRequestQueue(this);
+        final VisitManager managerVisitas = new VisitManager(this.getHelper());
 
         String URL = URL_ENDPOINT_INSTITUCIONES + "/" + idInstitucion;
-
-        final Institution[] institution = new Institution[1];
 
         JsonObjectRequest jsonRequest = new JsonObjectRequest
                 (Request.Method.GET,URL, null, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
 
-                        institution[0] = new GsonBuilder().create().fromJson(response.toString(), Institution.class);
+                        visit.institution = new GsonBuilder().create().fromJson(response.toString(), Institution.class);
+                        try {
+                            managerVisitas.persist(visit);
+                            RecargarListaDeVisitas();
+                        } catch (SQLException e) {
+                            Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
 
                     }
                 }, new Response.ErrorListener() {
@@ -729,8 +727,6 @@ public class MainActivity extends AppCompatActivity
             }
         };
         requestQueue.add(jsonRequest);
-
-        return institution[0];
     }
 
     private void enviarVisitasCompletadas() throws SQLException {

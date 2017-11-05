@@ -2,9 +2,6 @@ package Modelo;
 
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
-import com.j256.ormlite.dao.EagerForeignCollection;
-import com.j256.ormlite.dao.ForeignCollection;
-import com.j256.ormlite.dao.LazyForeignCollection;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
@@ -13,7 +10,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-import java.util.List;
 
 import Modelo.Enums.EnumTareas;
 
@@ -64,7 +60,7 @@ public class Visit implements Serializable {
         Task ret = null;
 
         for (Task tarea : tasks) {
-            if (tarea.type == tipo.id){
+            if (tarea.task_type == tipo.id){
                 ret = tarea;
                 break;
             }
@@ -80,7 +76,7 @@ public class Visit implements Serializable {
     public Boolean tieneTarea(EnumTareas tipo){
 
         for (Task tarea : tasks) {
-            if (tarea.type == tipo.id){
+            if (tarea.task_type == tipo.id){
                 return true;
             }
         }

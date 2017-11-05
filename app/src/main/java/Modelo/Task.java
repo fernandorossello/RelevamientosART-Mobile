@@ -15,7 +15,7 @@ public class Task implements Serializable {
 
     @Expose
     @DatabaseField
-    public int type;
+    public int task_type;
 
     @DatabaseField
     public int status;
@@ -24,11 +24,11 @@ public class Task implements Serializable {
     public Visit visit;
 
     public String getTypeName(){
-        return EnumTareas.getById(this.type).name;
+        return EnumTareas.getById(this.task_type).name;
     };
 
     public String getTypeShortName(){
-        return EnumTareas.getById(this.type).shortName;
+        return EnumTareas.getById(this.task_type).shortName;
     };
 
 }

@@ -2,7 +2,6 @@ package Helpers;
 
 import android.os.Environment;
 import android.support.annotation.NonNull;
-import android.telephony.CellIdentityCdma;
 import android.util.Log;
 
 import com.itextpdf.text.BaseColor;
@@ -27,7 +26,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Formatter;
 
@@ -55,7 +53,7 @@ public class PDFHelper {
     //Se utiliza para generar los PDF de cada tarea
     public void crearPDF(Result result,Task tarea) throws IOException, DocumentException {
         Document document;
-        if(tarea.type == EnumTareas.RAR.id) {
+        if(tarea.task_type == EnumTareas.RAR.id) {
             document = new Document(PageSize.A4.rotate());
         } else {
             document = new Document(PageSize.A4);
@@ -73,12 +71,12 @@ public class PDFHelper {
         document.add(titulo);
         generarCabeceraVisita(tarea.visit, document);
 
-        if(tarea.type == EnumTareas.RAR.id){
+        if(tarea.task_type == EnumTareas.RAR.id){
             contenidoRAR(document,(RARResult) result);
             writer.setPageEvent(new FooterRAR());
-        } else if (tarea.type == EnumTareas.RGRL.id){
+        } else if (tarea.task_type == EnumTareas.RGRL.id){
             contenidoRGRL(document,(RGRLResult) result);
-        } else if (tarea.type == EnumTareas.CAPACITACION.id) {
+        } else if (tarea.task_type == EnumTareas.CAPACITACION.id) {
             contenidoCapacitacion(document,(CAPResult)result);
             writer.setPageEvent(new FooterCapacitacion());
         }
