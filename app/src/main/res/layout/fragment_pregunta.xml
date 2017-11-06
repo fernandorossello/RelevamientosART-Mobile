@@ -23,54 +23,69 @@
         android:layout_margin="10dp"
         android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus odio enim, interdum sed volutpat non, interdum non mauris. Mauris ornare finibus lacus. Nullam at interdum quam, sed facilisis turpis. Nunc a arcu finibus, faucibus velit ut, egestas ligula. Aenean sit amet enim eget quam rutrum aliquet sed a nisl" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center">
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="bottom">
 
-        <Button
-            android:id="@+id/tv_SI"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Si"
-            android:layout_weight="1"/>
+            android:orientation="vertical">
 
-        <Button
-            android:id="@+id/tv_NoAplica"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="N/A"
-            android:layout_weight="1"/>
+            android:orientation="horizontal"
+            android:gravity="center">
 
-        <Button
-            android:id="@+id/tv_NO"
-            android:layout_width="wrap_content"
+            <Button
+                android:id="@+id/tv_SI"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Si"
+                android:layout_weight="1"/>
+
+            <Button
+                android:id="@+id/tv_NoAplica"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="N/A"
+                android:layout_weight="1"/>
+
+            <Button
+                android:id="@+id/tv_NO"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="No"
+                android:layout_weight="1"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="No"
-            android:layout_weight="1"/>
+            android:orientation="horizontal">
 
-    </LinearLayout>
+            <Button
+                android:id="@+id/tv_anterior"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ant."
+                android:layout_weight="1"/>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+            <Button
+                android:id="@+id/tv_siguiente"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sig."
+                android:layout_weight="1"/>
 
-        <Button
-            android:id="@+id/tv_anterior"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Ant."
-            android:layout_weight="1"/>
+        </LinearLayout>
 
-        <Button
-            android:id="@+id/tv_siguiente"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Sig."
-            android:layout_weight="1"/>
+        </LinearLayout>
 
-    </LinearLayout>
+    </RelativeLayout>
 
 </LinearLayout>
 </FrameLayout>
