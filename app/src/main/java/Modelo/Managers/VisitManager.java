@@ -218,4 +218,8 @@ public class VisitManager extends Manager<Visit> {
         Dao visitDao = dbHelper.getVisitDao();
         visitDao.delete(visit);
     }
+
+    public boolean existe(int id) throws SQLException {
+        return dbHelper.getVisitDao().idExists(id);
+    }
 }

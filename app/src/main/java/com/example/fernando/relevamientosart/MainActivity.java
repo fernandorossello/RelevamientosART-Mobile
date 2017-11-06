@@ -107,9 +107,9 @@ public class MainActivity extends AppCompatActivity
 
     private final String URL_ENDPOINT_VISITAS_LIST = "https://relevamientos-art.herokuapp.com/visits";
     private final String URL_ENDPOINT_VISITAS_DETALLE = "https://relevamientos-art.herokuapp.com/visits";
-    private final String URL_ENDPOINT_RESULTADOS = "https://relevamientos-art.herokuapp.com/results";
+    private final String URL_ENDPOINT_RESULTADOS = "https://relevamientos-art.herokuapp.com/tasks/";
     private final String URL_ENDPOINT_INSTITUCIONES = "https://relevamientos-art.herokuapp.com/institutions";
-    private final String URL_ENDPOINT_VISITA_ENVIO = "https://relevamientos-art.herokuapp.com/visits";
+    private final String URL_ENDPOINT_VISITA_ENVIO = "https://relevamientos-art.herokuapp.com/visits/";
 
     private StorageReference mStorageRef;
 
@@ -584,6 +584,8 @@ public class MainActivity extends AppCompatActivity
 
                             } catch (JSONException e) {
                                 Toast.makeText(MainActivity.this, R.string.error_carga_visitas, Toast.LENGTH_SHORT).show();
+                            } catch (SQLException e) {
+                                e.printStackTrace();
                             }
                         }
                     }, new Response.ErrorListener() {
@@ -623,57 +625,63 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    private void obtenerDetalleDeVisitas(List<Integer> idVisitas) {
-        for(int i = 0; i < idVisitas.size(); i++){
+    private void obtenerDetalleDeVisitas(List<Integer> idVisitas) throws SQLException {
+        for(int i = 0; i < idVisitas.size(); i++) {
 
-            RequestQueue requestQueue = Volley.newRequestQueue(this);
-            String idBuscado = idVisitas.get(i).toString();
+            final VisitManager managerVisitas = new VisitManager(this.getHelper());
 
-            String URL = URL_ENDPOINT_VISITAS_DETALLE + "/" + idBuscado;
+            if (!managerVisitas.existe(idVisitas.get(i))) {
 
-            JsonObjectRequest jsonRequest = new JsonObjectRequest
-                    (Request.Method.GET,URL, null, new Response.Listener<JSONObject>() {
-                        @Override
-                        public void onResponse(JSONObject response) {
-                            Institution institucion = null;
-                            try {
-                                int idInstitucion = response.getInt("institution_id");
-                                Visit visit = new GsonBuilder().create().fromJson(response.toString(), Visit.class);
-                                completarInstitucion(visit, idInstitucion);
-                            } catch (JSONException e) {
-                                Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                RequestQueue requestQueue = Volley.newRequestQueue(this);
+                String idBuscado = idVisitas.get(i).toString();
+
+
+                String URL = URL_ENDPOINT_VISITAS_DETALLE + "/" + idBuscado;
+
+                JsonObjectRequest jsonRequest = new JsonObjectRequest
+                        (Request.Method.GET, URL, null, new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                Institution institucion = null;
+                                try {
+                                    int idInstitucion = response.getInt("institution_id");
+                                    Visit visit = new GsonBuilder().create().fromJson(response.toString(), Visit.class);
+                                    completarInstitucion(visit, idInstitucion);
+                                } catch (JSONException e) {
+                                    Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                                }
                             }
-                        }
-                    }, new Response.ErrorListener() {
+                        }, new Response.ErrorListener() {
 
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            if (error.networkResponse.statusCode == 401) {
-                                Toast.makeText(MainActivity.this, R.string.error_carga_visitas, Toast.LENGTH_SHORT).show();
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                if (error.networkResponse.statusCode == 401) {
+                                    Toast.makeText(MainActivity.this, R.string.error_carga_visitas, Toast.LENGTH_SHORT).show();
+                                }
+                                VolleyError err = error;
                             }
-                            VolleyError err = error;
-                        }
-                    }){
-                @Override
-                public String getBodyContentType() {
-                    return "application/json; charset=utf-8";
-                }
+                        }) {
+                    @Override
+                    public String getBodyContentType() {
+                        return "application/json; charset=utf-8";
+                    }
 
-                @Override
-                public Map<String, String> getHeaders() throws AuthFailureError {
-                    Map<String,String> headers =  new HashMap<>();
-                    headers.put("Content-Type","application/json");
-                    headers.put("Accept","application/json");
+                    @Override
+                    public Map<String, String> getHeaders() throws AuthFailureError {
+                        Map<String, String> headers = new HashMap<>();
+                        headers.put("Content-Type", "application/json");
+                        headers.put("Accept", "application/json");
 
-                    return headers;
-                }
+                        return headers;
+                    }
 
-                @Override
-                public byte[] getBody(){
-                    return null;
-                }
-            };
-            requestQueue.add(jsonRequest);
+                    @Override
+                    public byte[] getBody() {
+                        return null;
+                    }
+                };
+                requestQueue.add(jsonRequest);
+            }
         }
     }
 
@@ -754,9 +762,9 @@ public class MainActivity extends AppCompatActivity
     private void enviarResultado(final Result resultado) {
         try {
             RequestQueue requestQueue = Volley.newRequestQueue(this);
-            String URL = URL_ENDPOINT_RESULTADOS;
+            String URL = URL_ENDPOINT_RESULTADOS + resultado.task.id +"/completion";
             JsonObjectRequest jsonRequest = new JsonObjectRequest
-                    (Request.Method.POST, URL, null, new Response.Listener<JSONObject>() {
+                    (Request.Method.PUT, URL, null, new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {}
                     }, new Response.ErrorListener() {
@@ -804,7 +812,7 @@ public class MainActivity extends AppCompatActivity
     private void enviarConstanciaDeVisita(final Visit visit) {
         try {
             RequestQueue requestQueue = Volley.newRequestQueue(this);
-            String URL = URL_ENDPOINT_VISITA_ENVIO;
+            String URL = URL_ENDPOINT_VISITA_ENVIO + visit.id + "/completion";
             JsonObjectRequest jsonRequest = new JsonObjectRequest
                     (Request.Method.POST, URL, null, new Response.Listener<JSONObject>() {
                         @Override
