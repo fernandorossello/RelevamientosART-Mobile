@@ -117,17 +117,6 @@ public class PDFHelper {
         }
         document.add(tareasRealizadas);
 
-        if(!visit.noises.isEmpty()) {
-            document.add(new Paragraph("Mediciones de ruido",fontSubtitulo));
-            List medicionesDeRuido = new List(List.UNORDERED);
-            for (Noise ruido : visit.noises) {
-                ListItem item = new ListItem(formatearDecibeles(ruido.decibels) +"db (" + ruido.description + ")");
-                item.setAlignment(Element.ALIGN_LEFT);
-                medicionesDeRuido.add(item);
-            }
-            document.add(medicionesDeRuido);
-        }
-
         document.close();
     }
 
