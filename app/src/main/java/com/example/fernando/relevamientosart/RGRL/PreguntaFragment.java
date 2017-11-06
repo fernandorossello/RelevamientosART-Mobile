@@ -156,11 +156,13 @@ public class PreguntaFragment extends Fragment {
             public void onClick(View view) {
                 if (iterador.hasPrevious()) {
                     Question pregunta = iterador.previous();
-                    if( pregunta == preguntaEnCurso) {
+                    if( pregunta == preguntaEnCurso && iterador.hasPrevious()) {
                         preguntaEnCurso = iterador.previous();
                     } else  {
                         preguntaEnCurso = pregunta;
                     }
+                } else {
+                    Toast.makeText(getActivity(), R.string.primera_pregunta, Toast.LENGTH_SHORT).show();
                 }
 
                 refreshQuestion(getView());
@@ -199,6 +201,8 @@ public class PreguntaFragment extends Fragment {
                 preguntaEnCurso = pregunta;
             }
 
+        } else {
+            Toast.makeText(getContext(), R.string.ultima_pregunta, Toast.LENGTH_SHORT).show();
         }
         refreshQuestion(getView());
     }
