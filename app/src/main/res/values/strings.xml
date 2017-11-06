@@ -106,5 +106,7 @@
     <string name="tareaNoFinalizada">La tarea aún no se encuentra finalizada</string>
     <string name="hint_sector_trabajador">Sector</string>
     <string name="error_carga_institucion">Error al obtener la institucion</string>
+    <string name="error_cambio_contraseña">Error al solicitar cambio de contraseña</string>
+    <string name="error_usuario_inexistente">No existe un usuario registrado con dicho correo electrónico</string>
 
 </resources>

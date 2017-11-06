@@ -7,6 +7,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -16,7 +17,27 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+import com.example.fernando.relevamientosart.MainActivity;
 import com.example.fernando.relevamientosart.R;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -34,6 +55,8 @@ public class restorePasswordFragment extends Fragment {
     private View mRestorePasswordView;
 
     private OnFragmentInteractionListener mListener;
+    private final String URL_ENDPOINT_RECUPERAR_CONTRASEÑA = "https://relevamientos-art.herokuapp.com/users/new_password_request";
+
 
     public restorePasswordFragment() {
         // Required empty public constructor
@@ -51,7 +74,6 @@ public class restorePasswordFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        //TODO: Si giro la pantalla, vuelve a aparecer el LoginFragment
         View view = inflater.inflate(R.layout.fragment_restore_password, container, false);
 
         mEmailView = view.findViewById(R.id.email);
@@ -73,9 +95,6 @@ public class restorePasswordFragment extends Fragment {
 
         boolean cancel = false;
         View focusView = null;
-
-        //TODO: Esta parte de código es comun con LoginFragment
-        //Posiblemente se pueda poner en un lugar común para que ambos lo utilicen
         if (TextUtils.isEmpty(email)) {
             mEmailView.setError(getString(R.string.error_field_required));
             focusView = mEmailView;
@@ -87,56 +106,68 @@ public class restorePasswordFragment extends Fragment {
         }
 
         if (cancel) {
-            // There was an error; don't attempt login and focus the first
-            // form field with an error.
+            // There was an error; don't attempt login and focus the first form field with an error.
             focusView.requestFocus();
         }
         else {
-            // Show a progress spinner, and kick off a background task to
-            // perform the user login attempt.
-            showProgress(true);
-            Toast.makeText(this.getActivity(), "Su nueva contraseña ha sido enviada a su mail", Toast.LENGTH_SHORT).show();
+            solicitarCambioDeContraseña(email);
         }
     }
 
-    //TODO: Este es un metodo comun que comparte con LoginFragment
-    //Posiblemente se pueda poner en un lugar común para que ambos lo utilicen
-    /**
-     * Shows the progress UI and hides the login form.
-     */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-    private void showProgress(final boolean show) {
-        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
-        // for very easy animations. If available, use these APIs to fade-in
-        // the progress spinner.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+    private void solicitarCambioDeContraseña(final String email) {
+        RequestQueue requestQueue = Volley.newRequestQueue(getContext());
+        String URL = URL_ENDPOINT_RECUPERAR_CONTRASEÑA;
 
-            mRestorePasswordView.setVisibility(show ? View.GONE : View.VISIBLE);
-            mRestorePasswordView.animate().setDuration(shortAnimTime).alpha(
-                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    mRestorePasswordView.setVisibility(show ? View.GONE : View.VISIBLE);
-                }
-            });
+        JsonObjectRequest jsonRequest = new JsonObjectRequest
+                (Request.Method.POST, URL, null, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Toast.makeText(getActivity(), "Su nueva contraseña será enviada a su correo", Toast.LENGTH_SHORT).show();
+                    }
+                }, new Response.ErrorListener() {
 
-            mRestorePasswordView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mRestorePasswordView.animate().setDuration(shortAnimTime).alpha(
-                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    mRestorePasswordView.setVisibility(show ? View.VISIBLE : View.GONE);
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        if (error.networkResponse.statusCode == 401 ) {
+                            Toast.makeText(getActivity(), R.string.error_cambio_contraseña, Toast.LENGTH_SHORT).show();
+                        }
+
+                        if (error.networkResponse.statusCode == 404 ) {
+                            Toast.makeText(getActivity(), R.string.error_usuario_inexistente, Toast.LENGTH_SHORT).show();
+                        }
+
+                        VolleyError err = error;
+                    }
+                }){
+            @Override
+            public String getBodyContentType() {
+                return "application/json; charset=utf-8";
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String,String> headers =  new HashMap<>();
+                headers.put("Content-Type","application/json");
+                headers.put("Accept","application/json");
+
+                return headers;
+            }
+
+            @Override
+            public byte[] getBody(){
+                String cuerpo = "{\"user_email\": "+ email.trim() + " }";
+                try {
+                    return cuerpo.getBytes("utf-8");
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                    return null;
                 }
-            });
-        } else {
-            // The ViewPropertyAnimator APIs are not available, so simply show
-            // and hide the relevant UI components.
-            mRestorePasswordView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mRestorePasswordView.setVisibility(show ? View.GONE : View.VISIBLE);
-        }
+            }
+        };
+
+        requestQueue.add(jsonRequest);
     }
-
+    
     //TODO: Este es un metodo comun que comparte con LoginFragment
     //Posiblemente se pueda poner en un lugar común para que ambos lo utilicen
     private boolean isEmailValid(String email) {
