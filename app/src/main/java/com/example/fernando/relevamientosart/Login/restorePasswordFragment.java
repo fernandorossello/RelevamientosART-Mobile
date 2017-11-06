@@ -167,7 +167,7 @@ public class restorePasswordFragment extends Fragment {
 
         requestQueue.add(jsonRequest);
     }
-    
+
     //TODO: Este es un metodo comun que comparte con LoginFragment
     //Posiblemente se pueda poner en un lugar común para que ambos lo utilicen
     private boolean isEmailValid(String email) {

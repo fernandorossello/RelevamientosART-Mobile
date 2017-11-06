@@ -108,5 +108,7 @@
     <string name="error_carga_institucion">Error al obtener la institucion</string>
     <string name="error_cambio_contraseña">Error al solicitar cambio de contraseña</string>
     <string name="error_usuario_inexistente">No existe un usuario registrado con dicho correo electrónico</string>
+    <string name="ultima_pregunta">Ha llegado a la última pregunta</string>
+    <string name="primera_pregunta">Se encuentra en la primera pregunta</string>
 
 </resources>
