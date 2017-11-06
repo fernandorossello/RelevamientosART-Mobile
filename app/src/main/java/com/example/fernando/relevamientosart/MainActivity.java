@@ -814,7 +814,7 @@ public class MainActivity extends AppCompatActivity
             RequestQueue requestQueue = Volley.newRequestQueue(this);
             String URL = URL_ENDPOINT_VISITA_ENVIO + visit.id + "/completion";
             JsonObjectRequest jsonRequest = new JsonObjectRequest
-                    (Request.Method.POST, URL, null, new Response.Listener<JSONObject>() {
+                    (Request.Method.PUT, URL, null, new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {}
                     }, new Response.ErrorListener() {
