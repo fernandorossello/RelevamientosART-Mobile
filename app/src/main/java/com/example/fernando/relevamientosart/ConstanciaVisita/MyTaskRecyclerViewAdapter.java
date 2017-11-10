@@ -18,10 +18,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.example.fernando.relevamientosart.MainActivity;
 import com.example.fernando.relevamientosart.R;
+import com.itextpdf.text.DocumentException;
+
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
+import Excepciones.ValidationException;
+import Helpers.DBHelper;
 import Helpers.PDFHelper;
+import Modelo.Arquitectura.GestorPDF;
 import Modelo.Enums.EnumStatus;
 import Modelo.Managers.ResultManager;
 import Modelo.Result;
@@ -58,21 +66,19 @@ public class MyTaskRecyclerViewAdapter extends RecyclerView.Adapter<MyTaskRecycl
                 .setTitle(R.string.generarPDF_Title)
                 .setPositiveButton(R.string.aceptar, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                     try{
-                        if(garantizarPermisosDeEscritura()) {
-                            ResultManager resultManager = new ResultManager(((MainActivity) view.getContext()).getHelper());
-                            Result result = resultManager.getResult(holder.mItem);
-                            if(result != null && result.getStatus() == EnumStatus.FINALIZADA){
-                                new PDFHelper().crearPDF(result, holder.mItem);
+                        try {
+                            if (garantizarPermisosDeEscritura()) {
+                                DBHelper helper = ((MainActivity) view.getContext()).getHelper();
+                                new GestorPDF(helper).GenerarPDFParaTarea(holder.mItem);
                                 Toast.makeText(view.getContext(), R.string.pdfGenerado, Toast.LENGTH_SHORT).show();
-                            } else {
-                                Toast.makeText(view.getContext(), R.string.tareaNoFinalizada, Toast.LENGTH_SHORT).show();
                             }
-
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        } catch (ValidationException e) {
+                            Toast.makeText(view.getContext(), R.string.tareaNoFinalizada, Toast.LENGTH_SHORT).show();
+                        } catch (Exception ex) {
+                            Toast.makeText(view.getContext(), ex.getMessage(), Toast.LENGTH_SHORT).show();
                         }
-                    }catch (Exception ex){
-                        Toast.makeText(view.getContext(), ex.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
                     }
 
                     private boolean garantizarPermisosDeEscritura() {

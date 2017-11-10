@@ -66,9 +66,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import Helpers.DBHelper;
+import Modelo.Arquitectura.GestorFirebase;
 import Modelo.Attendee;
+import Modelo.Enums.EnumStatus;
 import Modelo.Enums.EnumTareas;
 import Modelo.FirebaseFile;
+import Modelo.HelpQuestion;
 import Modelo.Image;
 
 import Modelo.Institution;
@@ -94,7 +97,8 @@ public class MainActivity extends AppCompatActivity
         ConstanciaVisitaFragment.OnEventoConstanciaListener,
         ImageFragment.OnImageListFragmentInteractionListener,
         RiskFragment.OnRiskFragmentInteractionListener,
-        MedidorDeRuidoFragment.OnNoiseListFragmentInteractionListener
+        MedidorDeRuidoFragment.OnNoiseListFragmentInteractionListener,
+        HelpFragment.OnListFragmentInteractionListener
 {
     private static final int REQUEST_TAKE_PHOTO = 1500;
     private static final int REQUEST_READ = 2000;
@@ -110,9 +114,6 @@ public class MainActivity extends AppCompatActivity
     private final String URL_ENDPOINT_RESULTADOS = "https://relevamientos-art.herokuapp.com/tasks/";
     private final String URL_ENDPOINT_INSTITUCIONES = "https://relevamientos-art.herokuapp.com/institutions";
     private final String URL_ENDPOINT_VISITA_ENVIO = "https://relevamientos-art.herokuapp.com/visits/";
-
-    private StorageReference mStorageRef;
-
 
     private DBHelper mDBHelper;
 
@@ -138,8 +139,6 @@ public class MainActivity extends AppCompatActivity
         //Allow camera works in SDK targets above v24
         mBuilder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(mBuilder.build());
-
-        mStorageRef = FirebaseStorage.getInstance().getReference();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -216,23 +215,38 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.nav_logout) {
-            Logout();
-            return true;
-        } else if (id == R.id.nav_sincronizar)
-        {
-            try {
-                Toast.makeText(this, getString(R.string.msj_sincronizandoVisitas), Toast.LENGTH_SHORT).show();
-                obtenerVisitasDesdeEnpoint();
-                //generarVisitasDePrueba();
-                enviarVisitasCompletadas();
-            }catch (Exception e){
-                Toast.makeText(this, R.string.error_carga_visitas, Toast.LENGTH_SHORT).show();
+        switch (id){
+            case R.id.nav_ayuda:{
+
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragment_container, HelpFragment.newInstance())
+                        .addToBackStack(null)
+                        .commit();
+
+                break;
             }
 
+            case R.id.nav_logout:{
+                Logout();
+                return true;
+            }
+
+            case R.id.nav_sincronizar:{
+                try {
+                    Toast.makeText(this, getString(R.string.msj_sincronizandoVisitas), Toast.LENGTH_SHORT).show();
+                    obtenerVisitasDesdeEnpoint();
+                    //generarVisitasDePrueba();
+                    enviarVisitasCompletadas();
+
+                }catch (Exception e){
+                    Toast.makeText(this, R.string.error_carga_visitas, Toast.LENGTH_SHORT).show();
+                }
+                break;
+            }
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
@@ -241,6 +255,13 @@ public class MainActivity extends AppCompatActivity
 
         VisitManager managerVisitas = new VisitManager(this.getHelper());
         List<Visit> visitas = managerVisitas.simuladorParaTraerVisitasDelEndpoint();
+
+        int userId = ObtenerIdUsuarioLogueado();
+
+        for (Visit visita: visitas) {
+            visita.user_id = userId;
+        }
+
         try {
             managerVisitas.persist(visitas);
         }
@@ -285,7 +306,6 @@ public class MainActivity extends AppCompatActivity
     }
 
     //************************************************Interacción fragments************************************************
-
     @Override
     public void OnVisitSelected(Visit visit) {
 
@@ -448,7 +468,20 @@ public class MainActivity extends AppCompatActivity
                 }};
             mVisitaEnCurso.images.add(imagen);
 
-            subirImagenAFirebase(imagen);
+            GestorFirebase gestorFirebase = new GestorFirebase(){
+                @Override
+                public void persistirEntidad(FirebaseFile archivo) throws SQLException {
+                    new ImageManager(getHelper()).persist((Image)archivo);
+                }
+
+                @Override
+                public String getNombreCarpetaRemota() {
+                    return "images/";
+                }
+            };
+
+            gestorFirebase.subirArchivo(imagen);
+
             }
 
             Fragment frg = getSupportFragmentManager().findFragmentByTag(TAG_CONSTANCIA_VISITA);
@@ -564,7 +597,7 @@ public class MainActivity extends AppCompatActivity
         try {
             RequestQueue requestQueue = Volley.newRequestQueue(this);
 
-            Integer idUsuario = PreferenceManager.getDefaultSharedPreferences(this).getInt("idUsuario",-1);
+            Integer idUsuario = ObtenerIdUsuarioLogueado();
             String estadoVisita = "assigned";
 
             String URL = URL_ENDPOINT_VISITAS_LIST + "?user_id=" + idUsuario + "&status=" + estadoVisita;
@@ -635,6 +668,7 @@ public class MainActivity extends AppCompatActivity
                 RequestQueue requestQueue = Volley.newRequestQueue(this);
                 String idBuscado = idVisitas.get(i).toString();
 
+                final int userId = ObtenerIdUsuarioLogueado();
 
                 String URL = URL_ENDPOINT_VISITAS_DETALLE + "/" + idBuscado;
 
@@ -646,6 +680,7 @@ public class MainActivity extends AppCompatActivity
                                 try {
                                     int idInstitucion = response.getInt("institution_id");
                                     Visit visit = new GsonBuilder().create().fromJson(response.toString(), Visit.class);
+                                    visit.user_id = userId;
                                     completarInstitucion(visit, idInstitucion);
                                 } catch (JSONException e) {
                                     Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -739,7 +774,10 @@ public class MainActivity extends AppCompatActivity
 
     private void enviarVisitasCompletadas() throws SQLException {
         VisitManager managerVisitas = new VisitManager(getHelper());
-        List<Visit> visitasCompletadas = managerVisitas.obtenerVisitasCompletadas();
+
+        Integer idUsuario = ObtenerIdUsuarioLogueado();
+
+        List<Visit> visitasCompletadas = managerVisitas.obtenerVisitasCompletadas(idUsuario);
         for(int i = 0; i < visitasCompletadas.size(); i++){
             enviarVisitaAEndpoint(visitasCompletadas.get(i));
             //managerVisitas.borrarVisita(visitasCompletadas.get(i));
@@ -816,12 +854,20 @@ public class MainActivity extends AppCompatActivity
             JsonObjectRequest jsonRequest = new JsonObjectRequest
                     (Request.Method.PUT, URL, null, new Response.Listener<JSONObject>() {
                         @Override
-                        public void onResponse(JSONObject response) {}
+                        public void onResponse(JSONObject response) {
+                            visit.status = EnumStatus.ENVIADA.id;
+                            try {
+                                new VisitManager(getHelper()).persist(visit);
+                            } catch (SQLException e) {
+                                e.printStackTrace();
+                            }
+                            RecargarListaDeVisitas();
+                        }
                     }, new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
                             if (error.networkResponse.statusCode == 401) {
-                                Toast.makeText(MainActivity.this, R.string.error_carga_visitas, Toast.LENGTH_SHORT).show();
+                                Toast.makeText(MainActivity.this, R.string.error_envio_visitas, Toast.LENGTH_SHORT).show();
                             }
                             VolleyError err = error;
                         }
@@ -843,6 +889,7 @@ public class MainActivity extends AppCompatActivity
                 @Override
                 public byte[] getBody(){
                     try {
+                        visit.completed_at = new Date();
                         String prueba = visit.toJson();
                         return prueba.getBytes("utf-8");
                     } catch (UnsupportedEncodingException e) {
@@ -859,24 +906,12 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    @SuppressWarnings("VisibleForTests")
-    public void subirImagenAFirebase(final FirebaseFile archivo) {
-        Uri uri = Uri.parse(archivo.url_file);
-        StorageReference imgRef = mStorageRef.child("images/" + archivo.obtenerNombreArchivo());
-        imgRef.putFile(uri)
-                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        // Get a URL to the uploaded content
-                        archivo.url_cloud = taskSnapshot.getDownloadUrl().toString();
-                        try {
-                            new ImageManager(getHelper()).persist((Image)archivo);
-                        } catch (SQLException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
+    @Override
+    public void onQuestionSelected(HelpQuestion item) {
+        Toast.makeText(this, item.Question, Toast.LENGTH_SHORT).show();
     }
 
-
+    private int ObtenerIdUsuarioLogueado(){
+        return PreferenceManager.getDefaultSharedPreferences(this).getInt("idUsuario",-1);
+    }
 }

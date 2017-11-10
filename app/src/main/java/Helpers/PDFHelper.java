@@ -1,5 +1,6 @@
 package Helpers;
 
+import android.net.Uri;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -60,6 +61,7 @@ public class PDFHelper {
         }
 
         File archivo = crearArchivo(tarea.getTypeShortName()+ "_"+tarea.visit.institution.name);
+        result.url_file = Uri.fromFile(archivo).toString();
         FileOutputStream output = new FileOutputStream(archivo);
 
         PdfWriter writer = PdfWriter.getInstance(document, output);
@@ -118,16 +120,15 @@ public class PDFHelper {
         document.add(tareasRealizadas);
 
         document.close();
+
+
+
     }
 
     private String formatearFecha(Date date){
         String myFormat = "dd/MM/yy";
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat);
         return sdf.format(date);
-    }
-
-    private String formatearDecibeles(Double decibeles){
-        return new Formatter().format("%03.1f", decibeles).toString();
     }
 
     private void generarLogo(Document document) throws IOException,DocumentException {
@@ -169,7 +170,10 @@ public class PDFHelper {
         PdfPTable linea3 = new PdfPTable(2);
         linea3.setWidthPercentage(100);
         linea3.addCell(getPdfPCell(getPhraseItem("Actividad:",institution.activity)));
-        linea3.addCell(getPdfPCell(getPhraseItem("CIIU:",institution.ciiu)));
+
+        if(institution.ciiu != null) {
+            linea3.addCell(getPdfPCell(getPhraseItem("CIIU:", institution.ciiu)));
+        }
 
 
         float[] columnWidths = {5, 3};
@@ -186,13 +190,23 @@ public class PDFHelper {
 
         PdfPTable linea6 = new PdfPTable(2);
         linea6.setWidthPercentage(100);
-        linea6.addCell(getPdfPCell(getPhraseItem("Teléfono:",institution.phone)));
-        linea6.addCell(getPdfPCell(getPhraseItem("Cod. Establecimiento AFIP:",institution.afip_cod)));
+
+        if(institution.phone != null) {
+            linea6.addCell(getPdfPCell(getPhraseItem("Teléfono:", institution.phone)));
+        }
+
+        if(institution.afip_cod != null) {
+            linea6.addCell(getPdfPCell(getPhraseItem("Cod. Establecimiento AFIP:", institution.afip_cod)));
+        }
 
         PdfPTable linea7 = new PdfPTable(2);
         linea7.setWidthPercentage(100);
-        linea7.addCell(getPdfPCell(getPhraseItem("Persona contactada:",institution.contact)));
-        linea7.addCell(getPdfPCell(getPhraseItem("Email:",institution.email)));
+        if(institution.contact != null) {
+            linea7.addCell(getPdfPCell(getPhraseItem("Persona contactada:", institution.contact)));
+        }
+        if(institution.email != null){
+            linea7.addCell(getPdfPCell(getPhraseItem("Email:",institution.email)));
+        }
 
         documento.add(lineaSubtitulo);
         documento.add(linea1);

@@ -24,6 +24,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.fernando.relevamientosart.MainActivity;
 import com.example.fernando.relevamientosart.R;
@@ -118,22 +119,21 @@ public class restorePasswordFragment extends Fragment {
         RequestQueue requestQueue = Volley.newRequestQueue(getContext());
         String URL = URL_ENDPOINT_RECUPERAR_CONTRASEÑA;
 
-        JsonObjectRequest jsonRequest = new JsonObjectRequest
-                (Request.Method.POST, URL, null, new Response.Listener<JSONObject>() {
+        StringRequest jsonRequest = new StringRequest
+                (Request.Method.POST, URL, new Response.Listener<String>() {
                     @Override
-                    public void onResponse(JSONObject response) {
+                    public void onResponse(String response) {
                         Toast.makeText(getActivity(), "Su nueva contraseña será enviada a su correo", Toast.LENGTH_SHORT).show();
                     }
                 }, new Response.ErrorListener() {
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        if (error.networkResponse.statusCode == 401 ) {
-                            Toast.makeText(getActivity(), R.string.error_cambio_contraseña, Toast.LENGTH_SHORT).show();
-                        }
 
                         if (error.networkResponse.statusCode == 404 ) {
                             Toast.makeText(getActivity(), R.string.error_usuario_inexistente, Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(getActivity(), R.string.error_cambio_contraseña, Toast.LENGTH_SHORT).show();
                         }
 
                         VolleyError err = error;
@@ -155,7 +155,7 @@ public class restorePasswordFragment extends Fragment {
 
             @Override
             public byte[] getBody(){
-                String cuerpo = "{\"user_email\": "+ email.trim() + " }";
+                String cuerpo = "{\"user_email\": \""+ email.trim() + "\" }";
                 try {
                     return cuerpo.getBytes("utf-8");
                 } catch (UnsupportedEncodingException e) {

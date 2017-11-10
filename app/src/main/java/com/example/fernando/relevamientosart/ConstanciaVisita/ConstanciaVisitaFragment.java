@@ -1,12 +1,14 @@
 package com.example.fernando.relevamientosart.ConstanciaVisita;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
@@ -24,8 +26,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.example.fernando.relevamientosart.MainActivity;
 import com.example.fernando.relevamientosart.R;
+import com.itextpdf.text.DocumentException;
+
 import java.sql.SQLException;
+
+import Excepciones.ValidationException;
 import Helpers.PDFHelper;
+import Modelo.Arquitectura.GestorFirebase;
+import Modelo.Arquitectura.GestorPDF;
+import Modelo.Enums.EnumStatus;
+import Modelo.FirebaseFile;
+import Modelo.Managers.ResultManager;
+import Modelo.Result;
 import Modelo.Visit;
 import java.io.File;
 import java.io.IOException;
@@ -91,7 +103,7 @@ public class ConstanciaVisitaFragment extends Fragment {
             }
         });
 
-        AppCompatImageButton btnFoto = view.findViewById(R.id.btn_camera);
+        @SuppressLint("WrongViewCast") AppCompatImageButton btnFoto = view.findViewById(R.id.btn_camera);
         btnFoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -107,11 +119,27 @@ public class ConstanciaVisitaFragment extends Fragment {
                     guardarConstanciaDeVisita(view);
 
                     if(garantizarPermisosDeEscritura()) {
-                        new PDFHelper().crearPDF(mVisit);
-                        Toast.makeText(view.getContext(), R.string.guardadoYpdf, Toast.LENGTH_SHORT).show();
+
+                        DBHelper helper = ((MainActivity)getActivity()).getHelper();
+                        ResultManager resultManager = new ResultManager(helper);
+                        List<Result> results = resultManager.getResults(mVisit);
+
+                        for (Result result: results) {
+                            if(result == null || result.getStatus() != EnumStatus.FINALIZADA) {
+                                throw new ValidationException("Debe completar todas las tareas primero");
+                            }
+                        }
+
+                        new PDFTask(helper).execute(mVisit);
+
+                        Toast.makeText(getContext(), R.string.guardadoYpdf, Toast.LENGTH_SHORT).show();
+
                         mListener.OnGuardarConstanciaDeVisita();
                     }
-                } catch (Exception ex){
+                }catch (ValidationException ex){
+                    Toast.makeText(getContext(), ex.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+                catch (Exception ex){
                     Toast.makeText(getContext(), R.string.error_pdf_constancia_visita, Toast.LENGTH_SHORT).show();
                 }
             }
@@ -130,7 +158,7 @@ public class ConstanciaVisitaFragment extends Fragment {
             }
         });
 
-        AppCompatImageButton btnAudio = view.findViewById(R.id.btn_audio);
+        @SuppressLint("WrongViewCast") AppCompatImageButton btnAudio = view.findViewById(R.id.btn_audio);
         btnAudio.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -174,33 +202,57 @@ public class ConstanciaVisitaFragment extends Fragment {
         mListener = null;
     }
 
-    private static void grantPermissionsToUri(Context context, Intent intent, Uri uri) {
-        List<ResolveInfo> resInfoList = context.getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
-        for (ResolveInfo resolveInfo : resInfoList) {
-            String packageName = resolveInfo.activityInfo.packageName;
-            context.grantUriPermission(packageName, uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        }
-    }
-
-    private File crearArchivoDeImagen() throws IOException {
-        // Create an image file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_";
-        File storageDir = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(
-                imageFileName,  /* prefix */
-                ".jpg",         /* suffix */
-                storageDir      /* directory */
-        );
-        return image;
-    }
-
 
     public interface OnEventoConstanciaListener {
         void OnTomarFoto();
         void OnVerFotosClick(Visit visit);
         void OnGuardarConstanciaDeVisita();
         void OnMedirRuido();
+    }
+
+    private class PDFTask extends AsyncTask<Visit, Integer, Visit> {
+
+        private final DBHelper _dbHelper;
+
+        public PDFTask(DBHelper dbHelper){
+            this._dbHelper = dbHelper;
+        }
+        
+        protected Visit doInBackground(Visit... visit) {
+
+            Visit visita = visit[0];
+
+            try {
+                new GestorPDF(_dbHelper).GenerarPDFParaVisita(visita);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return visita;
+        }
+
+        @Override
+        protected void onPostExecute(Visit visit) {
+            GestorFirebase gestorFirebase = new GestorFirebase(){
+
+                @Override
+                public void persistirEntidad(FirebaseFile archivo) throws SQLException {
+                    new ResultManager(_dbHelper).persist((Result)archivo);
+                }
+
+                @Override
+                public String getNombreCarpetaRemota() {
+                    return "PDF/";
+                }
+            };
+
+            List<Result> results = new ResultManager(_dbHelper).getResults(visit);
+
+            for (Result result:results) {
+                gestorFirebase.subirArchivo(result);
+            }
+        }
+
     }
 
 }

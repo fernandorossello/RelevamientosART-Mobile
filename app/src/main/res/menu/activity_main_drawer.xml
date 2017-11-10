@@ -9,6 +9,11 @@
             android:title="@string/sincronizar" />
 
         <item
+            android:id="@+id/nav_ayuda"
+            android:icon="@drawable/ic_menu_help"
+            android:title="@string/ayuda" />
+
+        <item
             android:id="@+id/nav_logout"
             android:icon="@drawable/ic_menu_logout"
             android:title="@string/salir" />

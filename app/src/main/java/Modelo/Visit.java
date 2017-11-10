@@ -20,6 +20,8 @@ public class Visit implements Serializable {
         tasks = new ArrayList<>();
         images=  new ArrayList<>();
         noises = new ArrayList<>();
+
+        completed_at = new Date();
     }
 
     @Expose
@@ -51,6 +53,13 @@ public class Visit implements Serializable {
 
     @DatabaseField
     public Date to_visit_on;
+
+    @DatabaseField
+    @Expose
+    public Date completed_at;
+
+    @DatabaseField
+    public int user_id;
 
     @Expose
     @ForeignCollectionField

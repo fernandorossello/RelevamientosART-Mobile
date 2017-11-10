@@ -12,7 +12,7 @@ import Modelo.Enums.EnumStatus;
 
 
 @DatabaseTable
-public abstract class Result implements Serializable {
+public abstract class Result extends FirebaseFile implements Serializable {
 
     @DatabaseField(generatedId = true)
     public int id;

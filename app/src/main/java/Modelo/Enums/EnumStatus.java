@@ -1,3 +1,4 @@
+
 package Modelo.Enums;
 
 import java.io.Serializable;
@@ -7,7 +8,8 @@ public enum EnumStatus  implements Serializable{
     PENDIENTE(0,"Pendiente"),
     ASIGNADA(1, "Asignada"),
     ENPROCESO(2, "En proceso"),
-    FINALIZADA(3,"Finalizada");
+    FINALIZADA(3,"Finalizada"),
+    ENVIADA(4,"Enviada");
 
 
     public java.lang.String name;

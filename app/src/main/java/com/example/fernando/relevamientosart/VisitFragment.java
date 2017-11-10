@@ -2,6 +2,7 @@ package com.example.fernando.relevamientosart;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -67,7 +68,8 @@ public class VisitFragment extends Fragment {
 
             try {
                 DBHelper helper = ((MainActivity) getActivity()).getHelper();
-                List<Visit> visitas = new VisitManager(helper).obtenerVisitasSincronizadas();
+                final int userId = PreferenceManager.getDefaultSharedPreferences(getActivity()).getInt("idUsuario",-1);
+                List<Visit> visitas = new VisitManager(helper).obtenerVisitasSincronizadas(userId);
                 recyclerView.setAdapter(new MyVisitRecyclerViewAdapter(visitas, mListener));
             }catch(SQLException e){
                 Toast.makeText(context, R.string.error_carga_visitas, Toast.LENGTH_SHORT).show();

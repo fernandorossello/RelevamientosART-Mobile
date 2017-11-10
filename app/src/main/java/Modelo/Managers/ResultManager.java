@@ -3,6 +3,8 @@ package Modelo.Managers;
 import com.j256.ormlite.dao.Dao;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import Helpers.DBHelper;
 import Modelo.CAPResult;
@@ -11,6 +13,7 @@ import Modelo.RARResult;
 import Modelo.RGRLResult;
 import Modelo.Result;
 import Modelo.Task;
+import Modelo.Visit;
 
 
 public class ResultManager extends Manager<Result> {
@@ -78,6 +81,18 @@ public class ResultManager extends Manager<Result> {
         Dao daoRGLRResult = dbHelper.getRGLRResultDao();
         return (RGRLResult)daoRGLRResult.queryBuilder().where().eq("task_id",task.id).queryForFirst();
     }
+
+    public List<Result> getResults(Visit visit){
+
+        List<Result> results = new ArrayList<>();
+
+        for (Task tarea:visit.tasks){
+            results.add(getResult(tarea));
+        }
+
+        return results;
+    }
+
 
     public Result getResult(Task task){
         Result result = null;

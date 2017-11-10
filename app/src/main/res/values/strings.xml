@@ -73,7 +73,7 @@
     <string name="borrarImagen_Title">Borrar imagen</string>
     <string name="aceptar">Aceptar</string>
     <string name="cancelar">Cancelar</string>
-    <string name="guardadoYpdf">Se ha guardardo y generado PDF</string>
+    <string name="guardadoYpdf">La visita se ha completado</string>
 
     <!--Strings related to medición de ruido -->
     <string name="medicion_ruido_title">Medición de ruido</string>
@@ -110,5 +110,7 @@
     <string name="error_usuario_inexistente">No existe un usuario registrado con dicho correo electrónico</string>
     <string name="ultima_pregunta">Ha llegado a la última pregunta</string>
     <string name="primera_pregunta">Se encuentra en la primera pregunta</string>
+    <string name="ayuda">Ayuda</string>
+    <string name="error_envio_visitas">Se produjo un error al enviar las visitas</string>
 
 </resources>

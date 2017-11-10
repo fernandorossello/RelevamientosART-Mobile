@@ -1,5 +1,7 @@
 package Modelo.Managers;
 
+import android.preference.PreferenceManager;
+
 import com.j256.ormlite.dao.Dao;
 
 import java.sql.SQLException;
@@ -128,12 +130,10 @@ public class VisitManager extends Manager<Visit> {
         return  lista;
     }
 
-    /*Este método devolverá las visitas que se encuentren en el dispositivo y que se mostraran
-        en la pantalla principal.
-    */
-    public List<Visit> obtenerVisitasSincronizadas() throws SQLException{
+    public List<Visit> obtenerVisitasSincronizadas(int userId) throws SQLException{
         Dao visitDao = dbHelper.getVisitDao();
-        List<Visit> visitas = visitDao.queryForAll();
+
+        List<Visit> visitas = visitDao.queryBuilder().where().eq("user_id",userId).query();
 
         for (Visit visita : visitas) {
             CompletarEstadoVisita(visita);
@@ -144,40 +144,41 @@ public class VisitManager extends Manager<Visit> {
 
     public void CompletarEstadoVisita(Visit visita) {
 
-        List<EnumStatus> estadosTareas = new ArrayList<>();
-        ResultManager resultManager =  new ResultManager(dbHelper);
-        for (Task tarea: visita.tasks) {
-            Result result = resultManager.getResult(tarea);
-            if(result == null){
-                estadosTareas.add(EnumStatus.PENDIENTE);
-            }else {
-                estadosTareas.add(result.getStatus());
+        if(visita.status != EnumStatus.ENVIADA.id) {
+            List<EnumStatus> estadosTareas = new ArrayList<>();
+            ResultManager resultManager = new ResultManager(dbHelper);
+            for (Task tarea : visita.tasks) {
+                Result result = resultManager.getResult(tarea);
+                if (result == null) {
+                    estadosTareas.add(EnumStatus.PENDIENTE);
+                } else {
+                    estadosTareas.add(result.getStatus());
+                }
             }
-        }
 
-        Boolean tieneEnCurso = false;
-        Boolean tieneFinalizadas = false;
-        Boolean tienePendientes = false;
+            Boolean tieneEnCurso = false;
+            Boolean tieneFinalizadas = false;
+            Boolean tienePendientes = false;
 
-        for (EnumStatus estado: estadosTareas) {
-            if(estado == EnumStatus.ENPROCESO){
-                tieneEnCurso = true;
-            } else if(estado == EnumStatus.FINALIZADA) {
-                tieneFinalizadas = true;
+            for (EnumStatus estado : estadosTareas) {
+                if (estado == EnumStatus.ENPROCESO) {
+                    tieneEnCurso = true;
+                } else if (estado == EnumStatus.FINALIZADA) {
+                    tieneFinalizadas = true;
+                } else {
+                    tienePendientes = true;
+                }
+            }
+
+            if (tieneEnCurso || (tieneFinalizadas && tienePendientes)) {
+                visita.status = EnumStatus.ENPROCESO.id;
+            } else if (tieneFinalizadas && !tienePendientes) {
+                visita.status = EnumStatus.FINALIZADA.id;
             } else {
-                tienePendientes = true;
+                visita.status = EnumStatus.PENDIENTE.id;
             }
-        }
-
-        if(tieneEnCurso || (tieneFinalizadas && tienePendientes)){
-            visita.status = EnumStatus.ENPROCESO.id;
-        } else if(tieneFinalizadas && !tienePendientes){
-            visita.status = EnumStatus.FINALIZADA.id;
-        } else {
-            visita.status = EnumStatus.PENDIENTE.id;
         }
     }
-
 
     @Override
     public void persist(Visit item) throws SQLException {
@@ -202,10 +203,10 @@ public class VisitManager extends Manager<Visit> {
         }
     }
 
-    public List<Visit> obtenerVisitasCompletadas() throws SQLException{
+    public List<Visit> obtenerVisitasCompletadas(int userId) throws SQLException{
 
         List<Visit> visitas = new ArrayList<>();
-        for (Visit visita : obtenerVisitasSincronizadas()) {
+        for (Visit visita : obtenerVisitasSincronizadas(userId)) {
             if (visita.status == EnumStatus.FINALIZADA.id) {
                 visitas.add(visita);
             }
