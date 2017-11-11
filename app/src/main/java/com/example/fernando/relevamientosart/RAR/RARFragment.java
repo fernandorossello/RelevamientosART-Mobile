@@ -110,6 +110,8 @@ public class RARFragment extends Fragment {
             }
         });
 
+        getActivity().setTitle(R.string.titulo_RAR);
+
         return view;
     }
 

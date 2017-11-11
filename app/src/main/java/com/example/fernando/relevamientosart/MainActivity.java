@@ -899,4 +899,8 @@ public class MainActivity extends AppCompatActivity
     private int ObtenerIdUsuarioLogueado(){
         return PreferenceManager.getDefaultSharedPreferences(this).getInt("idUsuario",-1);
     }
+
+    public void setTitle(int id){
+        getSupportActionBar().setTitle(id);
+    }
 }

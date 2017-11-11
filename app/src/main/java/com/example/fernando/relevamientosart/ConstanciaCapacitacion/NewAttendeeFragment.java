@@ -96,6 +96,8 @@ public class NewAttendeeFragment extends Fragment {
         tv_sector.setText(mAttendee.sector);
         tv_sector.setOnKeyListener(OnBackListener);
 
+        getActivity().setTitle(R.string.titulo_attendee);
+
         return view;
     }
 

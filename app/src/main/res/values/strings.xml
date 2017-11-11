@@ -112,4 +112,17 @@
     <string name="ayuda">Ayuda</string>
     <string name="error_envio_visitas">Se produjo un error al enviar las visitas</string>
 
+    <!--Strings related to titulo -->
+    <string name="titulo_detalle_visita">Detalle</string>
+    <string name="titulo_RGRL">Formulario R.G.R.L.</string>
+    <string name="titulo_RAR">Formulario R.A.R.</string>
+    <string name="titulo_empleado">Empleado</string>
+    <string name="titulo_constancia_visita">Constancia de visita</string>
+    <string name="titulo_imagenes">Imágenes</string>
+    <string name="titulo_medicion_ruido">Medición de ruido</string>
+    <string name="titulo_constancia_capacitacion">Constancia de capacitación</string>
+    <string name="titulo_attendee">Asistente</string>
+    <string name="titulo_ayuda">Ayuda</string>
+    <string name="titulo_riesgos">Riesgos</string>
+
 </resources>

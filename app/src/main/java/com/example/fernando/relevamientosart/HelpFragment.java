@@ -60,6 +60,9 @@ public class HelpFragment extends Fragment {
 
             recyclerView.setAdapter(new MyHelpRecyclerViewAdapter(preguntas, mListener));
         }
+
+        getActivity().setTitle(R.string.titulo_ayuda);
+
         return view;
     }
 

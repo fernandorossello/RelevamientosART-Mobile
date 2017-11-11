@@ -119,6 +119,8 @@ public class MedidorDeRuidoFragment extends Fragment {
             }
         });
 
+        getActivity().setTitle(R.string.titulo_medicion_ruido);
+
         return view;
     }
 

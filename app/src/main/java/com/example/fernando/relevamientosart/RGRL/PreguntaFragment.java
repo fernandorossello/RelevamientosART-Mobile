@@ -170,6 +170,8 @@ public class PreguntaFragment extends Fragment {
             }
         });
 
+        getActivity().setTitle(R.string.titulo_RGRL);
+
         refreshSelectedOption(view);
 
         return view;

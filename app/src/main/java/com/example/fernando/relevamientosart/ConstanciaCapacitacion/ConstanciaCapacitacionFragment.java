@@ -108,6 +108,8 @@ public class ConstanciaCapacitacionFragment extends Fragment {
             }
         });
 
+        getActivity().setTitle(R.string.titulo_constancia_capacitacion);
+
         return view;
     }
 

@@ -72,7 +72,6 @@ public class VisitDetalleFragment extends Fragment {
         EditText tvContrato = view.findViewById(R.id.tv_contrato);
         tvContrato.setText(institution.contract);
 
-
         EditText tvActividad = view.findViewById(R.id.tv_actividad);
         tvActividad.setText(institution.activity);
 
@@ -102,8 +101,7 @@ public class VisitDetalleFragment extends Fragment {
         EditText tvCodAfip= view.findViewById(R.id.tv_codAFIP);
         tvCodAfip.setText(institution.afip_cod);
 
-
-
+        getActivity().setTitle(R.string.titulo_detalle_visita);
 
         tvNombreInstitucion.setTextColor(0xff000000);
         tvDireccionInstitucion.setTextColor(0xff000000);
@@ -144,6 +142,7 @@ public class VisitDetalleFragment extends Fragment {
         menuItem.setVisible(true);
 
         }
+
 
     @Override
     public void onAttach(Context context) {

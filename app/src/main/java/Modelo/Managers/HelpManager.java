@@ -9,7 +9,6 @@ public class HelpManager {
      public List<HelpQuestion> obtenerPreguntas(){
 
          List<HelpQuestion> preguntas = new ArrayList<>();
-         d
          preguntas.add(new HelpQuestion(){{ Question = "¿Cómo enviar visitas completadas?"; Answer="Desplazar el menú lateral, por medio del botón en la esquina superior, o bien deslizando la pantalla de izquierda a derecha. Luego, seleccionar la opción \"Sincronizar\". Tenga en cuenta, que esta acción también obtendrá nuevas visitas asignadas.";}});
          preguntas.add(new HelpQuestion(){{ Question = "¿Cómo recibir nuevas visitas?"; Answer="Desplazar el menú lateral, por medio del botón en la esquina superior, o bien deslizando la pantalla de izquierda a derecha. Luego, seleccionar la opción \"Sincronizar\". Tenga en cuenta, que esta acción también enviará las visitas que se encuentren finalizadas a la ART.";}});
          preguntas.add(new HelpQuestion(){{ Question = "¿Cómo acceder a las tareas de una visita?"; Answer="Ubicado en la pantalla principal, podrá ver el listado de visitas asignadas. Al presionar sobre alguna de ellas, lo llevará a una nueva pantalla donde verá los detalles de la misma. En esta nueva pantalla, en la parte superior derecha de la pantalla, tendrá las distintas opciones disponibles para la visita seleccionada.";}});

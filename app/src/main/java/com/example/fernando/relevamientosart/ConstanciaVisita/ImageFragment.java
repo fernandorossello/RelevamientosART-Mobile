@@ -57,6 +57,9 @@ public class ImageFragment extends Fragment {
             recyclerView.setLayoutManager(new LinearLayoutManager(context));
             recyclerView.setAdapter(new MyImageRecyclerViewAdapter(mVisit.images, mListener));
         }
+
+        getActivity().setTitle(R.string.titulo_imagenes);
+
         return view;
     }
 

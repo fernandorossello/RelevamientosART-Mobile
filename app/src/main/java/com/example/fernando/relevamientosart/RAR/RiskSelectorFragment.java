@@ -56,6 +56,8 @@ public class RiskSelectorFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         recyclerView.setAdapter(new MyRiskSelectorRecyclerViewAdapter(mWorkingMan));
 
+        getActivity().setTitle(R.string.titulo_riesgos);
+
         return view;
     }
 

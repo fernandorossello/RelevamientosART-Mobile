@@ -173,6 +173,8 @@ public class ConstanciaVisitaFragment extends Fragment {
             }
         });
 
+        getActivity().setTitle(R.string.titulo_constancia_visita);
+
         return view;
     }
 

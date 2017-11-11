@@ -154,6 +154,9 @@ public class RiskFragment extends Fragment {
                  }
              }
         );
+
+        getActivity().setTitle(R.string.titulo_empleado);
+
         return view;
     }
 
@@ -261,8 +264,6 @@ public class RiskFragment extends Fragment {
     }
 
     private void guardarWorkingMen() {
-
-
         mWorkingManMock.name = ((EditText)getView().findViewById(R.id.tv_worker_name)).getText().toString();
         mWorkingManMock.last_name = ((EditText)getView().findViewById(R.id.tv_worker_lastName)).getText().toString();
         mWorkingManMock.cuil = ((EditText)getView().findViewById(R.id.tv_worker_cuil)).getText().toString();

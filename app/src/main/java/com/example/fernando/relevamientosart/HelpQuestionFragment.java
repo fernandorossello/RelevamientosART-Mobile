@@ -46,6 +46,8 @@ public class HelpQuestionFragment extends Fragment {
         TextView tvRespuesta = view.findViewById(R.id.tv_respuesta);
         tvRespuesta.setText(mPregunta.Answer);
 
+        getActivity().setTitle(R.string.titulo_ayuda);
+
         return view;
     }
 
