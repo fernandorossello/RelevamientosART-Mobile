@@ -1,7 +1,6 @@
 package com.example.fernando.relevamientosart;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -11,14 +10,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.TextView;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import Modelo.Enums.EnumTareas;
 import Modelo.Institution;
-import Modelo.Task;
 import Modelo.Visit;
 
 public class VisitDetalleFragment extends Fragment {
@@ -86,7 +80,7 @@ public class VisitDetalleFragment extends Fragment {
         tvCodPostal.setText(institution.postal_code);
 
         EditText tvTelefono = view.findViewById(R.id.tv_telefono);
-        tvTelefono.setText(institution.phone);
+        tvTelefono.setText(institution.phone_number);
 
 
         EditText tvContacto = view.findViewById(R.id.tv_contacto);

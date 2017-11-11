@@ -28,14 +28,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Formatter;
 
 import Modelo.Attendee;
 import Modelo.CAPResult;
 import Modelo.Enums.EnumAnswer;
 import Modelo.Enums.EnumTareas;
 import Modelo.Institution;
-import Modelo.Noise;
 import Modelo.Question;
 import Modelo.RARResult;
 import Modelo.RGRLResult;
@@ -191,8 +189,8 @@ public class PDFHelper {
         PdfPTable linea6 = new PdfPTable(2);
         linea6.setWidthPercentage(100);
 
-        if(institution.phone != null) {
-            linea6.addCell(getPdfPCell(getPhraseItem("Teléfono:", institution.phone)));
+        if(institution.phone_number != null) {
+            linea6.addCell(getPdfPCell(getPhraseItem("Teléfono:", institution.phone_number)));
         }
 
         if(institution.afip_cod != null) {

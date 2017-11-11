@@ -1,7 +1,5 @@
 package Modelo.Managers;
 
-import android.preference.PreferenceManager;
-
 import com.j256.ormlite.dao.Dao;
 
 import java.sql.SQLException;
@@ -48,7 +46,7 @@ public class VisitManager extends Manager<Visit> {
             number="Y.P.F Sucursal 1";
             workers_count=5;
             postal_code="C1015";
-            phone="4961-1234";
+            phone_number ="4961-1234";
             contact="Cosme Fulanito";
             email="empresa1@ypf.gob.ar";
             ciiu="01113";
@@ -68,7 +66,7 @@ public class VisitManager extends Manager<Visit> {
             number="Y.P.F Sucursal 1";
             workers_count=5;
             postal_code="C1015";
-            phone="4961-1234";
+            phone_number ="4961-1234";
             contact="Cosme Fulanito";
             email="empresa1@ypf.gob.ar";
             ciiu="01113";

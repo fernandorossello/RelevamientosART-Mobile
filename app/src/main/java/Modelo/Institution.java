@@ -45,7 +45,7 @@ public class Institution implements Serializable{
     public int workers_count;
 
     @DatabaseField
-    public String phone;
+    public String phone_number;
 
     @DatabaseField
     public String email;
