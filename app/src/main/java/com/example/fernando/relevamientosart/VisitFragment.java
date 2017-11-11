@@ -22,8 +22,6 @@ import Modelo.Visit;
 
 public class VisitFragment extends Fragment {
 
-    private static final String ARG_COLUMN_COUNT = "column-count";
-    private int mColumnCount = 1;
     private OnVisitSelectedListener mListener;
 
     /**
@@ -34,21 +32,13 @@ public class VisitFragment extends Fragment {
     }
 
     @SuppressWarnings("unused")
-    public static VisitFragment newInstance(int columnCount) {
-        VisitFragment fragment = new VisitFragment();
-        Bundle args = new Bundle();
-        args.putInt(ARG_COLUMN_COUNT, columnCount);
-        fragment.setArguments(args);
-        return fragment;
+    public static VisitFragment newInstance() {
+        return new VisitFragment();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        if (getArguments() != null) {
-            mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
-        }
     }
 
     @Override
@@ -60,11 +50,6 @@ public class VisitFragment extends Fragment {
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
             RecyclerView recyclerView = (RecyclerView) view;
-            if (mColumnCount <= 1) {
-                recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            } else {
-                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
-            }
 
             try {
                 DBHelper helper = ((MainActivity) getActivity()).getHelper();

@@ -17,6 +17,7 @@ import android.support.annotation.RequiresApi;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -236,13 +237,23 @@ public class MainActivity extends AppCompatActivity
                 try {
                     Toast.makeText(this, getString(R.string.msj_sincronizandoVisitas), Toast.LENGTH_SHORT).show();
                     obtenerVisitasDesdeEnpoint();
-                    //generarVisitasDePrueba();
                     enviarVisitasCompletadas();
 
                 }catch (Exception e){
                     Toast.makeText(this, R.string.error_carga_visitas, Toast.LENGTH_SHORT).show();
                 }
                 break;
+            }
+
+            case R.id.nav_inicio:{
+
+                getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragment_container, VisitFragment.newInstance())
+                        .addToBackStack(null)
+                        .commit();
             }
         }
 

@@ -124,5 +124,6 @@
     <string name="titulo_attendee">Asistente</string>
     <string name="titulo_ayuda">Ayuda</string>
     <string name="titulo_riesgos">Riesgos</string>
+    <string name="inicio">Inicio</string>
 
 </resources>
