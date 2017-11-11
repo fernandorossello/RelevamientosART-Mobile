@@ -31,6 +31,7 @@ import java.util.Date;
 import Excepciones.ValidationException;
 import Helpers.DBHelper;
 import Helpers.ValidacionHelper;
+import Modelo.Managers.VisitManager;
 import Modelo.Managers.WorkingManManager;
 import Modelo.RARResult;
 import Modelo.WorkingMan;
@@ -290,6 +291,7 @@ public class RiskFragment extends Fragment {
             mWorkingManMock.Validar();
             mWorkingMan.fill(mWorkingManMock);
             manager.persist(mWorkingMan);
+            new VisitManager(dbHelper).cambiarEstadoVisita(mWorkingMan.result);
 
             this.getActivity().onBackPressed();
         }

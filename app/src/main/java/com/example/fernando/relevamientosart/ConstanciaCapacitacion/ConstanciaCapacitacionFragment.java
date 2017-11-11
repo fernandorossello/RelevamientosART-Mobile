@@ -27,6 +27,7 @@ import Modelo.Attendee;
 import Modelo.CAPResult;
 import Modelo.Enums.EnumStatus;
 import Modelo.Managers.ResultManager;
+import Modelo.Managers.VisitManager;
 import Modelo.Result;
 import Modelo.Task;
 import Modelo.Visit;
@@ -156,6 +157,8 @@ public class ConstanciaCapacitacionFragment extends Fragment {
             }
 
             new ResultManager(dbHelper).persist(mResult);
+            new VisitManager(dbHelper).cambiarEstadoVisita(mResult);
+
         } catch (SQLException ex) {
             Toast.makeText(getActivity(), ex.getMessage(), Toast.LENGTH_SHORT).show();
         }

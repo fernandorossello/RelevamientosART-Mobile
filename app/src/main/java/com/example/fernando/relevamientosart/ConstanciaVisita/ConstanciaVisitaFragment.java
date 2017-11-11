@@ -134,6 +134,13 @@ public class ConstanciaVisitaFragment extends Fragment {
 
                         Toast.makeText(getContext(), R.string.guardadoYpdf, Toast.LENGTH_SHORT).show();
 
+                        mVisit.status = EnumStatus.FINALIZADA.id;
+                        try {
+                            new VisitManager(helper).persist(mVisit);
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
+
                         mListener.OnGuardarConstanciaDeVisita();
                     }
                 }catch (ValidationException ex){

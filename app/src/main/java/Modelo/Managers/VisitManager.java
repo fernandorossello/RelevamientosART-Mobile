@@ -134,50 +134,8 @@ public class VisitManager extends Manager<Visit> {
         Dao visitDao = dbHelper.getVisitDao();
 
         List<Visit> visitas = visitDao.queryBuilder().where().eq("user_id",userId).query();
-
-        for (Visit visita : visitas) {
-            CompletarEstadoVisita(visita);
-        }
         
         return visitas;
-    }
-
-    public void CompletarEstadoVisita(Visit visita) {
-
-        if(visita.status != EnumStatus.ENVIADA.id) {
-            List<EnumStatus> estadosTareas = new ArrayList<>();
-            ResultManager resultManager = new ResultManager(dbHelper);
-            for (Task tarea : visita.tasks) {
-                Result result = resultManager.getResult(tarea);
-                if (result == null) {
-                    estadosTareas.add(EnumStatus.PENDIENTE);
-                } else {
-                    estadosTareas.add(result.getStatus());
-                }
-            }
-
-            Boolean tieneEnCurso = false;
-            Boolean tieneFinalizadas = false;
-            Boolean tienePendientes = false;
-
-            for (EnumStatus estado : estadosTareas) {
-                if (estado == EnumStatus.ENPROCESO) {
-                    tieneEnCurso = true;
-                } else if (estado == EnumStatus.FINALIZADA) {
-                    tieneFinalizadas = true;
-                } else {
-                    tienePendientes = true;
-                }
-            }
-
-            if (tieneEnCurso || (tieneFinalizadas && tienePendientes)) {
-                visita.status = EnumStatus.ENPROCESO.id;
-            } else if (tieneFinalizadas && !tienePendientes) {
-                visita.status = EnumStatus.FINALIZADA.id;
-            } else {
-                visita.status = EnumStatus.PENDIENTE.id;
-            }
-        }
     }
 
     @Override
@@ -222,5 +180,16 @@ public class VisitManager extends Manager<Visit> {
 
     public boolean existe(int id) throws SQLException {
         return dbHelper.getVisitDao().idExists(id);
+    }
+
+    public void cambiarEstadoVisita(Result resultado) throws SQLException {
+
+        Visit visit = resultado.task.visit;
+
+        if(visit.status == EnumStatus.ASIGNADA.id ) {
+                visit.status = EnumStatus.ENPROCESO.id;
+        }
+
+        persist(visit);
     }
 }
