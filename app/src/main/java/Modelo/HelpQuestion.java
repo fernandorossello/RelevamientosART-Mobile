@@ -1,8 +1,10 @@
 package Modelo;
 
-public class HelpQuestion {
+import java.io.Serializable;
+
+public class HelpQuestion implements Serializable {
 
     public String Question;
 
-    public String Asnwer;
+    public String Answer;
 }

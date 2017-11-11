@@ -251,25 +251,6 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    private void generarVisitasDePrueba() {
-
-        VisitManager managerVisitas = new VisitManager(this.getHelper());
-        List<Visit> visitas = managerVisitas.simuladorParaTraerVisitasDelEndpoint();
-
-        int userId = ObtenerIdUsuarioLogueado();
-
-        for (Visit visita: visitas) {
-            visita.user_id = userId;
-        }
-
-        try {
-            managerVisitas.persist(visitas);
-        }
-        catch (SQLException e){
-            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
-        }
-    }
-
     private void RecargarListaDeVisitas(){
         getSupportFragmentManager()
                 .beginTransaction()
@@ -908,7 +889,11 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onQuestionSelected(HelpQuestion item) {
-        Toast.makeText(this, item.Question, Toast.LENGTH_SHORT).show();
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container,HelpQuestionFragment.newInstance(item) )
+                .addToBackStack(null)
+                .commit();
     }
 
     private int ObtenerIdUsuarioLogueado(){
