@@ -98,6 +98,17 @@ public class ConstanciaCapacitacionFragment extends Fragment {
 
         recyclerView.setAdapter(new MyAttendeeRecyclerViewAdapter(mResult.attendees, mListener));
 
+        TextView emptyView = view.findViewById(R.id.empty_view);
+
+        if (attendees.isEmpty()) {
+            recyclerView.setVisibility(View.GONE);
+            emptyView.setVisibility(View.VISIBLE);
+        }
+        else {
+            recyclerView.setVisibility(View.VISIBLE);
+            emptyView.setVisibility(View.GONE);
+        }
+
         FloatingActionButton btnAgregarAttendee = view.findViewById(R.id.btn_agregarAttendee);
         btnAgregarAttendee.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.fernando.relevamientosart.MainActivity;
@@ -92,11 +93,22 @@ public class RARFragment extends Fragment {
                 wm.Validar();
                 workingMen.add(wm);
             }catch (ValidationException ex){
-                //NO los agrega
+                //No los agrega
             }
         }
 
         mResult.working_men = workingMen;
+
+        TextView emptyView = view.findViewById(R.id.empty_view);
+
+        if (workingMen.isEmpty()) {
+            recyclerView.setVisibility(View.GONE);
+            emptyView.setVisibility(View.VISIBLE);
+        }
+        else {
+            recyclerView.setVisibility(View.VISIBLE);
+            emptyView.setVisibility(View.GONE);
+        }
 
         recyclerView.setAdapter(new MyTrabajadorRecyclerViewAdapter(mResult.working_men, mListener));
 

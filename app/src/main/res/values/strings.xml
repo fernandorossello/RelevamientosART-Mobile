@@ -112,6 +112,9 @@
     <string name="ayuda">Ayuda</string>
     <string name="error_envio_visitas">Se produjo un error al enviar las visitas</string>
 
+    <string name="no_employees_available">Aún no ha cargado ningún empleado</string>
+    <string name="no_visits_available">No hay visitas disponibles. Presione el botón sincronizar para obtener nuevas visitas asignadas</string>
+
     <!--Strings related to titulo -->
     <string name="titulo_detalle_visita">Detalle</string>
     <string name="titulo_RGRL">Formulario R.G.R.L.</string>
@@ -125,5 +128,6 @@
     <string name="titulo_ayuda">Ayuda</string>
     <string name="titulo_riesgos">Riesgos</string>
     <string name="inicio">Inicio</string>
+
 
 </resources>

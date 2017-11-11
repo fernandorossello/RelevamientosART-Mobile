@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.sql.SQLException;
@@ -46,20 +47,28 @@ public class VisitFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_visit_list, container, false);
 
-        // Set the adapter
-        if (view instanceof RecyclerView) {
-            Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
+
+            RecyclerView recyclerView = view.findViewById(R.id.visit_list);
 
             try {
                 DBHelper helper = ((MainActivity) getActivity()).getHelper();
                 final int userId = PreferenceManager.getDefaultSharedPreferences(getActivity()).getInt("idUsuario",-1);
                 List<Visit> visitas = new VisitManager(helper).obtenerVisitasSincronizadas(userId);
                 recyclerView.setAdapter(new MyVisitRecyclerViewAdapter(visitas, mListener));
-            }catch(SQLException e){
-                Toast.makeText(context, R.string.error_carga_visitas, Toast.LENGTH_SHORT).show();
+
+                TextView emptyView = view.findViewById(R.id.empty_view);
+
+                if (visitas.isEmpty()) {
+                    recyclerView.setVisibility(View.GONE);
+                    emptyView.setVisibility(View.VISIBLE);
+                }
+                else {
+                    recyclerView.setVisibility(View.VISIBLE);
+                    emptyView.setVisibility(View.GONE);
+                }
+            } catch(SQLException e){
+                Toast.makeText(getContext(), R.string.error_carga_visitas, Toast.LENGTH_SHORT).show();
             }
-        }
 
         setHasOptionsMenu(false);
         return view;
