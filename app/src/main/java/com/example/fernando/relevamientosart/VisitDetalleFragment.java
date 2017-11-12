@@ -113,7 +113,6 @@ public class VisitDetalleFragment extends Fragment {
         tvCIIU.setTextColor(0xff000000);
         tvCodAfip.setTextColor(0xff000000);
 
-
         setHasOptionsMenu(true);
 
         return view;

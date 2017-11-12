@@ -3,6 +3,7 @@ package com.example.fernando.relevamientosart.RAR;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -30,6 +31,9 @@ import Modelo.Task;
 import Modelo.Visit;
 import Modelo.WorkingMan;
 
+import static android.widget.LinearLayout.HORIZONTAL;
+import static android.widget.LinearLayout.VERTICAL;
+
 public class RARFragment extends Fragment {
 
     private static final String ARG_VISIT = "visita";
@@ -37,6 +41,7 @@ public class RARFragment extends Fragment {
     private Visit mVisit;
     private RARResult mResult;
     private DBHelper dbHelper;
+    private DividerItemDecoration mDividerItemDecoration;
 
 
     private OnTrabajadoresFragmentInteractionListener mListener;
@@ -123,6 +128,8 @@ public class RARFragment extends Fragment {
         });
 
         getActivity().setTitle(R.string.titulo_RAR);
+
+
 
         return view;
     }
