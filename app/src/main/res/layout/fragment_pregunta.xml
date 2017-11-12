@@ -11,7 +11,7 @@
 
     <TextView
         android:id="@+id/tv_categoria"
-        android:textSize="25dp"
+        style="@style/AppTheme.tituloPrincipal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

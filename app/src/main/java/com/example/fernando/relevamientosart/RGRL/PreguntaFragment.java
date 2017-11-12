@@ -182,7 +182,7 @@ public class PreguntaFragment extends Fragment {
         view.findViewById(R.id.tv_SI).setBackgroundColor(color);
         view.findViewById(R.id.tv_NoAplica).setBackgroundColor(color);
         view.findViewById(R.id.tv_NO).setBackgroundColor(color);
-        color = Color.parseColor("#0ae187");
+        color = getResources().getColor(R.color.colorAccent);
 
         int answer = preguntaEnCurso.answer_code;
 

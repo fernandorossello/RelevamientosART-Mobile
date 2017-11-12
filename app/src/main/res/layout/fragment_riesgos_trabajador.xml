@@ -14,8 +14,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/label_datosTrabajador"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="@dimen/label_size"
+            style="@style/AppTheme.tituloPrincipal"
             />
 
         <LinearLayout
@@ -156,8 +155,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/label_riesgos"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="@dimen/label_size"
+            style="@style/AppTheme.tituloPrincipal"
             />
 
     <include layout="@layout/fragment_risk_list"/>
