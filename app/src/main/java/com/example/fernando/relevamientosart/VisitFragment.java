@@ -47,7 +47,6 @@ public class VisitFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_visit_list, container, false);
 
-
             RecyclerView recyclerView = view.findViewById(R.id.visit_list);
 
             try {

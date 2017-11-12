@@ -4,6 +4,7 @@ import com.j256.ormlite.dao.Dao;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -132,7 +133,9 @@ public class VisitManager extends Manager<Visit> {
         Dao visitDao = dbHelper.getVisitDao();
 
         List<Visit> visitas = visitDao.queryBuilder().where().eq("user_id",userId).query();
-        
+
+        Collections.sort(visitas);
+
         return visitas;
     }
 

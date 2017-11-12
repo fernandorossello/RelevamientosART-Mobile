@@ -668,7 +668,6 @@ public class MainActivity extends AppCompatActivity
                         (Request.Method.GET, URL, null, new Response.Listener<JSONObject>() {
                             @Override
                             public void onResponse(JSONObject response) {
-                                Institution institucion = null;
                                 try {
                                     int idInstitucion = response.getInt("institution_id");
                                     Visit visit = new GsonBuilder().create().fromJson(response.toString(), Visit.class);

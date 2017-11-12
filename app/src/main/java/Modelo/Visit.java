@@ -1,5 +1,7 @@
 package Modelo;
 
+import android.support.annotation.NonNull;
+
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
 import com.j256.ormlite.field.DatabaseField;
@@ -14,7 +16,7 @@ import java.util.Date;
 import Modelo.Enums.EnumTareas;
 
 @DatabaseTable
-public class Visit implements Serializable {
+public class Visit implements Serializable,Comparable<Visit> {
 
     public Visit(){
         tasks = new ArrayList<>();
@@ -99,5 +101,25 @@ public class Visit implements Serializable {
                     .excludeFieldsWithoutExposeAnnotation()
                     .create()
                     .toJson(this);
+    }
+
+    @Override
+    public int compareTo(@NonNull Visit visit) {
+        if (this.to_visit_on.before(visit.to_visit_on)) {
+            return 1;
+        }
+        else if (this.to_visit_on.after(visit.to_visit_on)) {
+            return -1;
+        }
+        else {
+            if (this.priority < visit.priority) {
+                return 1;
+            }
+            else if (this.priority > visit.priority) {
+                return -1;
+            } else {
+                return 0;
+            }
+        }
     }
 }
