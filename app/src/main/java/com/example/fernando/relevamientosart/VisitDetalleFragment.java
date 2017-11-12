@@ -10,6 +10,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import Modelo.Enums.EnumStatus;
 import Modelo.Enums.EnumTareas;
@@ -64,37 +70,20 @@ public class VisitDetalleFragment extends Fragment {
         EditText tvCuit = view.findViewById(R.id.tv_cuit);
         tvCuit.setText(institution.cuit);
 
-        EditText tvContrato = view.findViewById(R.id.tv_contrato);
-        tvContrato.setText(institution.contract);
-
         EditText tvActividad = view.findViewById(R.id.tv_actividad);
         tvActividad.setText(institution.activity);
-
-
-        EditText tvNumYNomEstablec = view.findViewById(R.id.tv_NumYNomEstablecimiento);
-        tvNumYNomEstablec.setText(institution.number);
-
-        EditText tvNumTrabajadores = view.findViewById(R.id.tv_numTrabajadores);
-        tvNumTrabajadores.setText(Integer.toString(institution.workers_count));
-
-        EditText tvCodPostal = view.findViewById(R.id.tv_codPostal);
-        tvCodPostal.setText(institution.postal_code);
 
         EditText tvTelefono = view.findViewById(R.id.tv_telefono);
         tvTelefono.setText(institution.phone_number);
 
+        EditText tvFechaVisita = view.findViewById(R.id.tv_fecha_visita);
+        tvFechaVisita.setText(formatearFecha(mVisit.to_visit_on));
 
-        EditText tvContacto = view.findViewById(R.id.tv_contacto);
-        tvContacto.setText(institution.contact);
+        EditText tvEstadoVista = view.findViewById(R.id.tv_estado_visita);
+        tvEstadoVista.setText(EnumStatus.getById(mVisit.status).name);
 
-        EditText tvEmail= view.findViewById(R.id.tv_email);
-        tvEmail.setText(institution.email);
-
-        EditText tvCIIU= view.findViewById(R.id.tv_ciiu);
-        tvCIIU.setText(institution.ciiu);
-
-        EditText tvCodAfip= view.findViewById(R.id.tv_codAFIP);
-        tvCodAfip.setText(institution.afip_cod);
+        EditText tvPrioridadVisita = view.findViewById(R.id.tv_prioriodad_visita);
+        tvPrioridadVisita.setText(String.valueOf(mVisit.priority));
 
         getActivity().setTitle(R.string.titulo_detalle_visita);
 
@@ -103,16 +92,11 @@ public class VisitDetalleFragment extends Fragment {
         tvProvincia.setTextColor(0xff000000);
         tvLocalidad.setTextColor(0xff000000);
         tvCuit.setTextColor(0xff000000);
-        tvContrato.setTextColor(0xff000000);
         tvActividad.setTextColor(0xff000000);
-        tvNumYNomEstablec.setTextColor(0xff000000);
-        tvNumTrabajadores.setTextColor(0xff000000);
-        tvCodPostal.setTextColor(0xff000000);
         tvTelefono.setTextColor(0xff000000);
-        tvEmail.setTextColor(0xff000000);
-        tvContacto.setTextColor(0xff000000);
-        tvCIIU.setTextColor(0xff000000);
-        tvCodAfip.setTextColor(0xff000000);
+        tvPrioridadVisita.setTextColor(0xff000000);
+        tvEstadoVista.setTextColor(0xff000000);
+        tvFechaVisita.setTextColor(0xff000000);
 
         setHasOptionsMenu(true);
 
@@ -147,6 +131,12 @@ public class VisitDetalleFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
+    }
+
+    private String formatearFecha(Date date){
+        String myFormat = "dd/MM/yy";
+        SimpleDateFormat sdf = new SimpleDateFormat(myFormat);
+        return sdf.format(date);
     }
 
 }

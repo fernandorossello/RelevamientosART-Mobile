@@ -52,7 +52,7 @@
     <string name="domicilio">Domicilio</string>
     <string name="cuit">CUIT</string>
     <string name="contrato_num">Contrato N°</string>
-    <string name="fecha_visita">Fecha visita</string>
+    <string name="fecha_visita">Fecha de visita</string>
     <string name="actividad">Actividad</string>
     <string name="ciuu">CIIU</string>
     <string name="establec_nombre_numero">N° y Nombre del estab.</string>
@@ -128,6 +128,12 @@
     <string name="titulo_ayuda">Ayuda</string>
     <string name="titulo_riesgos">Riesgos</string>
     <string name="inicio">Inicio</string>
+    <string name="datos_visita_titulo">Datos de la visita</string>
+    <string name="datos_empresa_titulo">Datos de la empresa</string>
+    <string name="prioriodad_visita">Prioridad</string>
+    <string name="estado_visita">Estado</string>
+    <string name="more_info">Más información</string>
+    <string name="less_info">Menos información</string>
 
 
 </resources>
