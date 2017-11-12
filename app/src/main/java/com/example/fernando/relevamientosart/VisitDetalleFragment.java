@@ -136,7 +136,7 @@ public class VisitDetalleFragment extends Fragment {
             menuItem = menu.findItem(R.id.action_constancia);
             menuItem.setVisible(true);
         }
-    }   
+    }
 
 
     @Override

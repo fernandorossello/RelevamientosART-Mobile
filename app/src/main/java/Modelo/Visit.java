@@ -105,17 +105,17 @@ public class Visit implements Serializable,Comparable<Visit> {
 
     @Override
     public int compareTo(@NonNull Visit visit) {
-        if (this.to_visit_on.before(visit.to_visit_on)) {
+        if (this.to_visit_on.after(visit.to_visit_on)) {
             return 1;
         }
-        else if (this.to_visit_on.after(visit.to_visit_on)) {
+        else if (this.to_visit_on.before(visit.to_visit_on)) {
             return -1;
         }
         else {
-            if (this.priority < visit.priority) {
+            if (this.priority > visit.priority) {
                 return 1;
             }
-            else if (this.priority > visit.priority) {
+            else if (this.priority < visit.priority) {
                 return -1;
             } else {
                 return 0;
