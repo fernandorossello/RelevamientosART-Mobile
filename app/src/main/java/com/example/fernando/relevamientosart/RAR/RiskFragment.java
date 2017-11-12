@@ -194,9 +194,10 @@ public class RiskFragment extends Fragment {
         tvFechaIngreso.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new DatePickerDialog(v.getContext(), dateSetListener, myCalendar
+                new DatePickerDialog(v.getContext(),R.style.DialogTheme, dateSetListener, myCalendar
                         .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+                        myCalendar.get(Calendar.DAY_OF_MONTH))
+                        .show();
             }
         });
     }
@@ -218,7 +219,7 @@ public class RiskFragment extends Fragment {
         tvFechaInicio.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new DatePickerDialog(v.getContext(), dateSetInicioListener, myCalendar
+                new DatePickerDialog(v.getContext(), R.style.DialogTheme, dateSetInicioListener, myCalendar
                         .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
                         myCalendar.get(Calendar.DAY_OF_MONTH)).show();
             }
@@ -242,7 +243,7 @@ public class RiskFragment extends Fragment {
         tvFechaFin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new DatePickerDialog(v.getContext(), dateSetFinListener, myCalendar
+                new DatePickerDialog(v.getContext(),R.style.DialogTheme, dateSetFinListener, myCalendar
                         .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
                         myCalendar.get(Calendar.DAY_OF_MONTH)).show();
             }
