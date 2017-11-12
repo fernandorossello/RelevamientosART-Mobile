@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Formatter;
 import java.util.List;
 
+import Excepciones.ValidationException;
 import Modelo.Noise;
 import Modelo.Visit;
 
@@ -42,7 +43,6 @@ public class MedidorDeRuidoFragment extends Fragment {
     private Double maxNoise = MIN_DB;
 
     private OnNoiseListFragmentInteractionListener mListener;
-
 
     public MedidorDeRuidoFragment() {
         // Required empty public constructor
@@ -107,15 +107,23 @@ public class MedidorDeRuidoFragment extends Fragment {
         btnRegistrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Noise noise = new Noise(){{
-                    decibels = maxNoise;
-                    visit = mVisit;
-                }};
-                noise.description = etDescripcion.getText().toString();
-                mVisit.noises.add(noise);
+                try {
+                    String textoDescripcion = etDescripcion.getText().toString().trim();
+                    if (textoDescripcion == null || textoDescripcion.isEmpty()){
+                        throw new ValidationException("Debe ingresar una descripción");
+                    }
+                    Noise noise = new Noise() {{
+                        decibels = maxNoise;
+                        visit = mVisit;
+                    }};
+                    noise.description = etDescripcion.getText().toString();
+                    mVisit.noises.add(noise);
 
-                recyclerView.setAdapter(new MyNoiseRecyclerViewAdapter(mVisit.noises,mListener));
-                inicializar();
+                    recyclerView.setAdapter(new MyNoiseRecyclerViewAdapter(mVisit.noises, mListener));
+                    inicializar();
+                } catch (ValidationException ex){
+                    Toast.makeText(getContext(), ex.getMessage(), Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -123,7 +131,6 @@ public class MedidorDeRuidoFragment extends Fragment {
 
         return view;
     }
-
 
     private void inicializar(){
         EditText etDescripcion = getView().findViewById(R.id.etDescripcionDecibeles);
