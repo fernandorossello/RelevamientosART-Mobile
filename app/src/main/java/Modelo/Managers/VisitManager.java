@@ -132,7 +132,10 @@ public class VisitManager extends Manager<Visit> {
     public List<Visit> obtenerVisitasSincronizadas(int userId) throws SQLException{
         Dao visitDao = dbHelper.getVisitDao();
 
-        List<Visit> visitas = visitDao.queryBuilder().where().eq("user_id",userId).query();
+        List<Visit> visitas = visitDao.queryBuilder()
+                                .where().eq("user_id",userId)
+                                .and().not().eq("status",EnumStatus.ENVIADA.id)
+                                .query();
 
         Collections.sort(visitas);
 

@@ -11,19 +11,15 @@
         tools:context="com.example.fernando.relevamientosart.ConstanciaCapacitacion.ConstanciaCapacitacionFragment"
         android:orientation="vertical">
 
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/curso"
-                android:textColor="@color/colorPrimary"
-                android:textSize="@dimen/label_size"/>
+                style="@style/AppTheme.tituloPrincipal"/>
 
-        </android.support.design.widget.TextInputLayout>
-
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
         <EditText
             android:id="@+id/tv_capr_course"
             android:layout_width="match_parent"
@@ -32,20 +28,11 @@
             android:imeActionLabel="@string/hint_nombre_curso"
             android:inputType="text"
             android:maxLines="1" />
+        </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/contenidos"
-                android:textColor="@color/colorPrimary"
-                android:textSize="@dimen/label_size"/>
-
-        </android.support.design.widget.TextInputLayout>
-
         <EditText
             android:id="@+id/tv_capr_content"
             android:layout_width="match_parent"
@@ -54,20 +41,11 @@
             android:imeActionLabel="@string/hint_nombre_contenidos"
             android:inputType="text"
             android:maxLines="1" />
+        </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/metodologia"
-                android:textColor="@color/colorPrimary"
-                android:textSize="@dimen/label_size"/>
-
-        </android.support.design.widget.TextInputLayout>
-
         <EditText
             android:id="@+id/tv_capr_methodology"
             android:layout_width="match_parent"
@@ -76,13 +54,13 @@
             android:imeActionLabel="@string/hint_nombre_metodologia"
             android:inputType="text"
             android:maxLines="1" />
+        </android.support.design.widget.TextInputLayout>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/lbl_lista_attendees"
-            android:textColor="@color/colorPrimary"
-            android:textSize="@dimen/label_size"/>
+            style="@style/AppTheme.tituloPrincipal"/>
 
         <include layout="@layout/fragment_attendee_list" />
 

@@ -76,13 +76,12 @@ public class ConstanciaCapacitacionFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_constancia_capacitacion, container, false);
 
-        ((TextView) view.findViewById(R.id.tv_capr_course)).setText(mResult.course_name);
-        ((TextView) view.findViewById(R.id.tv_capr_content)).setText(mResult.contents);
-        ((TextView) view.findViewById(R.id.tv_capr_methodology)).setText(mResult.methodology);
+        ((EditText) view.findViewById(R.id.tv_capr_course)).setText(mResult.course_name);
+        ((EditText) view.findViewById(R.id.tv_capr_content)).setText(mResult.contents);
+        ((EditText) view.findViewById(R.id.tv_capr_methodology)).setText(mResult.methodology);
 
         RecyclerView recyclerView  = view.findViewById(R.id.attendeeList);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
-
 
         List<Attendee> attendees = new ArrayList<>();
         for (Attendee attendee : mResult.attendees) {

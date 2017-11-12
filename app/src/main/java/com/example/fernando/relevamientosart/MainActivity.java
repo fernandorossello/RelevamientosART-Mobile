@@ -769,19 +769,19 @@ public class MainActivity extends AppCompatActivity
         Integer idUsuario = ObtenerIdUsuarioLogueado();
 
         List<Visit> visitasCompletadas = managerVisitas.obtenerVisitasCompletadas(idUsuario);
-        for(int i = 0; i < visitasCompletadas.size(); i++){
-            enviarVisitaAEndpoint(visitasCompletadas.get(i));
-            //managerVisitas.borrarVisita(visitasCompletadas.get(i));
+        for (Visit visit : visitasCompletadas) {
+            visit.status = EnumStatus.ENVIANDO.id;
+            managerVisitas.persist(visit);
+            enviarVisitaAEndpoint(visit);
         }
     }
 
     private void enviarVisitaAEndpoint(Visit visit) {
         //Debe mandar todos los resultados y las imágenes
         ResultManager resultManager =  new ResultManager(getHelper());
-        ArrayList<Task> tareas = new ArrayList<>(visit.tasks);
 
-        for(int i = 0; i < tareas.size() ; i++){
-            Result resultado = resultManager.getResult(tareas.get(i));
+        for (Task task: visit.tasks) {
+            Result resultado = resultManager.getResult(task);
             if (resultado != null) enviarResultado(resultado);
         }
 
@@ -841,6 +841,15 @@ public class MainActivity extends AppCompatActivity
     private void enviarConstanciaDeVisita(final Visit visit) {
         try {
             RequestQueue requestQueue = Volley.newRequestQueue(this);
+            final VisitManager visitManager = new VisitManager(getHelper());
+            visit.status = EnumStatus.FINALIZADA.id;
+
+            try {
+                visitManager.persist(visit);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
             String URL = URL_ENDPOINT_VISITA_ENVIO + visit.id + "/completion";
             JsonObjectRequest jsonRequest = new JsonObjectRequest
                     (Request.Method.PUT, URL, null, new Response.Listener<JSONObject>() {
@@ -848,7 +857,7 @@ public class MainActivity extends AppCompatActivity
                         public void onResponse(JSONObject response) {
                             visit.status = EnumStatus.ENVIADA.id;
                             try {
-                                new VisitManager(getHelper()).persist(visit);
+                                visitManager.persist(visit);
                             } catch (SQLException e) {
                                 e.printStackTrace();
                             }
@@ -857,10 +866,9 @@ public class MainActivity extends AppCompatActivity
                     }, new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            if (error.networkResponse.statusCode == 401) {
-                                Toast.makeText(MainActivity.this, R.string.error_envio_visitas, Toast.LENGTH_SHORT).show();
-                            }
+                            Toast.makeText(MainActivity.this, R.string.error_envio_visitas, Toast.LENGTH_SHORT).show();
                             VolleyError err = error;
+                            RecargarListaDeVisitas();
                         }
                     }){
                 @Override

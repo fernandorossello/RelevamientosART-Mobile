@@ -9,7 +9,8 @@ public enum EnumStatus  implements Serializable{
     ASIGNADA(1, "Asignada"),
     ENPROCESO(2, "En proceso"),
     FINALIZADA(3,"Finalizada"),
-    ENVIADA(4,"Enviada");
+    ENVIADA(4,"Enviada"),
+    ENVIANDO(10,"Enviando");
 
 
     public java.lang.String name;

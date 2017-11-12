@@ -67,7 +67,7 @@
     <string name="lbl_lista_attendees">Empleados que asistieron</string>
     <string name="metodologia">Metodología</string>
     <string name="contenidos">Contenidos</string>
-    <string name="curso">Curso</string>
+    <string name="curso">Datos del curso</string>
     <string name="verFotos">Ver fotos</string>
     <string name="borrarImagen">¿Desea borrar la imagen?</string>
     <string name="borrarImagen_Title">Borrar imagen</string>
@@ -91,9 +91,9 @@
     <string name="pdfGenerado">Se ha generado el PDF</string>
 
     <!--Strings related to Constancia de Capacitacion -->
-    <string name="hint_nombre_curso">Nombre del Curso</string>
+    <string name="hint_nombre_curso">Nombre del curso</string>
     <string name="hint_nombre_contenidos">Contenidos</string>
-    <string name="hint_nombre_metodologia">Metodologia Empleada</string>
+    <string name="hint_nombre_metodologia">Metodología empleada</string>
 
 
     <string name="descartar">Descartar</string>
