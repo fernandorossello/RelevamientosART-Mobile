@@ -3,6 +3,7 @@ package com.example.fernando.relevamientosart;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.method.TextKeyListener;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -14,12 +15,14 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import Modelo.Enums.EnumStatus;
 import Modelo.Enums.EnumTareas;
 import Modelo.Institution;
+import Modelo.Managers.VisitManager;
 import Modelo.Visit;
 
 public class VisitDetalleFragment extends Fragment {
@@ -53,6 +56,12 @@ public class VisitDetalleFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_visita_detalle, container, false);
 
+        /*try {
+            mVisit = new VisitManager(((MainActivity)getActivity()).getHelper()).obtenerPorId(mVisit.id);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        */
         Institution institution = mVisit.institution;
 
         EditText tvNombreInstitucion = view.findViewById(R.id.tv_detalle_nombre_institucion);
@@ -79,8 +88,10 @@ public class VisitDetalleFragment extends Fragment {
         EditText tvFechaVisita = view.findViewById(R.id.tv_fecha_visita);
         tvFechaVisita.setText(formatearFecha(mVisit.to_visit_on));
 
+
         EditText tvEstadoVista = view.findViewById(R.id.tv_estado_visita);
         tvEstadoVista.setText(EnumStatus.getById(mVisit.status).name);
+
 
         EditText tvPrioridadVisita = view.findViewById(R.id.tv_prioriodad_visita);
         tvPrioridadVisita.setText(String.valueOf(mVisit.priority));
@@ -139,4 +150,11 @@ public class VisitDetalleFragment extends Fragment {
         return sdf.format(date);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        EditText tvEstadoVista = getView().findViewById(R.id.tv_estado_visita);
+        tvEstadoVista.setText(EnumStatus.getById(mVisit.status).name);
+
+    }
 }
