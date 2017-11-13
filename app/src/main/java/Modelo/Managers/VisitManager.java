@@ -137,6 +137,8 @@ public class VisitManager extends Manager<Visit> {
                                 .and().not().eq("status",EnumStatus.ENVIADA.id)
                                 .query();
 
+        List<Visit> visitas2 = visitDao.queryForAll();
+
         Collections.sort(visitas);
 
         return visitas;

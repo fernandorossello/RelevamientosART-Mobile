@@ -36,6 +36,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.fernando.relevamientosart.ConstanciaCapacitacion.ConstanciaCapacitacionFragment;
 import com.example.fernando.relevamientosart.ConstanciaCapacitacion.NewAttendeeFragment;
@@ -711,7 +712,7 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    private void completarInstitucion(final Visit visit, int idInstitucion) {
+    private void completarInstitucion(final Visit visit, final int idInstitucion) {
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         final VisitManager managerVisitas = new VisitManager(this.getHelper());
 
@@ -723,9 +724,11 @@ public class MainActivity extends AppCompatActivity
                     public void onResponse(JSONObject response) {
 
                         visit.institution = new GsonBuilder().create().fromJson(response.toString(), Institution.class);
+                        visit.institution.id = idInstitucion;
                         try {
                             managerVisitas.persist(visit);
                             RecargarListaDeVisitas();
+                            //ConfirmarRecepcionAlServidor(visit);
                         } catch (SQLException e) {
                             Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
@@ -920,5 +923,53 @@ public class MainActivity extends AppCompatActivity
 
     public void setTitle(int id){
         getSupportActionBar().setTitle(id);
+    }
+
+    private void ConfirmarRecepcionAlServidor(final Visit visit){
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        final VisitManager managerVisitas = new VisitManager(this.getHelper());
+
+        String URL = URL_ENDPOINT_VISITA_ENVIO + visit.id + "/in_process";
+
+        StringRequest jsonRequest = new StringRequest
+                (Request.Method.PUT,URL, new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        RecargarListaDeVisitas();
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(MainActivity.this, R.string.error_carga_visitas, Toast.LENGTH_SHORT).show();
+                        try {
+                            managerVisitas.borrarVisita(visit);
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
+                        RecargarListaDeVisitas();
+                        VolleyError err = error;
+                    }
+                }){
+            @Override
+            public String getBodyContentType() {
+                return "application/json; charset=utf-8";
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String,String> headers =  new HashMap<>();
+                headers.put("Content-Type","application/json");
+                headers.put("Accept","application/json");
+
+                return headers;
+            }
+
+            @Override
+            public byte[] getBody(){
+                return null;
+            }
+        };
+        requestQueue.add(jsonRequest);
     }
 }
