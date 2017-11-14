@@ -132,8 +132,6 @@
     <string name="datos_empresa_titulo">Datos de la empresa</string>
     <string name="prioriodad_visita">Prioridad</string>
     <string name="estado_visita">Estado</string>
-    <string name="more_info">Más información</string>
-    <string name="less_info">Menos información</string>
 
 
 </resources>

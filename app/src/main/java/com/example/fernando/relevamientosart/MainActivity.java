@@ -6,6 +6,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -240,6 +242,12 @@ public class MainActivity extends AppCompatActivity
 
             case R.id.nav_sincronizar:{
                 try {
+
+                    if(!TieneAccesoAInternet()) {
+                        Toast.makeText(this, R.string.internet_requerido, Toast.LENGTH_SHORT).show();
+                        break;
+                    }
+
                     Toast.makeText(this, getString(R.string.msj_sincronizandoVisitas), Toast.LENGTH_SHORT).show();
                     obtenerVisitasDesdeEnpoint();
                     enviarVisitasCompletadas();
@@ -803,7 +811,6 @@ public class MainActivity extends AppCompatActivity
                 enviarResultado(resultado);
             }
         }
-
     }
 
     private void enviarResultado(final Result resultado) {
@@ -836,6 +843,14 @@ public class MainActivity extends AppCompatActivity
                     }, new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
+
+                            resultado.task.visit.status = EnumStatus.FINALIZADA.id;
+                            try {
+                                new VisitManager(mDBHelper).persist(resultado.task.visit);
+                            } catch (SQLException e) {
+                                e.printStackTrace();
+                            }
+
                                 Toast.makeText(MainActivity.this, R.string.error_carga_visitas, Toast.LENGTH_SHORT).show();
                             Log.e("Sincronizar","Error al enviar el resultado " +EnumTareas.getById(resultado.id).name +
                                     " de la visita " + resultado.task.visit.toString() + ". " + new String(error.networkResponse.data));
@@ -907,9 +922,18 @@ public class MainActivity extends AppCompatActivity
                     }, new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
+
+                            visit.status = EnumStatus.FINALIZADA.id;
+                            try {
+                                visitManager.persist(visit);
+                            } catch (SQLException e) {
+                                e.printStackTrace();
+                            }
+
                             Toast.makeText(MainActivity.this, R.string.error_envio_visitas, Toast.LENGTH_SHORT).show();
                             Log.e("Sincronizar","Error al completar visita " + visit.toString() + ". "
                                     + new String(error.networkResponse.data));
+
                             RecargarListaDeVisitas();
                         }
                     }){
@@ -1015,5 +1039,11 @@ public class MainActivity extends AppCompatActivity
         };
 
         requestQueue.add(jsonRequest);
+    }
+
+    private boolean TieneAccesoAInternet(){
+        ConnectivityManager connectivityManager = (ConnectivityManager)this.getSystemService(Context.CONNECTIVITY_SERVICE);
+        return (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
+                connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED);
     }
 }
