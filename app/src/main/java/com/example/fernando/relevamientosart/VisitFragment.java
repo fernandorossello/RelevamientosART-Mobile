@@ -69,6 +69,8 @@ public class VisitFragment extends Fragment {
                 Toast.makeText(getContext(), R.string.error_carga_visitas, Toast.LENGTH_SHORT).show();
             }
 
+        getActivity().setTitle(R.string.titulo_visitas);
+
         setHasOptionsMenu(false);
         return view;
     }
