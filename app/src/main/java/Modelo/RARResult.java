@@ -21,6 +21,7 @@ public class RARResult extends Result implements Serializable {
         }
 
         type = EnumTareas.RAR.id;
+        status = EnumStatus.ENPROCESO.id;
     }
 
     @Expose
@@ -29,6 +30,10 @@ public class RARResult extends Result implements Serializable {
 
     @Override
     public EnumStatus getStatus() {
+
+        if(this.status == EnumStatus.ENVIADA.id){
+            return EnumStatus.ENVIADA;
+        }
 
         if(this.working_men.isEmpty()){
             return EnumStatus.PENDIENTE;

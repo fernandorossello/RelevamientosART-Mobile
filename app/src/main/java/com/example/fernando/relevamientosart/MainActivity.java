@@ -125,6 +125,8 @@ public class MainActivity extends AppCompatActivity
 
     private StrictMode.VmPolicy.Builder mBuilder;
 
+    RequestQueue requestQueue;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -141,6 +143,8 @@ public class MainActivity extends AppCompatActivity
         //Allow camera works in SDK targets above v24
         mBuilder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(mBuilder.build());
+
+        requestQueue = Volley.newRequestQueue(this);
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -586,14 +590,15 @@ public class MainActivity extends AppCompatActivity
     }
 
     //************************************************ Endpoints ************************************************
+
     private void obtenerVisitasDesdeEnpoint() {
         try {
-            RequestQueue requestQueue = Volley.newRequestQueue(this);
-
             Integer idUsuario = ObtenerIdUsuarioLogueado();
             String estadoVisita = "assigned";
 
             String URL = URL_ENDPOINT_VISITAS_LIST + "?user_id=" + idUsuario + "&status=" + estadoVisita;
+
+            Log.i("Sincronizar","Obteniendo visitas desde "+ URL);
 
             final List<Integer>  idVisitas = new ArrayList<>();
 
@@ -606,6 +611,9 @@ public class MainActivity extends AppCompatActivity
                                     JSONObject visitaJson= response.getJSONObject(i);
                                     idVisitas.add(visitaJson.getInt("id"));
                                 }
+
+                                Log.i("Sincronizar","Visitas obtenidas " + response.toString() );
+
                                 obtenerDetalleDeVisitas(idVisitas);
 
                             } catch (JSONException e) {
@@ -618,10 +626,8 @@ public class MainActivity extends AppCompatActivity
 
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            if (error.networkResponse.statusCode == 401) {
-                                Toast.makeText(MainActivity.this, R.string.error_carga_visitas, Toast.LENGTH_SHORT).show();
-                            }
-                            VolleyError err = error;
+                            Toast.makeText(MainActivity.this, R.string.error_carga_visitas, Toast.LENGTH_SHORT).show();
+                            Log.e("Sincronizar","Error al obtener visitas:" + new String(error.networkResponse.data) );
                         }
                     }){
                 @Override
@@ -652,18 +658,20 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void obtenerDetalleDeVisitas(List<Integer> idVisitas) throws SQLException {
-        for(int i = 0; i < idVisitas.size(); i++) {
 
-            final VisitManager managerVisitas = new VisitManager(this.getHelper());
+        final VisitManager managerVisitas = new VisitManager(this.getHelper());
 
-            if (!managerVisitas.existe(idVisitas.get(i))) {
+        for (Integer idVisita:idVisitas) {
 
-                RequestQueue requestQueue = Volley.newRequestQueue(this);
-                String idBuscado = idVisitas.get(i).toString();
+            if (!managerVisitas.existe(idVisita)) {
+
+                String idBuscado = idVisita.toString();
 
                 final int userId = ObtenerIdUsuarioLogueado();
 
                 String URL = URL_ENDPOINT_VISITAS_DETALLE + "/" + idBuscado;
+
+                Log.i("Sincronizar","Obteniendo detalle de visita desde:" + URL);
 
                 JsonObjectRequest jsonRequest = new JsonObjectRequest
                         (Request.Method.GET, URL, null, new Response.Listener<JSONObject>() {
@@ -673,6 +681,7 @@ public class MainActivity extends AppCompatActivity
                                     int idInstitucion = response.getInt("institution_id");
                                     Visit visit = new GsonBuilder().create().fromJson(response.toString(), Visit.class);
                                     visit.user_id = userId;
+                                    Log.i("Sincronizar","Se obtuvo correctamente el detalle de visita de la visita :" + response.toString() );
                                     completarInstitucion(visit, idInstitucion);
                                 } catch (JSONException e) {
                                     Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -682,10 +691,8 @@ public class MainActivity extends AppCompatActivity
 
                             @Override
                             public void onErrorResponse(VolleyError error) {
-                                if (error.networkResponse.statusCode == 401) {
-                                    Toast.makeText(MainActivity.this, R.string.error_carga_visitas, Toast.LENGTH_SHORT).show();
-                                }
-                                VolleyError err = error;
+                                Toast.makeText(MainActivity.this, R.string.error_carga_visitas, Toast.LENGTH_SHORT).show();
+                                Log.e("Sincronizar","Error al obtener un detalle de visita:" + new String(error.networkResponse.data) );
                             }
                         }) {
                     @Override
@@ -707,16 +714,18 @@ public class MainActivity extends AppCompatActivity
                         return null;
                     }
                 };
+
                 requestQueue.add(jsonRequest);
             }
         }
     }
 
     private void completarInstitucion(final Visit visit, final int idInstitucion) {
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
         final VisitManager managerVisitas = new VisitManager(this.getHelper());
 
         String URL = URL_ENDPOINT_INSTITUCIONES + "/" + idInstitucion;
+
+        Log.i("Sincronizar","Obteniendo institución desde:" + URL);
 
         JsonObjectRequest jsonRequest = new JsonObjectRequest
                 (Request.Method.GET,URL, null, new Response.Listener<JSONObject>() {
@@ -725,23 +734,23 @@ public class MainActivity extends AppCompatActivity
 
                         visit.institution = new GsonBuilder().create().fromJson(response.toString(), Institution.class);
                         visit.institution.id = idInstitucion;
+
+                        Log.i("Sincronizar","Obtenida institución: " + response.toString());
+
                         try {
                             managerVisitas.persist(visit);
-                            RecargarListaDeVisitas();
-                            //ConfirmarRecepcionAlServidor(visit);
+                            ConfirmarRecepcionAlServidor(visit);
                         } catch (SQLException e) {
                             Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
-
                     }
                 }, new Response.ErrorListener() {
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        if (error.networkResponse.statusCode == 401) {
-                            Toast.makeText(MainActivity.this, R.string.error_carga_institucion, Toast.LENGTH_SHORT).show();
-                        }
-                        VolleyError err = error;
+                       Toast.makeText(MainActivity.this, R.string.error_carga_institucion, Toast.LENGTH_SHORT).show();
+                       Log.e("Sincronizar","Error al obtener la institución id:" + idInstitucion + " -- " +
+                               new String(error.networkResponse.data) );
                     }
                 }){
             @Override
@@ -763,6 +772,7 @@ public class MainActivity extends AppCompatActivity
                 return null;
             }
         };
+
         requestQueue.add(jsonRequest);
     }
 
@@ -772,6 +782,8 @@ public class MainActivity extends AppCompatActivity
         Integer idUsuario = ObtenerIdUsuarioLogueado();
 
         List<Visit> visitasCompletadas = managerVisitas.obtenerVisitasCompletadas(idUsuario);
+
+
         for (Visit visit : visitasCompletadas) {
             visit.status = EnumStatus.ENVIANDO.id;
             managerVisitas.persist(visit);
@@ -783,29 +795,50 @@ public class MainActivity extends AppCompatActivity
         //Debe mandar todos los resultados y las imágenes
         ResultManager resultManager =  new ResultManager(getHelper());
 
+        Log.i("Sincronizar","Enviando visita: " + visit.toString());
+
         for (Task task: visit.tasks) {
             Result resultado = resultManager.getResult(task);
-            if (resultado != null) enviarResultado(resultado);
+            if (resultado != null && resultado.getStatus() != EnumStatus.ENVIADA){
+                enviarResultado(resultado);
+            }
         }
 
-        enviarConstanciaDeVisita(visit);
     }
 
     private void enviarResultado(final Result resultado) {
         try {
-            RequestQueue requestQueue = Volley.newRequestQueue(this);
             String URL = URL_ENDPOINT_RESULTADOS + resultado.task.id +"/completion";
+
+            Log.i("Sincronizar","Enviando resultado : " + EnumTareas.getById(resultado.type).name +
+                    " de la visita " + resultado.task.visit.toString());
+
             JsonObjectRequest jsonRequest = new JsonObjectRequest
                     (Request.Method.PUT, URL, null, new Response.Listener<JSONObject>() {
                         @Override
-                        public void onResponse(JSONObject response) {}
+                        public void onResponse(JSONObject response) {
+                            Log.i("Sincronizar",EnumTareas.getById(resultado.type).name +
+                                    " de la visita " + resultado.task.visit.toString() + " enviado correctamente");
+
+                            resultado.status = EnumStatus.ENVIADA.id;
+
+                            try {
+                                new ResultManager(mDBHelper).persist(resultado);
+                            } catch (SQLException e) {
+                                e.printStackTrace();
+                            }
+
+                            if(new VisitManager(mDBHelper).tieneTodosLosResultadosEnviados(resultado.task.visit)){
+                                enviarConstanciaDeVisita(resultado.task.visit);
+                            }
+
+                        }
                     }, new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            if (error.networkResponse.statusCode == 401) {
                                 Toast.makeText(MainActivity.this, R.string.error_carga_visitas, Toast.LENGTH_SHORT).show();
-                            }
-                            VolleyError err = error;
+                            Log.e("Sincronizar","Error al enviar el resultado " +EnumTareas.getById(resultado.id).name +
+                                    " de la visita " + resultado.task.visit.toString() + ". " + new String(error.networkResponse.data));
                         }
                     }){
                 @Override
@@ -843,7 +876,7 @@ public class MainActivity extends AppCompatActivity
 
     private void enviarConstanciaDeVisita(final Visit visit) {
         try {
-            RequestQueue requestQueue = Volley.newRequestQueue(this);
+
             final VisitManager visitManager = new VisitManager(getHelper());
             visit.status = EnumStatus.FINALIZADA.id;
 
@@ -854,6 +887,9 @@ public class MainActivity extends AppCompatActivity
             }
 
             String URL = URL_ENDPOINT_VISITA_ENVIO + visit.id + "/completion";
+
+            Log.i("Sincronizar","Enviando constancia de visita : " + visit.toString());
+
             JsonObjectRequest jsonRequest = new JsonObjectRequest
                     (Request.Method.PUT, URL, null, new Response.Listener<JSONObject>() {
                         @Override
@@ -865,12 +901,15 @@ public class MainActivity extends AppCompatActivity
                                 e.printStackTrace();
                             }
                             RecargarListaDeVisitas();
+
+                            Log.i("Sincronizar","Visita " + visit.toString() + " enviada correctamente.");
                         }
                     }, new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
                             Toast.makeText(MainActivity.this, R.string.error_envio_visitas, Toast.LENGTH_SHORT).show();
-                            VolleyError err = error;
+                            Log.e("Sincronizar","Error al completar visita " + visit.toString() + ". "
+                                    + new String(error.networkResponse.data));
                             RecargarListaDeVisitas();
                         }
                     }){
@@ -926,16 +965,19 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void ConfirmarRecepcionAlServidor(final Visit visit){
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
+
         final VisitManager managerVisitas = new VisitManager(this.getHelper());
 
         String URL = URL_ENDPOINT_VISITA_ENVIO + visit.id + "/in_process";
+
+        Log.i("Sincronizar","Enviando confirmación de recepción de visita " + visit.toString() + " a " + URL);
 
         StringRequest jsonRequest = new StringRequest
                 (Request.Method.PUT,URL, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         RecargarListaDeVisitas();
+                        Log.i("Sincronizar","Confirmación de recepción de visita " + visit.toString() + " recibida correctamente.");
                     }
                 }, new Response.ErrorListener() {
 
@@ -948,7 +990,8 @@ public class MainActivity extends AppCompatActivity
                             e.printStackTrace();
                         }
                         RecargarListaDeVisitas();
-                        VolleyError err = error;
+                        Log.e("Sincronizar","Error al enviar confirmación de recepción de visita " + visit.toString() + ". "
+                                + new String(error.networkResponse.data));
                     }
                 }){
             @Override
@@ -970,6 +1013,7 @@ public class MainActivity extends AppCompatActivity
                 return null;
             }
         };
+
         requestQueue.add(jsonRequest);
     }
 }

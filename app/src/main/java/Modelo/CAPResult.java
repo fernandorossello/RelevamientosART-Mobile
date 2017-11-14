@@ -20,6 +20,7 @@ public class CAPResult extends Result implements Serializable{
         }
 
         type = EnumTareas.CAPACITACION.id;
+        status = EnumStatus.ENPROCESO.id;
     }
 
 
@@ -42,6 +43,10 @@ public class CAPResult extends Result implements Serializable{
 
     @Override
     public EnumStatus getStatus() {
+
+        if(this.status == EnumStatus.ENVIADA.id){
+            return EnumStatus.ENVIADA;
+        }
 
         if(attendees.isEmpty() && methodology.trim().isEmpty() && course_name.trim().isEmpty() && contents.trim().isEmpty()){
             return EnumStatus.PENDIENTE;

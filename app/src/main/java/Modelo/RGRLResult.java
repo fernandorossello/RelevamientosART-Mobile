@@ -26,6 +26,7 @@ public class RGRLResult extends Result implements Serializable{
         }
 
         type = EnumTareas.RGRL.id;
+        status = EnumStatus.ENPROCESO.id;
     }
 
     @Expose
@@ -34,6 +35,11 @@ public class RGRLResult extends Result implements Serializable{
 
     @Override
     public EnumStatus getStatus() {
+
+        if(this.status == EnumStatus.ENVIADA.id){
+            return EnumStatus.ENVIADA;
+        }
+
         Boolean tieneContestadas = false;
         Boolean tieneSinContestar = false;
 

@@ -122,4 +122,9 @@ public class Visit implements Serializable,Comparable<Visit> {
             }
         }
     }
+
+    @Override
+    public String toString() {
+        return this.id + " - " + this.institution.name;
+    }
 }

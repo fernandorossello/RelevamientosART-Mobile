@@ -20,6 +20,9 @@ public abstract class Result extends FirebaseFile implements Serializable {
     @DatabaseField
     public int type;
 
+    @DatabaseField
+    public int status;
+
     @Expose
     @DatabaseField
     public Date completed_at;
