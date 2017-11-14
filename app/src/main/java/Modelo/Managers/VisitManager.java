@@ -11,6 +11,7 @@ import java.util.List;
 
 import Helpers.DBHelper;
 import Modelo.Enums.EnumStatus;
+import Modelo.Image;
 import Modelo.Institution;
 import Modelo.Result;
 import Modelo.Task;
@@ -103,5 +104,25 @@ public class VisitManager extends Manager<Visit> {
         }
 
         return true;
+    }
+
+    public boolean DatosSubidosAFirebase(Visit visit){
+
+        List<Result> results = new ResultManager(dbHelper).getResults(visit);
+
+        for (Result result : results) {
+                if(!result.enviado()){
+                        return false;
+                }
+        }
+
+        for (Image image:visit.images) {
+            if(!image.enviado()){
+                return false;
+            }
+        }
+
+        return true;
+
     }
 }

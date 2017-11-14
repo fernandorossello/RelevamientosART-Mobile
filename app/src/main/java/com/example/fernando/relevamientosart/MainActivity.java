@@ -50,10 +50,6 @@ import com.example.fernando.relevamientosart.RAR.RiskFragment;
 import com.example.fernando.relevamientosart.ConstanciaVisita.ConstanciaVisitaFragment;
 import com.example.fernando.relevamientosart.RAR.RiskSelectorFragment;
 import com.example.fernando.relevamientosart.RGRL.PreguntaFragment;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 import com.google.gson.GsonBuilder;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import org.json.JSONArray;
@@ -799,9 +795,18 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    private void enviarVisitaAEndpoint(Visit visit) {
+    private void enviarVisitaAEndpoint(Visit visit) throws SQLException {
         //Debe mandar todos los resultados y las imágenes
         ResultManager resultManager =  new ResultManager(getHelper());
+
+        VisitManager visitManager = new VisitManager(getHelper());
+
+        if(!visitManager.DatosSubidosAFirebase(visit)){
+            Toast.makeText(this, R.string.visita_reintentar_luego, Toast.LENGTH_SHORT).show();
+            visit.status = EnumStatus.FINALIZADA.id;
+            visitManager.persist(visit);
+            return;
+        }
 
         Log.i("Sincronizar","Enviando visita: " + visit.toString());
 
@@ -851,8 +856,8 @@ public class MainActivity extends AppCompatActivity
                                 e.printStackTrace();
                             }
 
-                                Toast.makeText(MainActivity.this, R.string.error_carga_visitas, Toast.LENGTH_SHORT).show();
-                            Log.e("Sincronizar","Error al enviar el resultado " +EnumTareas.getById(resultado.id).name +
+                                Toast.makeText(MainActivity.this, R.string.error_envio_visitas, Toast.LENGTH_SHORT).show();
+                            Log.e("Sincronizar","Error al enviar el resultado " +EnumTareas.getById(resultado.type).name +
                                     " de la visita " + resultado.task.visit.toString() + ". " + new String(error.networkResponse.data));
                         }
                     }){

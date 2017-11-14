@@ -17,4 +17,8 @@ public abstract class FirebaseFile {
 
         return carpetas[carpetas.length - 1];
     }
+
+    public boolean enviado(){
+        return !(url_cloud == null || url_cloud.isEmpty());
+    }
 }

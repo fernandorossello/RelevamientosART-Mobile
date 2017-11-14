@@ -132,6 +132,7 @@
     <string name="datos_empresa_titulo">Datos de la empresa</string>
     <string name="prioriodad_visita">Prioridad</string>
     <string name="estado_visita">Estado</string>
+    <string name="visita_reintentar_luego">La visita aún se está cargando, reintente nuevamente en unos minutos</string>
 
 
 </resources>
