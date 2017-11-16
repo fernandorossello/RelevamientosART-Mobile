@@ -17,21 +17,19 @@ import com.example.fernando.relevamientosart.MainActivity;
 import com.example.fernando.relevamientosart.R;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import Excepciones.ValidationException;
 import Helpers.DBHelper;
 import Modelo.Attendee;
 import Modelo.CAPResult;
 import Modelo.Enums.EnumStatus;
+import Modelo.Managers.AttendeeManager;
 import Modelo.Managers.ResultManager;
 import Modelo.Managers.VisitManager;
 import Modelo.Result;
 import Modelo.Task;
 import Modelo.Visit;
-import Modelo.WorkingMan;
 
 public class ConstanciaCapacitacionFragment extends Fragment {
     private static final String ARG_TASK = "tarea";
@@ -39,6 +37,7 @@ public class ConstanciaCapacitacionFragment extends Fragment {
     private Visit mVisit;
     private CAPResult mResult;
     private DBHelper dbHelper;
+    private ResultManager mResultManager;
 
     private OnNewAttendeeInteractionListener mListener;
 
@@ -60,13 +59,19 @@ public class ConstanciaCapacitacionFragment extends Fragment {
         if (getArguments() != null) {
             mTarea = (Task) getArguments().getSerializable(ARG_TASK);
             dbHelper = ((MainActivity)getActivity()).getHelper();
-            Result result = new ResultManager(dbHelper).getResult(mTarea);
-
+            mResultManager = new ResultManager(dbHelper);
+            Result result = mResultManager.getResult(mTarea);
             if(result == null){
                 mResult = new CAPResult();
                 mResult.task = mTarea;
             } else {
                 mResult = (CAPResult) result;
+            }
+
+            try {
+                mResultManager.persist(mResult);
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
         }
     }
@@ -83,23 +88,12 @@ public class ConstanciaCapacitacionFragment extends Fragment {
         RecyclerView recyclerView  = view.findViewById(R.id.attendeeList);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
 
-        List<Attendee> attendees = new ArrayList<>();
-        for (Attendee attendee : mResult.attendees) {
-            try{
-                attendee.Validar();
-                attendees.add(attendee);
-            }catch (ValidationException ex){
-                //NO lo agrega
-            }
-        }
-
-        mResult.attendees = attendees;
+        DepurarYCargarListaEmpleados();
 
         recyclerView.setAdapter(new MyAttendeeRecyclerViewAdapter(mResult.attendees, mListener));
 
         TextView emptyView = view.findViewById(R.id.empty_view);
-
-        if (attendees.isEmpty()) {
+        if (mResult.attendees.isEmpty()) {
             recyclerView.setVisibility(View.GONE);
             emptyView.setVisibility(View.VISIBLE);
         }
@@ -121,6 +115,25 @@ public class ConstanciaCapacitacionFragment extends Fragment {
         getActivity().setTitle(R.string.titulo_constancia_capacitacion);
 
         return view;
+    }
+
+    private void DepurarYCargarListaEmpleados() {
+
+        AttendeeManager attendeeManager = new AttendeeManager(dbHelper);
+
+        for (Attendee attendee : mResult.attendees) {
+            try{
+                attendee.Validar();
+            }catch (ValidationException ex){
+                try {
+                    mResult.attendees.remove(attendee);
+                    attendeeManager.delete(attendee);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
     }
 
     @Override
@@ -156,8 +169,6 @@ public class ConstanciaCapacitacionFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
 
-        DBHelper dbHelper = ((MainActivity)getActivity()).getHelper();
-
         mResult.course_name = ((EditText)getView().findViewById(R.id.tv_capr_course)).getText().toString();
         mResult.contents = ((EditText)getView().findViewById(R.id.tv_capr_content)).getText().toString();
         mResult.methodology = ((EditText)getView().findViewById(R.id.tv_capr_methodology)).getText().toString();
@@ -174,5 +185,12 @@ public class ConstanciaCapacitacionFragment extends Fragment {
         } catch (SQLException ex) {
             Toast.makeText(getActivity(), ex.getMessage(), Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        DepurarYCargarListaEmpleados();
     }
 }

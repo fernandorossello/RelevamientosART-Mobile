@@ -25,6 +25,7 @@ import Helpers.DBHelper;
 import Modelo.Enums.EnumStatus;
 import Modelo.Enums.EnumTareas;
 import Modelo.Managers.ResultManager;
+import Modelo.Managers.WorkingManManager;
 import Modelo.RARResult;
 import Modelo.Result;
 import Modelo.Task;
@@ -41,7 +42,8 @@ public class RARFragment extends Fragment {
     private Visit mVisit;
     private RARResult mResult;
     private DBHelper dbHelper;
-    private DividerItemDecoration mDividerItemDecoration;
+    private ResultManager mResultManager;
+
 
 
     private OnTrabajadoresFragmentInteractionListener mListener;
@@ -70,6 +72,7 @@ public class RARFragment extends Fragment {
             mVisit = (Visit) getArguments().getSerializable(ARG_VISIT);
             mTarea = mVisit.obtenerTarea(EnumTareas.RAR);
             dbHelper = ((MainActivity)getActivity()).getHelper();
+            mResultManager = new ResultManager(dbHelper);
             Result result = new ResultManager(dbHelper).getResult(mTarea);
 
             if(result == null){
@@ -91,22 +94,11 @@ public class RARFragment extends Fragment {
         Context context = view.getContext();
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
-
-        List<WorkingMan> workingMen = new ArrayList<>();
-        for (WorkingMan wm : mResult.working_men) {
-            try{
-                wm.Validar();
-                workingMen.add(wm);
-            }catch (ValidationException ex){
-                //No los agrega
-            }
-        }
-
-        mResult.working_men = workingMen;
+        DepurarListaEmpleados();
 
         TextView emptyView = view.findViewById(R.id.empty_view);
 
-        if (workingMen.isEmpty()) {
+        if (mResult.working_men.isEmpty()) {
             recyclerView.setVisibility(View.GONE);
             emptyView.setVisibility(View.VISIBLE);
         }
@@ -132,6 +124,23 @@ public class RARFragment extends Fragment {
 
 
         return view;
+    }
+
+    private void DepurarListaEmpleados() {
+        WorkingManManager workingManManager = new WorkingManManager(dbHelper);
+
+        for (WorkingMan wm : mResult.working_men) {
+            try{
+                wm.Validar();
+            }catch (ValidationException ex){
+                try {
+                    mResult.working_men.remove(wm);
+                    workingManManager.delete(wm);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     @Override
@@ -167,5 +176,12 @@ public class RARFragment extends Fragment {
     public interface OnTrabajadoresFragmentInteractionListener {
         void onTrabajadorSeleccionado(WorkingMan workingMan);
         void onBorrarTrabajador(WorkingMan workingMan);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        DepurarListaEmpleados();
     }
 }

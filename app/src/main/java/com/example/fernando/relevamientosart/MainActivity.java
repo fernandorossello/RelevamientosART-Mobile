@@ -856,7 +856,7 @@ public class MainActivity extends AppCompatActivity
                                 e.printStackTrace();
                             }
 
-                                Toast.makeText(MainActivity.this, R.string.error_envio_visitas, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MainActivity.this, R.string.error_envio_visitas, Toast.LENGTH_SHORT).show();
                             Log.e("Sincronizar","Error al enviar el resultado " +EnumTareas.getById(resultado.type).name +
                                     " de la visita " + resultado.task.visit.toString() + ". " + new String(error.networkResponse.data));
                         }

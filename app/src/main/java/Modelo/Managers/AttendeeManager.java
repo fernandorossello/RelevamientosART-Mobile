@@ -50,4 +50,5 @@ public class AttendeeManager extends Manager<Attendee> {
     public void delete(Attendee attendee) throws SQLException {
         dbHelper.getAttendeeDao().delete(attendee);
     }
+
 }
